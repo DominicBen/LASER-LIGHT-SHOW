@@ -55,43 +55,7 @@ struct Point
   uint16_t y;
 };
 
-class Point3D
-{
-private:
-  /* data */
-public:
-  int16_t x = 0;
-  int16_t y = 0;
-  int16_t z = 0;
 
-  int16_t scale_proj = 0;
-  int16_t x_proj = 0;
-  int16_t y_proj = 0;
-
-  void update();
-  Point3D(int16_t x_, int16_t y_, int16_t z_);
-  ~Point3D();
-};
-
-void Point3D::update(/* args */)
-{
-  scale_proj =  DEPTH / ( DEPTH + z);
-  x_proj = (x * scale_proj) + WIDTH/2;
-  y_proj = (y * scale_proj) + HEIGHT/2;
-
-
-}
-
-Point3D::Point3D(int16_t x_, int16_t y_, int16_t z_)
-{
-  x = x_;
-  y = y_;
-  z = z_;
-}
-
-Point3D::~Point3D()
-{
-}
 
 
 
@@ -111,8 +75,8 @@ void setup(void) {
     
   Serial.println("Generating a triangle wave");
 }
-
-uint32_t clamp(uint32_t n, uint32_t min, uint32_t max)
+template <typename T>
+T clamp(T n, T min, T max)
 {
   if (n > max) { return max;}
   else if (n < min) { return min;}
@@ -142,8 +106,8 @@ void draw_circle(double res, Circle c)
       uint16_t ymin = c.y-c.radius;
       uint16_t ymax = c.y+c.radius;
 
-      uint16_t tempx = clamp(normalize(sin(val),-1,1,xmin, xmax),0,4095);
-      uint16_t tempy = clamp(normalize(cos(val),-1,1,ymin,ymax),0,4095);
+      uint16_t tempx = clamp<uint16_t>(normalize(sin(val),-1,1,xmin, xmax),0,4095);
+      uint16_t tempy = clamp<uint16_t>(normalize(cos(val),-1,1,ymin,ymax),0,4095);
 
       xdim.setVoltage(tempx, false,I2C_CLOCK);
       ydim.setVoltage(tempy, false,I2C_CLOCK);
@@ -203,12 +167,7 @@ void draw_grid(double size, uint16_t x, uint16_t y, uint16_t rows, uint16_t cols
     }
 }
 
-void draw_3d_cube(double size, uint16_t x, uint16_t y, uint16_t rows, uint16_t cols)
-{
-  struct Point3D vertex[8] = {{-1,1,-1},{1,1,-1},{-1,-1,-1},{1,-1,-1},
-                              {-1,1,1},{1,1,1},{-1,-1,1},{1,-1,1}};
 
-}
 
 Circle c = {WIDTH/2 - 500, HEIGHT/2 + 66,100,100, 200};
 
