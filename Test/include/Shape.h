@@ -31,12 +31,12 @@ public:
     int16_t x_vel = 100;
     int16_t y_vel = 100;
     u_int32_t res;
-    Shape(Type type_, int16_t x_scale_, int16_t y_scale_, Point2D pos_, int16_t x_vel_, int16_t y_vel_);
+    Shape(Type type_, u_int32_t res_, int16_t x_scale_, int16_t y_scale_, Point2D pos_, int16_t x_vel_, int16_t y_vel_);
     Shape(){};
     ~Shape();
 };
 
-Shape::Shape(Type type_, int16_t x_scale_ = 100, int16_t y_scale_ = 100, Point2D pos_ = {WIDTH / 2, HEIGHT / 2}, int16_t x_vel_ = 0, int16_t y_vel_ = 0)
+Shape::Shape(Type type_, u_int32_t res_ = 100, int16_t x_scale_ = 100, int16_t y_scale_ = 100, Point2D pos_ = {WIDTH / 2, HEIGHT / 2}, int16_t x_vel_ = 0, int16_t y_vel_ = 0)
 {
     pos = pos_;
     x_scale = x_scale_;
@@ -44,16 +44,17 @@ Shape::Shape(Type type_, int16_t x_scale_ = 100, int16_t y_scale_ = 100, Point2D
     x_vel = x_vel_;
     y_vel = y_vel_;
     type = type_;
+
     switch (type)
     {
     case Shape::Circle:
         res = 100;
         break;
     case Shape::Square:
-        res = 100;
+        res = 400;
         break;
     case Shape::Rectange:
-        res = 100;
+        res = 400;
         break;
     case Shape::Triangle:
         res = 100;
@@ -72,6 +73,7 @@ Shape::Shape(Type type_, int16_t x_scale_ = 100, int16_t y_scale_ = 100, Point2D
     default:
         break;
     }
+    res = res_;
 }
 
 Shape::~Shape()
@@ -85,12 +87,19 @@ private:
 public:
     int16_t rows = 3;
     int16_t cols = 3;
+    Shape s;
 
     void operator=(Shape s);
 
-    Grid();
+    Grid(Shape s);
+
     ~Grid();
 };
+
+Grid::Grid(Shape s_)
+{
+    s = s_;
+}
 
 void Grid::operator=(Shape s)
 {
@@ -101,10 +110,6 @@ void Grid::operator=(Shape s)
     x_vel = s.x_vel;
     y_vel = s.y_vel;
     res = s.res;
-}
-
-Grid::Grid()
-{
 }
 
 Grid::~Grid()

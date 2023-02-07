@@ -13,28 +13,45 @@ const uint32_t I2C_CLOCK = 1000000;
 class Pointer
 {
 private:
+    // References to the x and y galvo outputs
+    // Accepts voltage values from (0-4095)
+
+    
     Adafruit_MCP4725 xdim;
     Adafruit_MCP4725 ydim;
 
+    // Points the laser to a specific point on the screen, The bottom left is 0,0
+    // WIDTH/2 , HEIGHT/2 is the middle of the screen
     void point_to(Point2D pos);
+    // Toggles the state of the LED
     void toggle_led();
+    // Sets the state of the led to state
+    // Ex. HIGH -> on
+    // LOW -> Off
     void toggle_led(int8_t state);
 
 protected:
     Pointer();
 
 public:
+    // Singleton Constructors
     Pointer(const Pointer &) = delete;
     Pointer(Pointer &&) = delete;
     Pointer &operator=(const Pointer &) = delete;
     Pointer &operator=(Pointer &&) = delete;
 
+    // Current position of the galvo, updated on point_to()
     Point2D cur_pos;
+
+    // Draws any given shape s depending on its type
     void draw_shape(Shape s);
 
     void draw_circle(Shape c);
     void draw_rect(Shape s);
+
+    // Draws a grid of shapes, shape is dependant on what is stored in Grid g
     void draw_grid(Grid g);
+
     void draw_3d_cube(double size, uint16_t x, uint16_t y, uint16_t rows, uint16_t cols);
 
     static Pointer &getInstance()
@@ -121,8 +138,8 @@ void Pointer::draw_circle(Shape c)
         double val = ((2 * PI) / c.res) * counter;
 
         uint16_t xmin = c.pos.x - c.x_scale;
-        uint16_t xmax = c.pos.x + c.y_scale;
-        uint16_t ymin = c.pos.y - c.x_scale;
+        uint16_t xmax = c.pos.x + c.x_scale;
+        uint16_t ymin = c.pos.y - c.y_scale;
         uint16_t ymax = c.pos.y + c.y_scale;
 
         Point2D new_pos = {(uint16_t)normalize(sin(val), -1, 1, xmin, xmax), (uint16_t)normalize(cos(val), -1, 1, ymin, ymax)};
@@ -156,11 +173,14 @@ void Pointer::draw_rect(Shape s)
 
 void Pointer::draw_grid(Grid g)
 {
-    for (int32_t i = -g.cols / 2; i <= g.cols / 2; i++)
+    for (int16_t i = -g.cols / 2; i <= g.cols / 2; i++)
     {
-        for (int32_t j = -g.rows / 2; j <= g.rows / 2; j++)
+        for (int16_t j = -g.rows / 2; j <= g.rows / 2; j++)
         {
-            draw_rect(g);
+            u_int16_t newx = (WIDTH / 2) + (g.s.x_scale * 2 * i);
+            u_int16_t newy = (HEIGHT / 2) + (g.s.y_scale * 2 * j);
+            g.s.pos = {newx, newy};
+            draw_shape(g.s);
         }
     }
 }
