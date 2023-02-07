@@ -1,7 +1,9 @@
+#ifndef POINT_H
+#define POINT_H
+
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_MCP4725.h>
-
 
 const uint16_t WIDTH = 4096;
 const uint16_t HEIGHT = 4096;
@@ -9,9 +11,9 @@ const uint16_t DEPTH = 100;
 
 struct Point2D
 {
-  uint16_t x = WIDTH/2;
-  uint16_t y = HEIGHT/2;
-}; 
+  uint16_t x = WIDTH / 2;
+  uint16_t y = HEIGHT / 2;
+};
 
 class Point3D
 {
@@ -33,11 +35,9 @@ public:
 
 void Point3D::update(/* args */)
 {
-  scale_proj =  DEPTH / ( DEPTH + z);
-  x_proj = (x * scale_proj) + WIDTH/2;
-  y_proj = (y * scale_proj) + HEIGHT/2;
-
-
+  scale_proj = DEPTH / (DEPTH + z);
+  x_proj = (x * scale_proj) + WIDTH / 2;
+  y_proj = (y * scale_proj) + HEIGHT / 2;
 }
 
 Point3D::Point3D(int16_t x_, int16_t y_, int16_t z_)
@@ -50,3 +50,5 @@ Point3D::Point3D(int16_t x_, int16_t y_, int16_t z_)
 Point3D::~Point3D()
 {
 }
+
+#endif

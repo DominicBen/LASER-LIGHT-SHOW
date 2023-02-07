@@ -1,3 +1,6 @@
+#ifndef POINTER_H
+#define POINTER_H
+
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_MCP4725.h>
@@ -5,8 +8,6 @@
 #include <Utils.h>
 
 const uint16_t LED_PIN = 5;
-
-const uint16_t DEPTH = 100;
 const uint32_t I2C_CLOCK = 1000000;
 
 class Pointer
@@ -15,37 +16,91 @@ private:
     Adafruit_MCP4725 xdim;
     Adafruit_MCP4725 ydim;
 
+    void point_to(Point2D pos);
+    void toggle_led();
+    void toggle_led(int8_t state);
+
+protected:
+    Pointer();
+
+public:
+    Pointer(const Pointer &) = delete;
+    Pointer(Pointer &&) = delete;
+    Pointer &operator=(const Pointer &) = delete;
+    Pointer &operator=(Pointer &&) = delete;
+
+    Point2D cur_pos;
+    void draw_shape(Shape s);
+
     void draw_circle(Shape c);
     void draw_rect(Shape s);
     void draw_grid(Grid g);
     void draw_3d_cube(double size, uint16_t x, uint16_t y, uint16_t rows, uint16_t cols);
 
-    void point_to(Point2D pos);
-    void toggle_led();
-    void toggle_led(int8_t state);
-
-public:
-    Point2D cur_pos;
-    Pointer(/* args */);
-    void draw_shape(Shape s);
+    static Pointer &getInstance()
+    {
+        static Pointer instance; // Guaranteed to be destroyed.
+                                 // Instantiated on first use.
+        return instance;
+    }
 };
 
-Pointer::Pointer(/* args */)
+Pointer::Pointer()
 {
     cur_pos = {0, 0};
+    pinMode(LED_PIN, OUTPUT);
+
+    // For Adafruit MCP4725A1 the address is 0x62 (default) or 0x63 (ADDR pin tied to VCC)
+    // For MCP4725A0 the address is 0x60 or 0x61
+    // For MCP4725A2 the address is 0x64 or 0x65
+    xdim.begin(0x63);
+    ydim.begin(0x62);
+}
+
+void Pointer::draw_shape(Shape s)
+{
+    switch (s.type)
+    {
+    case Shape::Circle:
+        draw_circle(s);
+        break;
+    case Shape::Square:
+        draw_rect(s);
+        break;
+    case Shape::Rectange:
+        draw_rect(s);
+        break;
+    case Shape::Triangle:
+        /* code */
+        break;
+    case Shape::Star:
+        /* code */
+        break;
+    case Shape::Polygon:
+        /* code */
+        break;
+    case Shape::Diamond:
+        /* code */
+    case Shape::AlphaNumeric:
+        /* code */
+        break;
+    default:
+        break;
+    }
 }
 
 void Pointer::point_to(Point2D pos)
 {
     if (pos.x != cur_pos.x)
     {
-        xdim.setVoltage(clamp<uint16_t>(pos.x, 0, HEIGHT), false, I2C_CLOCK);
+        xdim.setVoltage(clamp<uint16_t>(pos.x, 0, WIDTH), false, I2C_CLOCK);
+        cur_pos.x = pos.x;
     }
-    else if (pos.y != cur_pos.y)
+    if (pos.y != cur_pos.y)
     {
-        ydim.setVoltage(clamp<uint16_t>(pos.y, 0, WIDTH), false, I2C_CLOCK);
+        ydim.setVoltage(clamp<uint16_t>(pos.y, 0, HEIGHT), false, I2C_CLOCK);
+        cur_pos.y = pos.y;
     }
-    cur_pos = pos;
 }
 void Pointer::toggle_led()
 {
@@ -59,6 +114,7 @@ void Pointer::toggle_led(int8_t state)
 void Pointer::draw_circle(Shape c)
 {
     uint32_t counter;
+    toggle_led();
     for (counter = 0; counter < c.res * 2; counter++)
     {
         // Serial.println(normalize(sin(counter/slowness),-1,1,0,4095));
@@ -69,9 +125,11 @@ void Pointer::draw_circle(Shape c)
         uint16_t ymin = c.pos.y - c.x_scale;
         uint16_t ymax = c.pos.y + c.y_scale;
 
-        Point2D new_pos = {normalize(sin(val), -1, 1, xmin, xmax), normalize(cos(val), -1, 1, ymin, ymax)};
+        Point2D new_pos = {(uint16_t)normalize(sin(val), -1, 1, xmin, xmax), (uint16_t)normalize(cos(val), -1, 1, ymin, ymax)};
+        // Serial.println(new_pos.y);
         point_to(new_pos);
     }
+    toggle_led();
 }
 
 void Pointer::draw_rect(Shape s)
@@ -111,3 +169,5 @@ void Pointer::draw_3d_cube(double size, uint16_t x, uint16_t y, uint16_t rows, u
 {
     struct Point3D vertex[8] = {{-1, 1, -1}, {1, 1, -1}, {-1, -1, -1}, {1, -1, -1}, {-1, 1, 1}, {1, 1, 1}, {-1, -1, 1}, {1, -1, 1}};
 }
+
+#endif
