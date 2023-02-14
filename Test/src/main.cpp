@@ -21,25 +21,45 @@
 #include <BasicLinearAlgebra.h>
 
 // Custom Libraries
-#include <Pointer.h>
-#include <Utils.h>
-#include <Point.h>
-#include <Shape.h>
+
+#include <pointer.h>
+#include <utils.h>
+#include <point.h>
+#include <shape.h>
+
+// Global variables
 
 Pointer &p = Pointer::getInstance();
+Transform trans;
+Shape s;
+Shape c;
+Grid g;
+Mesh m('k');
+Symbol sm(m);
+std::string message = "i am a danger   to society";
+Sentence sen(message, 250, 400);
 
 void setup(void)
 {
 
   Serial.begin(9600);
   Serial.println("Hello!");
+
+  trans = Transform();
+  s = Shape(Shape::Square, 400, trans);
+  trans.scale = {400, 100};
+  c = Shape(Shape::Circle, 50, trans);
+  g = Grid(c);
+
+  sm.t = Transform({1000, 1000});
+  sen.t.pos = {400, HEIGHT - 800};
+  p.toggle_led();
 }
 
 // Circle c = {WIDTH / 2 - 500, HEIGHT / 2 + 66, 100, 100, 200};
-Shape s = Shape(Shape::Square, 400, 200, 200);
-Shape c = Shape(Shape::Circle, 50, 400, 200);
 
-Grid g = Grid(c);
+int16_t delay_cycle = 100;
+int16_t delay_var = 500;
 
 void loop(void)
 {
@@ -49,5 +69,24 @@ void loop(void)
   // p.draw_shape(c);
   // p.draw_shape(s);
 
-  p.draw_grid(c);
+  // p.point_to({0, 0});
+  // delayMicroseconds(delay_var);
+  // p.point_to({0, 4095});
+  // delayMicroseconds(delay_var);
+  // p.point_to({4095, 4095});
+  // delayMicroseconds(delay_var);
+  // p.point_to({4095, 0});
+  // delayMicroseconds(delay_var);
+  // p.point_to({0, 0});
+  // delay(delay_cycle);
+
+  // p.point_to({0, 0});
+  // delayMicroseconds(delay_var);
+  // p.point_to({4095, 4095});
+  // delay(delay_cycle);
+
+  // delay(200);
+  // p.draw_symbol(sm);
+  p.draw_sentence(sen);
+  // p.draw_sentence(sen);
 }

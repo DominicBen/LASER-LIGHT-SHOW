@@ -5,9 +5,9 @@
 #include <Wire.h>
 #include <Adafruit_MCP4725.h>
 
+const uint16_t DEPTH = 100;
 const uint16_t WIDTH = 4096;
 const uint16_t HEIGHT = 4096;
-const uint16_t DEPTH = 100;
 
 struct Point2D
 {
