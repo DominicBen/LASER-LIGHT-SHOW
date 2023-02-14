@@ -36,7 +36,7 @@ Shape c;
 Grid g;
 Mesh m('k');
 Symbol sm(m);
-std::string message = "i am a danger   to society";
+std::string message = "i am a danger to society";
 Sentence sen(message, 250, 400);
 
 void setup(void)
