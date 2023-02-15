@@ -36,7 +36,7 @@ Shape c;
 Grid g;
 Mesh m('k');
 Symbol sm(m);
-std::string message = "i am a danger to society";
+std::string message = "Sigma balls";
 Sentence sen(message, 250, 400);
 
 void setup(void)
@@ -47,13 +47,15 @@ void setup(void)
 
   trans = Transform2D();
   s = Shape(Shape::Square, 400, trans);
-  trans.scale = {400, 100};
+  trans.scale = {500, 500};
   c = Shape(Shape::Circle, 50, trans);
-  g = Grid(c);
+  g = Grid(s);
+  g.rows = 10;
+  g.cols = 10;
 
   sm.t = Transform2D(Vec2{1000, 1000});
   sen.t.pos = {400, HEIGHT - 800};
-  p.toggle_led();
+  p.toggle_led(HIGH);
 }
 
 // Circle c = {WIDTH / 2 - 500, HEIGHT / 2 + 66, 100, 100, 200};
@@ -65,9 +67,10 @@ void loop(void)
 {
 
   // Serial.println("Hello");
-
+  // Timing Library
   // p.draw_shape(c);
   // p.draw_shape(s);
+  // p.draw_grid(g);
 
   // p.point_to({0, 0});
   // delayMicroseconds(delay_var);
@@ -80,9 +83,9 @@ void loop(void)
   // p.point_to({0, 0});
   // delay(delay_cycle);
 
-  // p.point_to({0, 0});
+  // p.point_to(Vec2{0, 0});
   // delayMicroseconds(delay_var);
-  // p.point_to({4095, 4095});
+  // p.point_to(Vec2{4095, 4095});
   // delay(delay_cycle);
 
   // delay(200);

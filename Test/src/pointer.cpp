@@ -91,7 +91,7 @@ void Pointer::toggle_led(int8_t state)
 void Pointer::draw_circle(Shape c)
 {
     uint32_t counter;
-    toggle_led();
+    toggle_led(HIGH);
     for (counter = 0; counter < c.res * 2; counter++)
     {
         // Serial.println(normalize(sin(counter/slowness),-1,1,0,4095));
@@ -106,7 +106,7 @@ void Pointer::draw_circle(Shape c)
         // Serial.println(new_pos.y);
         point_to(new_pos);
     }
-    toggle_led();
+    toggle_led(LOW);
 }
 
 void Pointer::draw_rect(Shape s)
@@ -151,26 +151,26 @@ void Pointer::draw_grid(Grid g)
 //     struct Point3D vertex[8] = {{-1, 1, -1}, {1, 1, -1}, {-1, -1, -1}, {1, -1, -1}, {-1, 1, 1}, {1, 1, 1}, {-1, -1, 1}, {1, -1, 1}};
 // }
 
-void Pointer::draw_mesh(Mesh m)
-{
-    Vec2 newpos;
-    // delay(1000);
-    for (u_int16_t i = 0; i < m.travel_order.size(); i++)
-    {
-        newpos = Vec2::mapVec(m.verticies[m.travel_order[i]], -1, 1, 0, 1000);
-        newpos.x += WIDTH / 2;
-        newpos.y += HEIGHT / 2;
-        point_to({newpos.x, newpos.y});
+// void Pointer::draw_mesh(Mesh m)
+// {
+//     Vec2 newpos;
+//     // delay(1000);
+//     for (u_int16_t i = 0; i < m.travel_order.size(); i++)
+//     {
+//         newpos = Vec2::mapVec(m.verticies[m.travel_order[i]], -1, 1, 0, 1000);
+//         newpos.x += WIDTH / 2;
+//         newpos.y += HEIGHT / 2;
+//         point_to({newpos.x, newpos.y});
 
-        delayMicroseconds(400);
+//         delayMicroseconds(400);
 
-        if (!m.led_info[i])
-        {
-            delayMicroseconds(400);
-        }
-        toggle_led(m.led_info[i]);
-    }
-}
+//         if (!m.led_info[i])
+//         {
+//             delayMicroseconds(400);
+//         }
+//         toggle_led(m.led_info[i]);
+//     }
+// }
 
 void Pointer::draw_symbol(Symbol s, bool first_letter)
 {
@@ -194,6 +194,7 @@ void Pointer::draw_symbol(Symbol s, bool first_letter)
         {
             delayMicroseconds(0);
         }
+
         toggle_led(s.m.led_info[i]);
     }
     toggle_led(LOW);
