@@ -1,21 +1,4 @@
-#ifndef MESH_H
-#define MESH_H
-#include <Arduino.h>
-#include <transform.h>
-#include <vector>
-
-class Mesh
-{
-private:
-public:
-    std::vector<Vec2> verticies;
-    std::vector<boolean> led_info;
-    std::vector<uint16_t> travel_order;
-    bool valid = true;
-    Mesh(/* args */);
-    Mesh(char sym);
-    ~Mesh();
-};
+#include <mesh.h>
 
 Mesh::Mesh(/* args */)
 {
@@ -684,5 +667,3 @@ Mesh::Mesh(char sym)
 Mesh::~Mesh()
 {
 }
-
-#endif // !MESH_H

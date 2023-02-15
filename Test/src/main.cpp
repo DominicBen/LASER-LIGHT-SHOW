@@ -30,7 +30,7 @@
 // Global variables
 
 Pointer &p = Pointer::getInstance();
-Transform trans;
+Transform2D trans;
 Shape s;
 Shape c;
 Grid g;
@@ -45,13 +45,13 @@ void setup(void)
   Serial.begin(9600);
   Serial.println("Hello!");
 
-  trans = Transform();
+  trans = Transform2D();
   s = Shape(Shape::Square, 400, trans);
   trans.scale = {400, 100};
   c = Shape(Shape::Circle, 50, trans);
   g = Grid(c);
 
-  sm.t = Transform({1000, 1000});
+  sm.t = Transform2D(Vec2{1000, 1000});
   sen.t.pos = {400, HEIGHT - 800};
   p.toggle_led();
 }

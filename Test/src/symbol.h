@@ -10,22 +10,11 @@ class Symbol
 private:
     /* data */
 public:
-    Transform t;
+    Transform2D t;
     Mesh m;
 
     u_int32_t res = 400;
-    Symbol(/* args */);
-    Symbol(Mesh m);
-    ~Symbol();
+    Symbol(Mesh m_) { m = m_; }
 };
-
-Symbol::Symbol(Mesh m_)
-{
-    m = m_;
-}
-
-Symbol::~Symbol()
-{
-}
 
 #endif // !SYMBOL_H#define SYMBOL_H
