@@ -3,6 +3,7 @@
 ## Team Members
 
 * Dominic Benintendi
+* Ian Gant
 
 ## Explanation
 
