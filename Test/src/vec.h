@@ -36,6 +36,11 @@ public:
         x = map(x, old_min, old_max, new_min, new_max);
         y = map(y, old_min, old_max, new_min, new_max);
     }
+    void absVec()
+    {
+        x = abs(x);
+        y = abs(y);
+    }
     static Vec2 mapVec(Vec2 old_num, int16_t old_min, int16_t old_max, int16_t new_min, int16_t new_max)
     {
         Vec2 new_num;

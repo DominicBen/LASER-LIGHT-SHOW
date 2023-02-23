@@ -14,16 +14,31 @@
 #define POINTER_H
 
 #include <Arduino.h>
+#include "MCP4922.h"
 #include <Wire.h>
-#include <Adafruit_MCP4725.h>
 #include <shape.h>
 #include <utils.h>
 #include <mesh.h>
 #include <symbol.h>
 #include <sentence.h>
 
+// MOSI 11
+// SCK 13
 const uint16_t LED_PIN = 5;
-const uint32_t I2C_CLOCK = 1000000;
+// LED_POW 5
+const uint16_t CS = 10;
+// CS 10,
+const uint16_t LDAC = 9;
+// LDAC 9
+
+// 1300 MicroSeconds for Low Resolution
+// 1350 Medium resolution
+// 1400 Medium- High
+// 1450 High, Dots appear
+// 1500 Highest, Dots appear
+const uint32_t DELAY_RATE = 1500;
+const uint32_t CONSTANT_LAG = 700;
+
 /**
  * @brief
  * This class is responsible for controlling the galvo motors and led.
@@ -31,11 +46,14 @@ const uint32_t I2C_CLOCK = 1000000;
  * This allows the class to be called for anywhere in the code
  *
  */
+
 class Pointer
 {
 private:
-    Adafruit_MCP4725 xdim;
-    Adafruit_MCP4725 ydim;
+    // CS 10,
+    // LDAC 9
+    // MOSI 11
+    // SCK 13
 
 protected:
     Pointer();
@@ -78,6 +96,8 @@ public:
 
     /// @brief Current position of the galvo, updated on point_to()
     Vec2 cur_pos;
+
+    MCP4922 dac = MCP4922(CS, LDAC);
 
     /**
      * @brief Draws a given shape s, the algorithm used depends on the shape's type

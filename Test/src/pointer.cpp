@@ -2,14 +2,16 @@
 
 Pointer::Pointer()
 {
+
     cur_pos = {0, 0};
     pinMode(LED_PIN, OUTPUT);
 
     // For Adafruit MCP4725A1 the address is 0x62 (default) or 0x63 (ADDR pin tied to VCC)
     // For MCP4725A0 the address is 0x60 or 0x61
     // For MCP4725A2 the address is 0x64 or 0x65
-    xdim.begin(0x63);
-    ydim.begin(0x62);
+    dac.init();
+    dac.write(0, HEIGHT / 2);
+    dac.write(1, WIDTH / 2);
 }
 
 void Pointer::draw_shape(Shape s)
@@ -68,16 +70,26 @@ void Pointer::move_towards(Vec2 pos, uint16_t delay_time)
 
 void Pointer::point_to(Vec2 pos)
 {
+    Vec2 distance = pos - cur_pos;
+    distance.absVec();
+    float distance_traveled = max(distance.x, distance.y);
+    float slope = (DELAY_RATE - CONSTANT_LAG) / (float)(4095 - 0);
+    u_int32_t total_delay = (u_int32_t)(slope * (distance_traveled)) + CONSTANT_LAG;
+
     if (pos.x != cur_pos.x)
     {
-        xdim.setVoltage(clamp<uint16_t>(pos.x, 0, WIDTH), false, I2C_CLOCK);
+        dac.write(0, clamp<uint16_t>(pos.x, 0, WIDTH));
         cur_pos.x = pos.x;
     }
     if (pos.y != cur_pos.y)
     {
-        ydim.setVoltage(clamp<uint16_t>(pos.y, 0, HEIGHT), false, I2C_CLOCK);
+        dac.write(1, clamp<uint16_t>(pos.y, 0, HEIGHT));
         cur_pos.y = pos.y;
     }
+    dac.drive();
+    // Serial.println(total_delay);
+    delayMicroseconds(total_delay);
+    // delayMicroseconds(1500);
 }
 void Pointer::toggle_led()
 {
@@ -117,17 +129,17 @@ void Pointer::draw_rect(Shape s)
     float topbound = s.t.pos.y + s.t.scale.y;
     // Move Pointer to bottom left position
     point_to({leftbound, bottombound});
-    delayMicroseconds(s.res);
+    // delayMicroseconds(s.res);
     // Draw the rectangle
     toggle_led(HIGH);
     point_to({leftbound, topbound});
-    delayMicroseconds(s.res);
+    // delayMicroseconds(s.res);
     point_to({rightbound, topbound});
-    delayMicroseconds(s.res);
+    // delayMicroseconds(s.res);
     point_to({rightbound, bottombound});
-    delayMicroseconds(s.res);
+    // delayMicroseconds(s.res);
     point_to({leftbound, bottombound});
-    delayMicroseconds(s.res);
+    // delayMicroseconds(s.res);
     // Turn off the laser
     toggle_led(LOW);
 }
@@ -186,13 +198,13 @@ void Pointer::draw_symbol(Symbol s, bool first_letter)
         if (first_letter && !past_first)
         {
             past_first = true;
-            delayMicroseconds(delay_mod / 2);
+            // delayMicroseconds(delay_mod / 2);
         }
-        delayMicroseconds(delay_mod);
+        // delayMicroseconds(delay_mod);
 
         if (!s.m.led_info[i])
         {
-            delayMicroseconds(0);
+            // delayMicroseconds(0);
         }
 
         toggle_led(s.m.led_info[i]);

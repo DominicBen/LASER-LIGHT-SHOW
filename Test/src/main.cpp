@@ -18,7 +18,6 @@
 #include <Wire.h>
 #include <Adafruit_MCP4725.h>
 #include <vector>
-#include <BasicLinearAlgebra.h>
 
 // Custom Libraries
 
@@ -26,6 +25,7 @@
 #include <utils.h>
 #include <point.h>
 #include <shape.h>
+#include <screen.h>
 
 // Global variables
 
@@ -36,19 +36,22 @@ Shape c;
 Grid g;
 Mesh m('k');
 Symbol sm(m);
-std::string message = "Sigma balls";
-Sentence sen(message, 250, 400);
+std::string message = "hello world";
+
+Sentence sen(message, 350, 500); // kernaling, fontsize
+Screen screen;
 
 void setup(void)
 {
-
   Serial.begin(9600);
   Serial.println("Hello!");
 
   trans = Transform2D();
   s = Shape(Shape::Square, 400, trans);
-  trans.scale = {500, 500};
-  c = Shape(Shape::Circle, 50, trans);
+
+  c = Shape(Shape::Circle, 500, trans);
+  c.t.scale = {100, 100};
+  s.res = 300;
   g = Grid(s);
   g.rows = 10;
   g.cols = 10;
@@ -60,16 +63,21 @@ void setup(void)
 
 // Circle c = {WIDTH / 2 - 500, HEIGHT / 2 + 66, 100, 100, 200};
 
+// 1300 MicroSeconds for Low Resolution
+// 1350 Medium resolution
+// 1400 Medium- High
+// 1450 High, Dots appear
+// 1500 Highest, Dots appear
+
 int16_t delay_cycle = 100;
-int16_t delay_var = 500;
+u_int32_t delay_var = 1500;
 
 void loop(void)
 {
-
   // Serial.println("Hello");
   // Timing Library
   // p.draw_shape(c);
-  // p.draw_shape(s);
+  // p.draw_shape(c);
   // p.draw_grid(g);
 
   // p.point_to({0, 0});
@@ -90,6 +98,15 @@ void loop(void)
 
   // delay(200);
   // p.draw_symbol(sm);
-  p.draw_sentence(sen);
   // p.draw_sentence(sen);
+  // delay(20);
+
+  p.point_to({0, 0});
+  // delayMicroseconds(delay_var);
+  p.point_to({0, HEIGHT - 1});
+  // delayMicroseconds(delay_var);
+  p.point_to({WIDTH - 1, HEIGHT - 1});
+  // delayMicroseconds(delay_var);
+  p.point_to({WIDTH - 1, 0});
+  // delayMicroseconds(delay_var);
 }
