@@ -21,9 +21,21 @@ public:
     Vec2 rot;
     Vec2 scale;
 
-    void set_scale(Vec2 scale_) { scale = scale_; }
-    void set_rot(Vec2 rot_) { rot = rot_; }
-    void set_pos(Vec2 pos_) { pos = pos_; }
+    Transform2D &setScale(Vec2 scale_)
+    {
+        scale = scale_;
+        return *this;
+    }
+    Transform2D &setRotation(Vec2 rot_)
+    {
+        rot = rot_;
+        return *this;
+    }
+    Transform2D &setPosition(Vec2 pos_)
+    {
+        pos = pos_;
+        return *this;
+    }
 
     Transform2D(Vec2 scale_ = {100, 100}, Vec2 pos_ = {WIDTH / 2, HEIGHT / 2}, Vec2 rot_ = {0, 0})
     {
@@ -42,9 +54,9 @@ public:
     Vec2 rot;
     Vec2 scale;
 
-    void set_scale(Vec2 scale_) { scale = scale_; }
-    void set_rot(Vec2 rot_) { rot = rot_; }
-    void set_pos(Vec2 pos_) { pos = pos_; }
+    void setScale(Vec2 scale_) { scale = scale_; }
+    void setRotation(Vec2 rot_) { rot = rot_; }
+    void setPosition(Vec2 pos_) { pos = pos_; }
 
     Transform3D(Vec2 scale_, Vec2 pos_, Vec2 rot_);
     ~Transform3D();

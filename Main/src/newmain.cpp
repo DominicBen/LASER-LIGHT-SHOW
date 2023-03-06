@@ -9,6 +9,7 @@
 // void setup()
 // {
 //     ILDA file;
+//     file.read("cube.ild");
 // }
 
 // void loop()

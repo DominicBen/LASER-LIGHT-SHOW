@@ -720,7 +720,6 @@ Mesh::Mesh(char sym)
             true,
             true,
             true,
-            true
 
         };
         travel_order = {
@@ -986,7 +985,8 @@ Mesh::Mesh(char sym)
 
     if (led_info.size() != travel_order.size() - 1)
     {
-        Serial.println("Error::Mesh::Invalid Mesh Initilization, Travel order != led_info");
+        Serial.println("Error::Mesh::Invalid Mesh Initilization, Travel order != led_info at char ");
+        Serial.print(sym);
         // exit(-1);
     }
 }

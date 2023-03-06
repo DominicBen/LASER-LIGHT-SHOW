@@ -8,7 +8,7 @@ class MCP4922
 {
 public:
     MCP4922(int cs, int lDac)
-        : csPin(cs), lDac(lDac), settings(10000000, MSBFIRST, SPI_MODE0) // 20MHz MAX
+        : csPin(cs), lDac(lDac), settings(100000, MSBFIRST, SPI_MODE0) // 20MHz MAX
     {
     }
 
@@ -38,6 +38,7 @@ public:
     void drive()
     {
         digitalWrite(lDac, LOW);
+        digitalWrite(lDac, HIGH);
     }
 
     void setBuffer(const uint8_t ch, const bool isUse)

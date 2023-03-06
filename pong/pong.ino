@@ -79,91 +79,91 @@ void loop()
   Serial.println("Test");
   delay(500);
 }
-// void loop()
-// {
-//   Serial.println("Test");
-//   if (gameEnd == false)
-//   {
-//     if (ballY >= 234)
-//     { // bottom bounce
-//       ballSpeedY *= -1;
-//       playFile("bounce.WAV");
-//       delay(25);
-//     }
-//     if (ballY <= 5)
-//     { // top bounce
-//       ballSpeedY *= -1;
-//       playFile("bounce.WAV");
-//       delay(25);
-//     }
-//     if (ballX >= rightPaddleX - 4 && ballY >= rightPaddleY && ballY <= rightPaddleY + 30)
-//     { // right paddle bounce
-//       ballSpeedX *= -1;
-//       playFile("bounce.WAV");
-//       delay(25);
-//     }
-//     if (ballX <= leftPaddleX + 5 && ballY >= leftPaddleY && ballY <= leftPaddleY + 30)
-//     { // left paddle bounce
-//       ballSpeedX *= -1;
-//       playFile("bounce.WAV");
-//       delay(25);
-//     }
-//     if (ballX >= 315)
-//     { // right goal
-//       player1++;
-//       playFile("goal.WAV");
-//       delay(25);
-//       resetRound();
-//     }
-//     if (ballX <= 5)
-//     { // left goal
-//       player2++;
-//       playFile("goal.WAV");
-//       delay(25);
-//       resetRound();
-//     }
-//     tft.drawChar(100, 15, player1, ILI9341_WHITE, 2, 3);
-//     tft.drawChar(200, 15, player2, ILI9341_WHITE, 2, 3);
-//     tft.fillCircle(ballX, ballY, 2, ILI9341_BLACK); // ball
-//     ballX += ballSpeedX;
-//     ballY += ballSpeedY;
-//     tft.fillCircle(ballX, ballY, 2, ILI9341_WHITE); // ball
-//     tft.drawRect(1, 1, 318, 238, ILI9341_WHITE);    // border
+void loop()
+{
+  Serial.println("Test");
+  if (gameEnd == false)
+  {
+    if (ballY >= 234)
+    { // bottom bounce
+      ballSpeedY *= -1;
+      playFile("bounce.WAV");
+      delay(25);
+    }
+    if (ballY <= 5)
+    { // top bounce
+      ballSpeedY *= -1;
+      playFile("bounce.WAV");
+      delay(25);
+    }
+    if (ballX >= rightPaddleX - 4 && ballY >= rightPaddleY && ballY <= rightPaddleY + 30)
+    { // right paddle bounce
+      ballSpeedX *= -1;
+      playFile("bounce.WAV");
+      delay(25);
+    }
+    if (ballX <= leftPaddleX + 5 && ballY >= leftPaddleY && ballY <= leftPaddleY + 30)
+    { // left paddle bounce
+      ballSpeedX *= -1;
+      playFile("bounce.WAV");
+      delay(25);
+    }
+    if (ballX >= 315)
+    { // right goal
+      player1++;
+      playFile("goal.WAV");
+      delay(25);
+      resetRound();
+    }
+    if (ballX <= 5)
+    { // left goal
+      player2++;
+      playFile("goal.WAV");
+      delay(25);
+      resetRound();
+    }
+    tft.drawChar(100, 15, player1, ILI9341_WHITE, 2, 3);
+    tft.drawChar(200, 15, player2, ILI9341_WHITE, 2, 3);
+    tft.fillCircle(ballX, ballY, 2, ILI9341_BLACK); // ball
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
+    tft.fillCircle(ballX, ballY, 2, ILI9341_WHITE); // ball
+    tft.drawRect(1, 1, 318, 238, ILI9341_WHITE);    // border
 
-//     tft.drawRect(10, leftPaddleY, 2, 30, ILI9341_BLACK);   // left paddle
-//     tft.drawRect(308, rightPaddleY, 2, 30, ILI9341_BLACK); // right paddle
-//     if (digitalRead(41) == LOW)
-//     {
-//       leftPaddleY += 1;
-//     }
-//     if (digitalRead(40) == LOW)
-//     {
-//       leftPaddleY -= 1;
-//     }
-//     if (digitalRead(37) == LOW)
-//     {
-//       rightPaddleY += 1;
-//     }
-//     if (digitalRead(36) == LOW)
-//     {
-//       rightPaddleY -= 1;
-//     }
-//     tft.drawRect(10, leftPaddleY, 2, 30, ILI9341_WHITE);   // left paddle
-//     tft.drawRect(308, rightPaddleY, 2, 30, ILI9341_WHITE); // right paddle
+    tft.drawRect(10, leftPaddleY, 2, 30, ILI9341_BLACK);   // left paddle
+    tft.drawRect(308, rightPaddleY, 2, 30, ILI9341_BLACK); // right paddle
+    if (digitalRead(41) == LOW)
+    {
+      leftPaddleY += 1;
+    }
+    if (digitalRead(40) == LOW)
+    {
+      leftPaddleY -= 1;
+    }
+    if (digitalRead(37) == LOW)
+    {
+      rightPaddleY += 1;
+    }
+    if (digitalRead(36) == LOW)
+    {
+      rightPaddleY -= 1;
+    }
+    tft.drawRect(10, leftPaddleY, 2, 30, ILI9341_WHITE);   // left paddle
+    tft.drawRect(308, rightPaddleY, 2, 30, ILI9341_WHITE); // right paddle
 
-//     delay(15);
-//   }
-//   if (player1 >= '9')
-//   {
-//     gameEnd = true;
-//     win(1);
-//   }
-//   if (player2 >= '9')
-//   {
-//     gameEnd = true;
-//     win(2);
-//   }
-// }
+    delay(15);
+  }
+  if (player1 >= '9')
+  {
+    gameEnd = true;
+    win(1);
+  }
+  if (player2 >= '9')
+  {
+    gameEnd = true;
+    win(2);
+  }
+}
 
 void win(int winner)
 {

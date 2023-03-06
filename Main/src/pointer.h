@@ -14,13 +14,14 @@
 #define POINTER_H
 
 #include <Arduino.h>
-#include "MCP4922.h"
+#include <MCP4922.h>
 #include <Wire.h>
 #include <shape.h>
 #include <utils.h>
 #include <mesh.h>
-#include <symbol.h>
+#include <char.h>
 #include <sentence.h>
+#include <ILDA.h>
 
 // MOSI 11
 // SCK 13
@@ -37,7 +38,7 @@ const uint16_t LDAC = 9;
 // 1450 High, Dots appear
 // 1500 Highest, Dots appear
 const uint32_t DELAY_RATE = 1500;
-const uint32_t CONSTANT_LAG = 700;
+const uint32_t CONSTANT_LAG = 300;
 
 /**
  * @brief
@@ -46,6 +47,14 @@ const uint32_t CONSTANT_LAG = 700;
  * This allows the class to be called for anywhere in the code
  *
  */
+struct Cursor_info
+{
+    int16_t font_size = 350;
+    int16_t kerneling = 500;
+
+    // u_int16_t lines = 0;
+    Vec2 cursor_pos;
+};
 
 class Pointer
 {
@@ -67,24 +76,24 @@ public:
      *
      * @param pos
      */
-    void point_to(Vec2 pos);
+    void pointTo(Vec2 pos);
 
     /**
      * @brief Moves the pointer towards the provided pos at a given speed, helpful if you want
      * longer and exaggerated lines
      * @param pos
      */
-    void move_towards(Vec2 pos, uint16_t delay_time);
+    void moveTowards(Vec2 pos);
     /**
      * @brief toggle_led toggles the current state of the led
      */
-    void toggle_led();
+    void toggleLed();
     /**
      * @brief toggle_led turns the led to the given state
      * @example HIGH(1) -> on : LOW(0) -> OFF
      * @param state
      */
-    void toggle_led(int8_t state);
+    void toggleLed(int8_t state);
 
     // Singleton Constructors
     // only be one
@@ -95,37 +104,57 @@ public:
     Pointer &operator=(Pointer &&) = delete;
 
     /// @brief Current position of the galvo, updated on point_to()
-    Vec2 cur_pos;
+    Vec2 current_pos;
+    /// @brief Current cursor data of the cursor, used for where to print words
+    Cursor_info format_info;
 
     MCP4922 dac = MCP4922(CS, LDAC);
 
-    /**
-     * @brief Draws a given shape s, the algorithm used depends on the shape's type
-     * @param s
-     */
-    void draw_shape(Shape s);
-    void draw_circle(Shape c);
-    void draw_rect(Shape s);
-
+    // /**
+    //  * @brief Draws a given shape s, the algorithm used depends on the shape's type
+    //  * @param s
+    //  */
+    // // void draw_shape(Shape s);
+    void drawCircle(Shape c);
+    void drawRect(Shape s);
     /// @brief Draws a grid of shapes g, default 3x3
     /// @param g
-    void draw_grid(Grid g);
-    /// @brief Draws a mesh object, these are objects that contain a specific set of vertices to be draw.
-    /// This includes characters
-    /// @param m
-    void draw_mesh(Mesh m);
+    void drawGrid(Grid g);
     /// @brief Draws a symbol object s, if first_word is true, a small delay is added before the laser beings drawing
     /// @param s
     /// @param first_word
-    void draw_symbol(Symbol s, bool first_word);
-    /// @brief Draws a sentence sen, which is a collection of symbols,
-    /// if a sentence goes off screen, it will wrap back below the sentence's orgin
+    void drawChar(Char s);
+    void drawShape(Shape s);
+
+    // /// @brief Draws a mesh object, these are objects that contain a specific set of vertices to be draw.
+    // /// This includes characters
+    // /// @param m
+    // void drawMesh(Mesh m);
+    void println(std::string sen);
+    void print(std::string sen);
+    /// @brief Prints a string at the current location
     /// @param sen
-    void draw_sentence(Sentence sen);
+    void print(Sentence sen);
     // WIP
-    void draw_3d_cube(double size, uint16_t x, uint16_t y, uint16_t rows, uint16_t cols);
+    void draw3DCube(double size, uint16_t x, uint16_t y, uint16_t rows, uint16_t cols);
     /// @brief returns a reference to the singleton instance of this class
     /// @return
+
+    // user friendly function calls
+    /**
+     * @brief draws a rectangle centered at x, y with the width and height
+     *
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     */
+    void drawRect(int x, int y, int w, int h);
+    void drawCircle(int x, int y, int r);
+    void drawChar(int x, int y, char c, int size);
+
+    void drawILDA(ILDA &ild);
+
     static Pointer &getInstance()
     {
         static Pointer instance;

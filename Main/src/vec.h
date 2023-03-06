@@ -14,7 +14,12 @@ private:
 public:
     float x;
     float y;
+    template <typename T>
 
+    Vec2(T x_, T y_)
+    {
+        x = (float)x_, y = (float)y_;
+    };
     Vec2(float x_ = 0, float y_ = 0) { x = x_, y = y_; };
 
     float magnitude() { return sqrt(x * x + y * y); };
@@ -25,21 +30,39 @@ public:
     Vec2 operator*(Vec2 a) { return Vec2(x * a.x, y * a.y); }
     Vec2 operator/(Vec2 a) { return Vec2(x / a.x, y / a.y); }
 
-    void normalize()
+    Vec2 &normalize()
     {
         float mag = magnitude();
         x = x / mag;
         y = y / mag;
+        return *this;
     }
-    void mapVec(int16_t old_min, int16_t old_max, int16_t new_min, int16_t new_max)
+    Vec2 &mapVec(int16_t old_min, int16_t old_max, int16_t new_min, int16_t new_max)
     {
         x = map(x, old_min, old_max, new_min, new_max);
         y = map(y, old_min, old_max, new_min, new_max);
+        return *this;
     }
-    void absVec()
+    Vec2 &absVec()
     {
         x = abs(x);
         y = abs(y);
+        return *this;
+    }
+    Vec2 &clamp(float min, float max)
+    {
+        if (x > max)
+        {
+            x = max;
+            y = max;
+        }
+        else if (x < min)
+        {
+            x = min;
+            y = max;
+        }
+
+        return *this;
     }
     static Vec2 mapVec(Vec2 old_num, int16_t old_min, int16_t old_max, int16_t new_min, int16_t new_max)
     {
