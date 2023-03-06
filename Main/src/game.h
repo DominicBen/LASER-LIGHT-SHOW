@@ -2,6 +2,7 @@
 #include <gameobject.h>
 // #include <iostream>
 #include <vector>
+#include <pointer.h>
 
 class Game
 {

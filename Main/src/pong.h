@@ -3,6 +3,10 @@
 #include <Audio.h>
 #include <Wire.h>
 #include <SD.h>
+#include <mesh.h>
+#include <shape.h>
+#include <char.h>
+#include <string>
 #include <SerialFlash.h>
 #include "game.h"
 
