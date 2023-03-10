@@ -2,11 +2,10 @@
 #define TRANSFORM_H
 
 #include <Arduino.h>
+#include <constants.h>
 #include <utils.h>
 #include <vec.h>
 
-const uint16_t WIDTH = 4096;
-const uint16_t HEIGHT = 4096;
 /**
  * @brief The Transform object is a data class that holds values pertaining to transform in a 2D space
  * This includes the position, rotation, and scale of an object

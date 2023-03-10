@@ -14,6 +14,7 @@
 #define POINTER_H
 
 #include <Arduino.h>
+#include <constants.h>
 #include <MCP4922.h>
 #include <Wire.h>
 #include <shape.h>
@@ -22,23 +23,7 @@
 #include <char.h>
 #include <sentence.h>
 #include <ILDA.h>
-
-// MOSI 11
-// SCK 13
-const uint16_t LED_PIN = 5;
-// LED_POW 5
-const uint16_t CS = 10;
-// CS 10,
-const uint16_t LDAC = 9;
-// LDAC 9
-
-// 1300 MicroSeconds for Low Resolution
-// 1350 Medium resolution
-// 1400 Medium- High
-// 1450 High, Dots appear
-// 1500 Highest, Dots appear
-const uint32_t DELAY_RATE = 1500;
-const uint32_t CONSTANT_LAG = 300;
+#include <string>
 
 /**
  * @brief
@@ -47,10 +32,16 @@ const uint32_t CONSTANT_LAG = 300;
  * This allows the class to be called for anywhere in the code
  *
  */
+
+class Shape;
+class Char;
+class Sentence;
+class Grid;
+
 struct Cursor_info
 {
-    int16_t font_size = 350;
-    int16_t kerneling = 500;
+    int16_t font_size = FONT_SIZE;
+    int16_t kerneling = KERNELING;
 
     // u_int16_t lines = 0;
     Vec2 cursor_pos;

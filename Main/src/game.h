@@ -8,12 +8,14 @@ class Game
 {
 private:
     /* data */
+
 public:
-    std::vector<GameObject2D> objects;
     Pointer &p = Pointer::getInstance();
-    void init();
-    void update();
-    void draw();
+    std::vector<GameObject2D> objects;
+
+    virtual void init() = 0;
+    virtual void update() = 0;
+    virtual void draw() = 0;
     Game(/* args */);
     ~Game();
 };

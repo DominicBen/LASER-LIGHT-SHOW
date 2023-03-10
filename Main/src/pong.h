@@ -64,7 +64,7 @@ public:
 };
 void Pong::init()
 {
-    Serial.begin(9600);
+    Serial.begin(BAUD_RATE);
     AudioMemory(8);
     sgtl5000_1.enable();
     sgtl5000_1.volume(1);
@@ -103,6 +103,11 @@ void Pong::update()
 {
     if (gameEnd == false)
     {
+        for (size_t i = 0; i < objects.size(); i++)
+        {
+            objects[i].update();
+        }
+
         if (ball.transform.pos.y >= HEIGHT - ball.transform.scale.y)
         { // bottom bounce
             ballSpeedY *= -1;

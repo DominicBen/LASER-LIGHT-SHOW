@@ -4,14 +4,15 @@
 #include <Arduino.h>
 #include <transform.h>
 #include <mesh.h>
-
+#include <graphic.h>
+#include <pointer.h>
 class Char
 {
 private:
     /* data */
 public:
-    Transform2D transform;
     Mesh m;
+    Transform2D transform;
     Char(Mesh m_) { m = m_; }
     Char(char c_) { m = Mesh(c_); }
     Char(char c_, Transform2D transform_)

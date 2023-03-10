@@ -122,7 +122,8 @@ void loop(void)
 
   // delay(200);
   // p.draw_symbol(sm);
-  // p.print(sen);
+  p.print(sen);
+  // p.pointTo({WIDTH / 2, HEIGHT - 200});
 
   // delay(20);
 
@@ -136,8 +137,8 @@ void loop(void)
   // // delayMicroseconds(delay_var);
 
   // p.drawILDA(ild);
-  pong_game.update();
-  pong_game.draw();
+  // pong_game.update();
+  // pong_game.draw();
   // p.format_info.cursor_pos = {100, 3000};
   // p.print("player ");
   // p.print("0");

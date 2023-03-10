@@ -69,8 +69,8 @@ void Pointer::pointTo(Vec2 pos)
     Vec2 distance = current_pos - pos;
     distance.absVec();
     float distance_traveled = max(distance.x, distance.y);
-    float slope = (DELAY_RATE - CONSTANT_LAG) / (float)(4095 - 0);
-    u_int32_t total_delay = (u_int32_t)(slope * (distance_traveled)) + CONSTANT_LAG;
+    float slope = (MAX_DELAY - MIN_DELAY) / (float)(4095 - 0);
+    u_int32_t total_delay = (u_int32_t)(slope * (distance_traveled)) + MIN_DELAY;
     // Clamp value to the window
     Vec2 newPos = pos.clamp(0, WIDTH);
 
