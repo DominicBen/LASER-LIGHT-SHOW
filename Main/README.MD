@@ -3,6 +3,7 @@
 ## Team Members
 
 * Dominic Benintendi
+* Ian Gant
 
 ## Explanation
 
@@ -34,6 +35,10 @@ The code is being loaded onto a Teensy4.1
   * shape.h : Data class for basic shapes
   * vec.h : Data class for 2d/3d Vectors, usually used to represent cordinantes
   * utils.h : Utility files with helpful functions
+* lib : Folder for holding header files
+* include : folder for holding 3rd party libraries
+* test : folder for holding test files
+* .vscode : vscode config data
 
 ## Getting Started
 

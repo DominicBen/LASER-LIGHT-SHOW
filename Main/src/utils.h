@@ -24,21 +24,21 @@
  * @param max The maximum number in the range
  * @return T Clamped value
  */
-template <typename T>
-T clamp(T n, T min, T max)
-{
-  if (n > max)
-  {
-    return max;
-  }
-  else if (n < min)
-  {
-    return min;
-  }
-  else
-  {
-    return n;
-  }
-}
+// template <typename T>
+// T clamp(T n, T min, T max)
+// {
+//   if (n > max)
+//   {
+//     return max;
+//   }
+//   else if (n < min)
+//   {
+//     return min;
+//   }
+//   else
+//   {
+//     return n;
+//   }
+// }
 
 #endif

@@ -648,6 +648,332 @@ Mesh::Mesh(char sym)
         };
         break;
     }
+    case '?':
+    {
+        verticies = {
+            {-0.5, 1},
+            {0.5, 1},
+            {0.5, 0},
+            {0, -1},
+            {0, 0},
+        };
+        led_info = {
+            true,
+            true,
+            true,
+            true,
+            false,
+            true,
+
+        };
+        travel_order = {
+            0,
+            1,
+            2,
+            4,
+            3,
+            3,
+        };
+        break;
+    }
+    case '.':
+    {
+        verticies = {
+            {-0.5, -1},
+        };
+        led_info = {
+            true,
+
+        };
+        travel_order = {
+            0,
+            0,
+        };
+        break;
+    }
+    case ',':
+    {
+        verticies = {
+            {0, -0.5},
+            {-0.5, -1}};
+        led_info = {
+            true,
+
+        };
+        travel_order = {
+            0,
+            1,
+        };
+        break;
+    }
+    case '0':
+    {
+        verticies = {
+            {-0.5, -1},
+            {-0.5, 1},
+            {0.5, 1},
+            {0.5, -1},
+        };
+        led_info = {
+            true,
+            true,
+            true,
+            true,
+            true,
+
+        };
+        travel_order = {
+            0,
+            1,
+            2,
+            3,
+            0,
+            2,
+        };
+        break;
+    }
+    case '1':
+    {
+        verticies = {
+            {-0.5, -1},
+            {-0.5, 1},
+            {0, 1},
+            {0.5, -1},
+            {0, -1},
+        };
+        led_info = {
+            true,
+            true,
+            true,
+            true,
+            true,
+        };
+        travel_order = {
+            1,
+            2,
+            4,
+            0,
+            3,
+        };
+        break;
+    }
+    case '2':
+    {
+        verticies = {
+            {-0.5, -1},
+            {-0.5, 0},
+            {-0.5, 1},
+            {0.5, 1},
+            {0.5, 0},
+            {0.5, -1},
+        };
+        led_info = {
+            true,
+            true,
+            true,
+            true,
+            true,
+        };
+        travel_order = {
+            5,
+            0,
+            1,
+            4,
+            3,
+            2,
+        };
+        break;
+    }
+    case '3':
+    {
+        verticies = {
+            {-0.5, -1},
+            {-0.5, 0},
+            {-0.5, 1},
+            {0.5, 1},
+            {0.5, 0},
+            {0.5, -1},
+        };
+        led_info = {
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+        };
+        travel_order = {
+            0,
+            5,
+            4,
+            1,
+            4,
+            3,
+            2,
+        };
+        break;
+    }
+    case '4':
+    {
+        verticies = {
+            {-0.5, -1},
+            {-0.5, 0},
+            {-0.5, 1},
+            {0.5, 1},
+            {0.5, 0},
+            {0.5, -1},
+        };
+        led_info = {
+            true,
+            true,
+            true,
+            true,
+        };
+        travel_order = {
+            2,
+            1,
+            4,
+            3,
+            5,
+        };
+        break;
+    }
+    case '5':
+    {
+        verticies = {
+            {-0.5, -1},
+            {-0.5, 0},
+            {-0.5, 1},
+            {0.5, 1},
+            {0.5, 0},
+            {0.5, -1},
+        };
+        led_info = {
+            true,
+            true,
+            true,
+            true,
+            true,
+        };
+        travel_order = {
+            0,
+            5,
+            4,
+            1,
+            2,
+            3,
+        };
+        break;
+    }
+    case '6':
+    {
+        verticies = {
+            {-0.5, -1},
+            {-0.5, 0},
+            {-0.5, 1},
+            {0.5, 1},
+            {0.5, 0},
+            {0.5, -1},
+        };
+        led_info = {
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+        };
+        travel_order = {
+            3,
+            2,
+            1,
+            0,
+            5,
+            4,
+            1,
+        };
+        break;
+    }
+    case '7':
+    {
+        verticies = {
+            {-0.5, -1},
+            {-0.5, 0},
+            {-0.5, 1},
+            {0.5, 1},
+            {0.5, 0},
+            {0.5, -1},
+        };
+        led_info = {
+            true,
+            true,
+            true,
+        };
+        travel_order = {
+            2,
+            3,
+            4,
+            5,
+        };
+        break;
+    }
+    case '8':
+    {
+        verticies = {
+            {-0.5, -1},
+            {-0.5, 0},
+            {-0.5, 1},
+            {0.5, 1},
+            {0.5, 0},
+            {0.5, -1},
+        };
+        led_info = {
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false,
+            true};
+        travel_order = {
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            0,
+            1,
+            4,
+        };
+        break;
+    }
+    case '9':
+    {
+        verticies = {
+            {-0.5, -1},
+            {-0.5, 0},
+            {-0.5, 1},
+            {0.5, 1},
+            {0.5, 0},
+            {0.5, -1},
+        };
+        led_info = {
+            true,
+            true,
+            true,
+            true,
+        };
+        travel_order = {
+            4,
+            1,
+            2,
+            3,
+            5,
+        };
+        break;
+    }
     case ' ':
     {
         break;
@@ -659,7 +985,8 @@ Mesh::Mesh(char sym)
 
     if (led_info.size() != travel_order.size() - 1)
     {
-        Serial.println("Error::Mesh::Invalid Mesh Initilization, Travel order != led_info");
+        Serial.println("Error::Mesh::Invalid Mesh Initilization, Travel order != led_info at char ");
+        Serial.print(sym);
         // exit(-1);
     }
 }
