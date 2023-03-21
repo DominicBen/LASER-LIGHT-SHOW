@@ -27,6 +27,7 @@ public:
 
 void GameObject2D::draw()
 {
+    graphic->draw();
 }
 
 void GameObject2D::update()
@@ -40,6 +41,7 @@ GameObject2D::GameObject2D(/* args */)
 
 GameObject2D::~GameObject2D()
 {
+    free(graphic);
 }
 
 #endif // !GAMEOBJECT_H

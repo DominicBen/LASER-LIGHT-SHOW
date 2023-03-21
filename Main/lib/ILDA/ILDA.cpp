@@ -1,4 +1,7 @@
 #include <ILDA.h>
+#include <Audio.h>
+
+AudioOutputI2S2 temp;
 
 ILDA::ILDA()
 {

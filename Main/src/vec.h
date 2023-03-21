@@ -2,7 +2,6 @@
 #define VEC_H
 
 #include <Arduino.h>
-#include <utils.h>
 /**
  * @brief A vector class for storing a 2d vector of floats
  * used mainly to represent points in 2d space

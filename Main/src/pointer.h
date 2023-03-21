@@ -16,13 +16,15 @@
 #include <Arduino.h>
 #include <constants.h>
 #include <MCP4922.h>
-#include <Wire.h>
-#include <shape.h>
-#include <utils.h>
-#include <mesh.h>
-#include <char.h>
-#include <sentence.h>
-#include <ILDA.h>
+
+#include <vec.h>
+
+// #include <shape.h>
+// #include <mesh.h>
+// #include <char.h>
+// #include <sentence.h>
+// #include <ILDA.h>
+
 #include <string>
 
 /**
@@ -32,11 +34,6 @@
  * This allows the class to be called for anywhere in the code
  *
  */
-
-class Shape;
-class Char;
-class Sentence;
-class Grid;
 
 struct Cursor_info
 {
@@ -105,46 +102,46 @@ public:
     //  * @brief Draws a given shape s, the algorithm used depends on the shape's type
     //  * @param s
     //  */
-    // // void draw_shape(Shape s);
-    void drawCircle(Shape c);
-    void drawRect(Shape s);
-    /// @brief Draws a grid of shapes g, default 3x3
-    /// @param g
-    void drawGrid(Grid g);
-    /// @brief Draws a symbol object s, if first_word is true, a small delay is added before the laser beings drawing
-    /// @param s
-    /// @param first_word
-    void drawChar(Char s);
-    void drawShape(Shape s);
+    // // // void draw_shape(Shape s);
+    // void drawCircle(Shape c);
+    // void drawRect(Shape s);
+    // /// @brief Draws a grid of shapes g, default 3x3
+    // /// @param g
+    // void drawGrid(Grid g);
+    // /// @brief Draws a symbol object s, if first_word is true, a small delay is added before the laser beings drawing
+    // /// @param s
+    // /// @param first_word
+    // void drawChar(Char s);
+    // void drawShape(Shape s);
 
-    // /// @brief Draws a mesh object, these are objects that contain a specific set of vertices to be draw.
-    // /// This includes characters
-    // /// @param m
-    // void drawMesh(Mesh m);
-    void println(std::string sen);
-    void print(std::string sen);
-    /// @brief Prints a string at the current location
-    /// @param sen
-    void print(Sentence sen);
-    // WIP
-    void draw3DCube(double size, uint16_t x, uint16_t y, uint16_t rows, uint16_t cols);
-    /// @brief returns a reference to the singleton instance of this class
-    /// @return
+    // // /// @brief Draws a mesh object, these are objects that contain a specific set of vertices to be draw.
+    // // /// This includes characters
+    // // /// @param m
+    // // void drawMesh(Mesh m);
+    // void println(std::string sen);
+    // void print(std::string sen);
+    // /// @brief Prints a string at the current location
+    // /// @param sen
+    // void print(Sentence sen);
+    // // WIP
+    // void draw3DCube(double size, uint16_t x, uint16_t y, uint16_t rows, uint16_t cols);
+    // /// @brief returns a reference to the singleton instance of this class
+    // /// @return
 
-    // user friendly function calls
-    /**
-     * @brief draws a rectangle centered at x, y with the width and height
-     *
-     * @param x
-     * @param y
-     * @param w
-     * @param h
-     */
-    void drawRect(int x, int y, int w, int h);
-    void drawCircle(int x, int y, int r);
-    void drawChar(int x, int y, char c, int size);
+    // // user friendly function calls
+    // /**
+    //  * @brief draws a rectangle centered at x, y with the width and height
+    //  *
+    //  * @param x
+    //  * @param y
+    //  * @param w
+    //  * @param h
+    //  */
+    // void drawRect(int x, int y, int w, int h);
+    // void drawCircle(int x, int y, int r);
+    // void drawChar(int x, int y, char c, int size);
 
-    void drawILDA(ILDA &ild);
+    // void drawILDA(ILDA &ild);
 
     static Pointer &getInstance()
     {

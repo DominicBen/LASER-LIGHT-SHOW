@@ -22,12 +22,13 @@
 // Custom Libraries
 
 #include <pointer.h>
-#include <ILDA.h>
-#include <utils.h>
+// #include <ILDA.h>
+// #include <shape.h>
 #include <shape.h>
+
 #include <screen.h>
 
-#include <pong.h>
+// #include <pong.h>
 
 static const char *files[] = {
     "ilda/cube.ild",    // works
@@ -43,21 +44,22 @@ static const char *files[] = {
 static const int num_files = 9;
 
 // Global variables
+Graphic *g = &Shape(Shape::Circle).setPosition({WIDTH / 2, HEIGHT / 2});
 
 Pointer &p = Pointer::getInstance();
-Transform2D trans;
-Shape s;
-Shape c;
-Grid g;
-Mesh m('k');
-Char sm(m);
-std::string message = "123456789101112131415";
-Pong pong_game;
+// Transform2D trans;
+// Shape s;
+// Shape c;
+// Grid g;
+// Mesh m('k');
+// Char sm(m);
+// std::string message = "123456789101112131415";
+// Pong pong_game;
 
-Sentence sen(message); // kernaling, fontsize
-Screen screen;
+// Sentence sen(message); // kernaling, fontsize
+// Screen screen;
 
-ILDA ild;
+// ILDA ild;
 
 void setup(void)
 {
@@ -67,19 +69,19 @@ void setup(void)
   p.format_info.kerneling = 350;
   p.format_info.font_size = 500;
 
-  trans = Transform2D();
-  s = Shape(Shape::Square, trans);
+  // trans = Transform2D();
+  // s = Shape(Shape::Square, trans);
 
-  c = Shape(Shape::Circle, trans);
-  c.transform.scale = {100, 100};
-  g = Grid(c);
-  g.rows = 5;
-  g.cols = 5;
+  // c = Shape(Shape::Circle, trans);
+  // c.transform.scale = {100, 100};
+  // g = Grid(c);
+  // g.rows = 5;
+  // g.cols = 5;
 
-  sm.transform = Transform2D(Vec2{1000, 1000});
-  sen.transform.pos = {400, HEIGHT - 800};
-  p.toggleLed(HIGH);
-  ild.read(files[0]);
+  // sm.transform = Transform2D(Vec2{1000, 1000});
+  // sen.transform.pos = {400, HEIGHT - 800};
+  // p.toggleLed(HIGH);
+  // ild.read(files[0]);
   // pong_game.init();
 }
 
@@ -96,6 +98,7 @@ u_int32_t delay_var = 1500;
 
 void loop(void)
 {
+  g->draw();
   // Serial.println("Hello");
   // Timing Library
 
@@ -122,7 +125,7 @@ void loop(void)
 
   // delay(200);
   // p.draw_symbol(sm);
-  p.print(sen);
+  // p.print(sen);
   // p.pointTo({WIDTH / 2, HEIGHT - 200});
 
   // delay(20);

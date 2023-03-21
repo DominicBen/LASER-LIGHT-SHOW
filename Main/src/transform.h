@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include <constants.h>
-#include <utils.h>
 #include <vec.h>
 
 /**
