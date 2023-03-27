@@ -24,10 +24,36 @@ public:
     float magnitude() { return sqrt(x * x + y * y); };
 
     static float distance(Vec2 a, Vec2 b) { return sqrt(pow((b.x - a.x), 2) + pow((b.y - a.y), 2)); }
-    Vec2 operator-(Vec2 a) { return Vec2(x - a.x, y - a.y); }
-    Vec2 operator+(Vec2 a) { return Vec2(x + a.x, y + a.y); }
-    Vec2 operator*(Vec2 a) { return Vec2(x * a.x, y * a.y); }
-    Vec2 operator/(Vec2 a) { return Vec2(x / a.x, y / a.y); }
+    Vec2 operator-(const Vec2 a) const { return Vec2(x - a.x, y - a.y); }
+    Vec2 operator+(const Vec2 a) const { return Vec2(x + a.x, y + a.y); }
+    Vec2 operator*(const Vec2 a) const { return Vec2(x * a.x, y * a.y); }
+    Vec2 operator/(const Vec2 a) const { return Vec2(x / a.x, y / a.y); }
+
+    void operator-=(Vec2 a)
+    {
+        x = x - a.x;
+        y = y - a.y;
+    }
+    void operator+=(Vec2 a)
+    {
+        x = x + a.x;
+        y = y + a.y;
+    }
+    void operator*=(Vec2 a)
+    {
+        x = x * a.x;
+        y = y * a.y;
+    }
+    void operator/=(Vec2 a)
+    {
+        x = x / a.x;
+        y = y / a.y;
+    }
+
+    Vec2 operator-(float a) { return Vec2(x - a, y - a); }
+    Vec2 operator+(float a) { return Vec2(x + a, y + a); }
+    Vec2 operator*(float a) { return Vec2(x * a, y * a); }
+    Vec2 operator/(float a) { return Vec2(x / a, y / a); }
 
     Vec2 &normalize()
     {

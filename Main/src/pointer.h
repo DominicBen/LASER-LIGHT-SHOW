@@ -75,14 +75,16 @@ public:
     /**
      * @brief toggle_led toggles the current state of the led
      */
-    void toggleLed();
-    /**
-     * @brief toggle_led turns the led to the given state
-     * @example HIGH(1) -> on : LOW(0) -> OFF
-     * @param state
-     */
-    void toggleLed(int8_t state);
+    void toggleRed();
+    void toggleBlue();
+    void toggleGreen();
 
+    void setRed(int8_t state);
+    void setBlue(int8_t state);
+    void setGreen(int8_t state);
+
+    void toggleLed();
+    void setLed(int8_t state);
     // Singleton Constructors
     // only be one
     // These constructors call an error when attempting to copy a pointer instance, as there can

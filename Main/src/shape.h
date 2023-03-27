@@ -38,20 +38,21 @@ public:
     {
         type = type_;
     }
-    Shape(Type type_, Transform2D t_)
+
+    void draw(Transform2D transform) override
     {
-        type = type_;
-        transform = t_;
-    }
-    void draw() override
-    {
+        // Serial.println("Print Shape");
         switch (type)
         {
         case Shape::Circle:
-            drawCircle();
+            drawCircle(transform);
             break;
-        case Shape::Square || Shape::Rectangle:
-            drawRect();
+        case Shape::Square:
+            // Serial.println("Rect draw arm");
+            drawRect(transform);
+            break;
+        case Shape::Rectangle:
+            drawRect(transform);
             break;
         case Shape::Triangle:
             /* code */
@@ -71,7 +72,7 @@ public:
             break;
         }
     }
-    void drawCircle()
+    void drawCircle(Transform2D transform)
     {
         uint32_t counter;
         bool first = true;
@@ -88,30 +89,45 @@ public:
             p.pointTo(new_pos);
             if (first)
             {
-                p.toggleLed(HIGH);
+                p.setLed(LOW);
                 first = false;
             }
         }
-        p.toggleLed(LOW);
+        p.setLed(HIGH);
     }
-    void drawRect()
+    void drawRect(Transform2D transform)
     {
         float leftbound = transform.pos.x - transform.scale.x / 2;
         float rightbound = transform.pos.x + transform.scale.x / 2;
         float bottombound = transform.pos.y - transform.scale.y / 2;
         float topbound = transform.pos.y + transform.scale.y / 2;
         // Draw the rectangle
-
+        // Serial.println("Drawing rect");
         // Move Pointer to bottom left position
         p.pointTo({leftbound, bottombound});
-        p.toggleLed(HIGH);
+        p.setLed(LOW);
         p.pointTo({leftbound, topbound});
         p.pointTo({rightbound, topbound});
         p.pointTo({rightbound, bottombound});
         p.pointTo({leftbound, bottombound});
         // Turn off the laser
-        p.toggleLed(LOW);
+        p.setLed(HIGH);
     }
+    // Shape *setScale(Vec2 scale_) override
+    // {
+    //     transform.setScale(scale_);
+    //     return this;
+    // }
+    // Shape *setRotation(Vec2 rot_) override
+    // {
+    //     transform.setRotation(rot_);
+    //     return this;
+    // }
+    // Shape *setPosition(Vec2 pos_) override
+    // {
+    //     transform.setPosition(pos_);
+    //     return this;
+    // }
 
     // Graphic Functions
 };

@@ -13,7 +13,11 @@ private:
 public:
     Mesh m;
     Transform2D transform;
-    Char(Mesh m_) { m = m_; }
+    // Transform2D transform;
+    Char(Mesh m_)
+    {
+        m = m_;
+    }
     Char(char c_) { m = Mesh(c_); }
     Char(char c_, Transform2D transform_)
     {
@@ -31,9 +35,9 @@ public:
             newpos.y = map(m.verticies[m.travel_order[i]].y, -1, 1, 0, transform.scale.y) + transform.pos.y;
             newpos.x = map(m.verticies[m.travel_order[i]].x, -1, 1, 0, transform.scale.x) + transform.pos.x;
             p.pointTo({newpos.x, newpos.y});
-            p.toggleLed(m.led_info[i]);
+            p.setLed(!m.led_info[i]);
         }
-        p.toggleLed(LOW);
+        p.setLed(HIGH);
     }
 };
 

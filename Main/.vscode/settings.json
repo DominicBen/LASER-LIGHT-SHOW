@@ -32,7 +32,11 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "string": "cpp",
+        "deque": "cpp",
+        "algorithm": "cpp",
+        "numeric": "cpp"
     },
     "cmake.configureOnOpen": false
 }

@@ -1,8 +1,6 @@
 #include <ILDA.h>
 #include <Audio.h>
 
-AudioOutputI2S2 temp;
-
 ILDA::ILDA()
 {
     frames = NULL;
@@ -16,7 +14,6 @@ ILDA::~ILDA()
 
 bool ILDA::read(const char *filepath)
 {
-
     // SPI.setMISO(SDCARD_MISO_PIN);
     // SPI.setMOSI(SDCARD_MOSI_PIN);
     // SPI.setSCK(SDCARD_SCK_PIN);

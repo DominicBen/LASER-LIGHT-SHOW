@@ -42,7 +42,13 @@
       "streambuf": "cpp",
       "cinttypes": "cpp",
       "typeinfo": "cpp",
-      "iostream": "cpp"
+      "iostream": "cpp",
+      "cstring": "cpp",
+      "deque": "cpp",
+      "list": "cpp",
+      "unordered_set": "cpp",
+      "algorithm": "cpp",
+      "numeric": "cpp"
     }
   }
 }

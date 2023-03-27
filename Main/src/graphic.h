@@ -11,22 +11,22 @@ private:
 protected:
 public:
     Pointer &p = Pointer::getInstance();
-    Transform2D transform;
-    virtual void draw() = 0;
+    // Transform2D transform;
+    virtual void draw(Transform2D transform) { Serial.println("Calling Basic Graphic Draw"); }
 
-    Graphic &setScale(Vec2 scale_)
-    {
-        transform.setScale(scale_);
-        return *this;
-    }
-    Graphic &setRotation(Vec2 rot_)
-    {
-        transform.setRotation(rot_);
-        return *this;
-    }
-    Graphic &setPosition(Vec2 pos_)
-    {
-        transform.setPosition(pos_);
-        return *this;
-    }
+    // virtual Graphic *setScale(Vec2 scale_)
+    // {
+    //     transform.setScale(scale_);
+    //     return this;
+    // }
+    // virtual Graphic *setRotation(Vec2 rot_)
+    // {
+    //     transform.setRotation(rot_);
+    //     return this;
+    // }
+    // virtual Graphic *setPosition(Vec2 pos_)
+    // {
+    //     transform.setPosition(pos_);
+    //     return this;
+    // }
 };

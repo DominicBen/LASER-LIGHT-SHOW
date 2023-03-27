@@ -19,7 +19,7 @@ public:
     Sentence(std::string word_);
     Sentence(/* args */);
     ~Sentence();
-    void draw()
+    void draw(Transform2D transform)
     {
 
         p.pointTo({transform.pos.x, transform.pos.y});
@@ -44,7 +44,7 @@ public:
             sym.draw();
         }
         p.format_info.cursor_pos = {newPos.x + p.format_info.kerneling, newPos.y};
-        p.toggleLed(LOW);
+        p.setLed(LOW);
     }
 };
 

@@ -25,10 +25,11 @@
 // #include <ILDA.h>
 // #include <shape.h>
 #include <shape.h>
+#include <sentence.h>
 
 #include <screen.h>
 
-// #include <pong.h>
+#include <pong.h>
 
 static const char *files[] = {
     "ilda/cube.ild",    // works
@@ -44,19 +45,21 @@ static const char *files[] = {
 static const int num_files = 9;
 
 // Global variables
-Graphic *g = &Shape(Shape::Circle).setPosition({WIDTH / 2, HEIGHT / 2});
+// Graphic *g;
 
 Pointer &p = Pointer::getInstance();
-// Transform2D trans;
+// Shape s = Shape(Shape::Circle).setPosition({WIDTH / 2, HEIGHT / 2}).setScale({1000, 1000});
+// Graphic *g = &s;
+// Graphic *g = (new Shape(Shape::Circle))->setPosition({WIDTH / 2, HEIGHT / 2})->setScale({500, 500}); // Transform2D trans;
 // Shape s;
 // Shape c;
 // Grid g;
 // Mesh m('k');
 // Char sm(m);
-// std::string message = "123456789101112131415";
-// Pong pong_game;
+std::string message = "123456789101112131415";
+Pong pong_game;
 
-// Sentence sen(message); // kernaling, fontsize
+Sentence sen(message); // kernaling, fontsize
 // Screen screen;
 
 // ILDA ild;
@@ -66,8 +69,8 @@ void setup(void)
   Serial.begin(9600);
   Serial.println("Hello!");
 
-  p.format_info.kerneling = 350;
-  p.format_info.font_size = 500;
+  p.format_info.kerneling = 150;
+  p.format_info.font_size = 200;
 
   // trans = Transform2D();
   // s = Shape(Shape::Square, trans);
@@ -82,29 +85,53 @@ void setup(void)
   // sen.transform.pos = {400, HEIGHT - 800};
   // p.toggleLed(HIGH);
   // ild.read(files[0]);
-  // pong_game.init();
+  pong_game.init();
+  p.setLed(LOW);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(8, OUTPUT);
+  digitalWrite(5, HIGH); // blue
+  digitalWrite(6, HIGH); // red
+  digitalWrite(8, LOW);  // g reen
+
+  delay(2000);
+  // Serial.println("setting graphic");
+  // Shape s = Shape(Shape::Circle).setPosition({WIDTH / 2, HEIGHT / 2}).setScale({500, 500});
+
+  // Serial.println("set");
 }
 
 // Circle c = {WIDTH / 2 - 500, HEIGHT / 2 + 66, 100, 100, 200};
 
-// 1300 MicroSeconds for Low Resolution
-// 1350 Medium resolution
+// 1300 MicroSeconds for Low Resolution// 1350 Medium resolution
 // 1400 Medium- High
 // 1450 High, Dots appear
 // 1500 Highest, Dots appear
 
-int16_t delay_cycle = 100;
+int16_t delay_cycle = 10000;
 u_int32_t delay_var = 1500;
 
 void loop(void)
 {
-  g->draw();
+  // delay(delay_cycle);
   // Serial.println("Hello");
+  // if (g == NULL)
+  // {
+  //   Serial.println("g is null");
+  // }
+  // g->draw();
+  // sen.draw();
+  // g->draw();
+  // Serial.println();
   // Timing Library
 
   // p.drawShape(s);
   // p.draw_shape(c);
   // p.drawGrid(g);
+
+  // digitalToggle(6);
+  // digitalToggle(6);
+  // digitalToggle(8);
 
   // p.pointTo({0, 0});
   // // delayMicroseconds(delay_var);
@@ -115,7 +142,7 @@ void loop(void)
   // p.pointTo({4095, 0});
   // // delayMicroseconds(delay_var);
   // p.pointTo({0, 0});
-  // // delay(delay_cycle);
+  // delay(delay_cycle);
   // p.drawRect(WIDTH / 2, HEIGHT / 2, 4095, 4095);
 
   // p.point_to(Vec2{0, 0});
@@ -140,8 +167,8 @@ void loop(void)
   // // delayMicroseconds(delay_var);
 
   // p.drawILDA(ild);
-  // pong_game.update();
-  // pong_game.draw();
+  pong_game.draw();
+  pong_game.update();
   // p.format_info.cursor_pos = {100, 3000};
   // p.print("player ");
   // p.print("0");

@@ -6,7 +6,9 @@ const int BAUD_RATE = 9600;
 const int KERNELING = 350;
 const int FONT_SIZE = 500;
 
-const uint16_t LED_PIN = 5;
+const uint16_t RED_LED = 6;
+const uint16_t GREEN_LED = 8;
+const uint16_t BLUE_LED = 5;
 // LED_POW 5
 const uint16_t CS = 10;
 /// @brief Pin to toggle the LDAC on the dac
@@ -28,7 +30,7 @@ const uint32_t MAX_DELAY = 1500;
 const uint32_t MIN_DELAY = 300;
 
 /// @brief Max resolution when drawing circles
-const u_int16_t CIRCLE_RESOLUTION = 15;
+const u_int16_t CIRCLE_RESOLUTION = 10;
 
 /// @brief Max Width and Height on a screen
 const uint16_t WIDTH = 4096;

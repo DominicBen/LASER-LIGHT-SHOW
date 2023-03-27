@@ -4,7 +4,9 @@ Pointer::Pointer()
 {
 
     current_pos = {0, 0};
-    pinMode(LED_PIN, OUTPUT);
+    pinMode(RED_LED, OUTPUT);
+    pinMode(GREEN_LED, OUTPUT);
+    pinMode(BLUE_LED, OUTPUT);
     // Set pointer at center of screen
     dac.init();
     dac.write(0, HEIGHT / 2);
@@ -74,8 +76,12 @@ void Pointer::pointTo(Vec2 pos)
     // Clamp value to the window
     Vec2 newPos = pos.clamp(0, WIDTH);
 
+    // Serial.print(newPos.x);
+    // Serial.println(newPos.y);
+
     if (current_pos.x != newPos.x)
     {
+
         dac.write(0, newPos.x);
         current_pos.x = newPos.x;
     }
@@ -88,13 +94,30 @@ void Pointer::pointTo(Vec2 pos)
     dac.drive();
     delayMicroseconds(total_delay);
 }
+
+void Pointer::toggleRed() { digitalToggle(RED_LED); }
+void Pointer::toggleGreen() { digitalToggle(GREEN_LED); }
+void Pointer::toggleBlue() { digitalToggle(BLUE_LED); }
+/**
+ * @brief toggle_led turns the led to the given state
+ * @example HIGH(1) -> on : LOW(0) -> OFF
+ * @param state
+ */
+void Pointer::setRed(int8_t state) { digitalWrite(RED_LED, state); }
+void Pointer::setGreen(int8_t state) { digitalWrite(GREEN_LED, state); }
+void Pointer::setBlue(int8_t state) { digitalWrite(BLUE_LED, state); }
+
 void Pointer::toggleLed()
 {
-    digitalToggle(LED_PIN);
+    toggleRed();
+    toggleGreen();
+    toggleBlue();
 }
-void Pointer::toggleLed(int8_t state)
+void Pointer::setLed(int8_t state)
 {
-    digitalWrite(LED_PIN, state);
+    setRed(state);
+    setGreen(state);
+    setBlue(state);
 }
 // void Pointer::drawCircle(int x, int y, int r)
 // {
