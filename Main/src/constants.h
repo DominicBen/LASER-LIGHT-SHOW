@@ -27,7 +27,7 @@ const uint16_t LDAC = 9;
 // 1500 Highest, Dots appear
 const uint32_t MAX_DELAY = 1500;
 /// @brief Minimum delay the laser experiences when moving
-const uint32_t MIN_DELAY = 300;
+const uint32_t MIN_DELAY = 300; // 300 usually pretty good
 
 /// @brief Max resolution when drawing circles
 const u_int16_t CIRCLE_RESOLUTION = 10;

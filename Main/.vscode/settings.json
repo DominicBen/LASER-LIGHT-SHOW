@@ -36,7 +36,8 @@
         "string": "cpp",
         "deque": "cpp",
         "algorithm": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "random": "cpp"
     },
     "cmake.configureOnOpen": false
 }

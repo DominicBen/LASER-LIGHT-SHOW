@@ -95,9 +95,6 @@ void Pointer::pointTo(Vec2 pos)
     delayMicroseconds(total_delay);
 }
 
-void Pointer::toggleRed() { digitalToggle(RED_LED); }
-void Pointer::toggleGreen() { digitalToggle(GREEN_LED); }
-void Pointer::toggleBlue() { digitalToggle(BLUE_LED); }
 /**
  * @brief toggle_led turns the led to the given state
  * @example HIGH(1) -> on : LOW(0) -> OFF
@@ -107,18 +104,75 @@ void Pointer::setRed(int8_t state) { digitalWrite(RED_LED, state); }
 void Pointer::setGreen(int8_t state) { digitalWrite(GREEN_LED, state); }
 void Pointer::setBlue(int8_t state) { digitalWrite(BLUE_LED, state); }
 
-void Pointer::toggleLed()
-{
-    toggleRed();
-    toggleGreen();
-    toggleBlue();
-}
 void Pointer::setLed(int8_t state)
 {
-    setRed(state);
-    setGreen(state);
-    setBlue(state);
+    if (state == LOW)
+    {
+        setColor(cur_color);
+    }
+    else
+    {
+        setRed(HIGH);
+        setGreen(HIGH);
+        setBlue(HIGH);
+    }
 }
+void Pointer::setColor(Color c)
+{
+    switch (c)
+    {
+    case RED:
+        setRed(LOW);
+        setGreen(HIGH);
+        setBlue(HIGH);
+
+        break;
+    case GREEN:
+        setRed(HIGH);
+        setGreen(LOW);
+        setBlue(HIGH);
+        /* code */
+        break;
+    case BLUE:
+        setRed(HIGH);
+        setGreen(HIGH);
+        setBlue(LOW);
+        /* code */
+        break;
+    case CYAN:
+        setRed(HIGH);
+        setGreen(LOW);
+        setBlue(LOW);
+        /* code */
+        break;
+    case YELLOW:
+        setRed(LOW);
+        setGreen(LOW);
+        setBlue(HIGH);
+        /* code */
+        break;
+    case MAGGENTA:
+        setRed(LOW);
+        setGreen(HIGH);
+        setBlue(LOW);
+        /* code */
+        break;
+    case WHITE:
+        setRed(LOW);
+        setGreen(LOW);
+        setBlue(LOW);
+        /* code */
+        break;
+
+    default:
+        setRed(LOW);
+        setGreen(LOW);
+        setBlue(LOW);
+        break;
+    }
+    cur_color = c;
+}
+
 // void Pointer::drawCircle(int x, int y, int r)
 // {
 //     Shape circle = Shape(Shape::Circle, Transform2D().setPosition({x, y}).setScale({r, r}));

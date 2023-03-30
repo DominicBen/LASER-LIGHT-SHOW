@@ -1,5 +1,6 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
+
 #include <transform.h>
 #include <graphic.h>
 #include <collision.h>
@@ -13,6 +14,7 @@ private:
 public:
     Graphic *graphic;
     Collider *collider;
+    Color cur_color = RED;
     // Physics Info
     Transform2D *transform;
     Vec2 velocity = {0, 0};
@@ -22,6 +24,11 @@ public:
     // functions
     void update();
     void draw();
+    GameObject2D *setColor(Color c)
+    {
+        cur_color = c;
+        return this;
+    }
 
     GameObject2D *setScale(Vec2 scale_)
     {
@@ -42,28 +49,5 @@ public:
     GameObject2D(Graphic *g);
     ~GameObject2D();
 };
-
-void GameObject2D::draw()
-{
-    graphic->draw(*transform);
-}
-
-void GameObject2D::update()
-{
-}
-
-GameObject2D::GameObject2D(Graphic *g)
-{
-    graphic = g;
-    collider = new SphereCollider();
-    transform = new Transform2D();
-}
-
-GameObject2D::~GameObject2D()
-{
-    free(collider);
-    free(graphic);
-    free(transform);
-}
 
 #endif // !GAMEOBJECT_H

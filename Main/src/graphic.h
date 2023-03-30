@@ -12,7 +12,7 @@ protected:
 public:
     Pointer &p = Pointer::getInstance();
     // Transform2D transform;
-    virtual void draw(Transform2D transform) { Serial.println("Calling Basic Graphic Draw"); }
+    virtual void draw(Transform2D transform, Color c) { Serial.println("Calling Basic Graphic Draw"); }
 
     // virtual Graphic *setScale(Vec2 scale_)
     // {

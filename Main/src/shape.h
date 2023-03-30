@@ -39,20 +39,20 @@ public:
         type = type_;
     }
 
-    void draw(Transform2D transform) override
+    void draw(Transform2D transform, Color c) override
     {
         // Serial.println("Print Shape");
         switch (type)
         {
         case Shape::Circle:
-            drawCircle(transform);
+            drawCircle(transform, c);
             break;
         case Shape::Square:
             // Serial.println("Rect draw arm");
-            drawRect(transform);
+            drawRect(transform, c);
             break;
         case Shape::Rectangle:
-            drawRect(transform);
+            drawRect(transform, c);
             break;
         case Shape::Triangle:
             /* code */
@@ -72,7 +72,7 @@ public:
             break;
         }
     }
-    void drawCircle(Transform2D transform)
+    void drawCircle(Transform2D transform, Color c)
     {
         uint32_t counter;
         bool first = true;
@@ -89,13 +89,13 @@ public:
             p.pointTo(new_pos);
             if (first)
             {
-                p.setLed(LOW);
+                p.setColor(c);
                 first = false;
             }
         }
         p.setLed(HIGH);
     }
-    void drawRect(Transform2D transform)
+    void drawRect(Transform2D transform, Color c)
     {
         float leftbound = transform.pos.x - transform.scale.x / 2;
         float rightbound = transform.pos.x + transform.scale.x / 2;
@@ -105,7 +105,7 @@ public:
         // Serial.println("Drawing rect");
         // Move Pointer to bottom left position
         p.pointTo({leftbound, bottombound});
-        p.setLed(LOW);
+        p.setColor(c);
         p.pointTo({leftbound, topbound});
         p.pointTo({rightbound, topbound});
         p.pointTo({rightbound, bottombound});

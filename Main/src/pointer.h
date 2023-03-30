@@ -44,6 +44,17 @@ struct Cursor_info
     Vec2 cursor_pos;
 };
 
+enum Color
+{
+    WHITE,
+    RED,
+    BLUE,
+    GREEN,
+    CYAN,
+    YELLOW,
+    MAGGENTA
+};
+
 class Pointer
 {
 private:
@@ -75,15 +86,16 @@ public:
     /**
      * @brief toggle_led toggles the current state of the led
      */
-    void toggleRed();
-    void toggleBlue();
-    void toggleGreen();
+    // void toggleRed();
+    // void toggleBlue();
+    // void toggleGreen();
 
     void setRed(int8_t state);
     void setBlue(int8_t state);
     void setGreen(int8_t state);
 
-    void toggleLed();
+    // void toggleLed();
+    void setColor(Color c);
     void setLed(int8_t state);
     // Singleton Constructors
     // only be one
@@ -97,6 +109,7 @@ public:
     Vec2 current_pos;
     /// @brief Current cursor data of the cursor, used for where to print words
     Cursor_info format_info;
+    Color cur_color;
 
     MCP4922 dac = MCP4922(CS, LDAC);
 

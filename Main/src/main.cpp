@@ -46,6 +46,8 @@ static const int num_files = 9;
 
 // Global variables
 // Graphic *g;
+Graphic *cubeg = new Shape(Shape::Rectangle);
+GameObject2D *cube = (new GameObject2D(cubeg))->setPosition({WIDTH / 2, HEIGHT / 2})->setScale({1000, 1000})->setColor(RED);
 
 Pointer &p = Pointer::getInstance();
 // Shape s = Shape(Shape::Circle).setPosition({WIDTH / 2, HEIGHT / 2}).setScale({1000, 1000});
@@ -90,9 +92,9 @@ void setup(void)
   pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);
   pinMode(8, OUTPUT);
-  digitalWrite(5, HIGH); // blue
-  digitalWrite(6, HIGH); // red
-  digitalWrite(8, LOW);  // g reen
+  digitalWrite(5, LOW); // blue
+  digitalWrite(6, LOW); // red
+  digitalWrite(8, LOW); // g reen
 
   delay(2000);
   // Serial.println("setting graphic");
@@ -113,6 +115,7 @@ u_int32_t delay_var = 1500;
 
 void loop(void)
 {
+  // cube->draw();
   // delay(delay_cycle);
   // Serial.println("Hello");
   // if (g == NULL)
@@ -134,13 +137,16 @@ void loop(void)
   // digitalToggle(8);
 
   // p.pointTo({0, 0});
+  // delay(5);
   // // delayMicroseconds(delay_var);
   // p.pointTo({0, 4095});
+  // delay(5);
   // // delayMicroseconds(delay_var);
   // p.pointTo({4095, 4095});
+  // delay(5);
   // // delayMicroseconds(delay_var);
   // p.pointTo({4095, 0});
-  // // delayMicroseconds(delay_var);
+  // delay(5);
   // p.pointTo({0, 0});
   // delay(delay_cycle);
   // p.drawRect(WIDTH / 2, HEIGHT / 2, 4095, 4095);

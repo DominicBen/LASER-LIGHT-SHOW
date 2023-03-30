@@ -28,7 +28,6 @@ public:
     Vec2 operator+(const Vec2 a) const { return Vec2(x + a.x, y + a.y); }
     Vec2 operator*(const Vec2 a) const { return Vec2(x * a.x, y * a.y); }
     Vec2 operator/(const Vec2 a) const { return Vec2(x / a.x, y / a.y); }
-
     void operator-=(Vec2 a)
     {
         x = x - a.x;
@@ -73,6 +72,10 @@ public:
         x = abs(x);
         y = abs(y);
         return *this;
+    }
+    float dot(Vec2 a)
+    {
+        return (x * a.x + y * a.y);
     }
     Vec2 &clamp(float min, float max)
     {

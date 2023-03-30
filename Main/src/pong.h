@@ -101,11 +101,11 @@ void Pong::init()
     // gameObjects.push_back(&border);
     // gameObjects.push_back(&player1_score_display);
     // gameObjects.push_back(&player2_score_display);
-    for (size_t i = 0; i < 10; i++)
+    for (size_t i = 0; i < 7; i++)
     {
         float size = random(100) + 50;
         float offset = random(100) + 50;
-        GameObject2D *ball = (new GameObject2D(ballg))->setPosition({WIDTH / 2 + offset, HEIGHT / 2 + offset})->setScale({size, size});
+        GameObject2D *ball = (new GameObject2D(ballg))->setPosition({WIDTH / 2 + offset, HEIGHT / 2 + offset})->setScale({size, size})->setColor((Color)i);
         world.addObject(ball);
     }
 
