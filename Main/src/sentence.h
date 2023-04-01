@@ -19,7 +19,7 @@ public:
     Sentence(std::string word_);
     Sentence(/* args */);
     ~Sentence();
-    void draw(Transform2D transform)
+    void draw(Transform2D transform, Color c) override
     {
 
         p.pointTo({transform.pos.x, transform.pos.y});
@@ -40,8 +40,8 @@ public:
             }
 
             Char sym = word[i];
-            sym.transform = Transform2D().setScale({(float)p.format_info.font_size, (float)p.format_info.font_size}).setPosition(newPos);
-            sym.draw();
+            Transform2D temp = Transform2D().setScale({(float)p.format_info.font_size, (float)p.format_info.font_size}).setPosition(newPos);
+            sym.draw(temp, c);
         }
         p.format_info.cursor_pos = {newPos.x + p.format_info.kerneling, newPos.y};
         p.setLed(LOW);

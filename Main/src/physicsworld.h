@@ -45,11 +45,12 @@ void PhysicsWorld2D::fill(std::vector<GameObject2D *> objects_)
 }
 void PhysicsWorld2D::resolveCollisions()
 {
-    Serial.println("===================== Collisions =============");
+    // Serial.println("===================== Collisions =============");
     std::vector<Collision> collisions;
     // Find all collisions between all objects
     for (GameObject2D *a : objects)
     {
+
         for (GameObject2D *b : objects)
         {
 
@@ -57,25 +58,38 @@ void PhysicsWorld2D::resolveCollisions()
             {
                 break;
             }
-            if (!a->collider || !b->collider)
+            if (!a->is_collision || !b->is_collision)
             {
+                continue;
+            }
+            if (a->colliders.empty() || b->colliders.empty())
+            {
+
                 Serial.println("Missing collider on object, skipping");
                 continue;
             }
-
-            CollisionPoints points = a->collider->testCollision(a->transform, b->collider, b->transform);
-
-            if (points.hasCollision)
+            // Serial.println("Entering for loops");
+            for (Collider *c1 : a->colliders)
             {
-                collisions.emplace_back(a, b, points);
-                Serial.println("collision detected");
+                for (Collider *c2 : b->colliders)
+                {
+                    // Serial.println("Inside of 4 for loops right now");
+
+                    CollisionPoints points = c1->testCollision(a->transform, c2, b->transform);
+
+                    if (points.hasCollision)
+                    {
+                        collisions.emplace_back(a, b, points);
+                        Serial.println("collision detected");
+                    }
+                }
             }
         }
     }
     // Move objects if they are colliding
     for (Solver *solver : solvers)
     {
-        Serial.println("looking for  collisions to solve.....");
+        // Serial.println("looking for  collisions to solve.....");
         solver->solve(collisions);
     }
 }
@@ -105,12 +119,15 @@ void PhysicsWorld2D::removeObject(GameObject2D *obj)
 
 void PhysicsWorld2D::step(float dt)
 {
-    resolveCollisions();
-    resolveWorldBounderies(dt);
+
     for (GameObject2D *obj : objects)
     {
+        if (obj->is_static)
+            continue;
+
         // Serial.println("Updating object force");
-        obj->force += gravity * obj->mass;
+        if (obj->is_gravity)
+            obj->force += gravity * obj->mass;
         // Serial.println("Updating one object vel");
         obj->velocity += obj->force / obj->mass * dt;
         // Serial.println("Updating one object pos");
@@ -118,12 +135,16 @@ void PhysicsWorld2D::step(float dt)
         // Serial.println("Updating one object force");
         obj->force = Vec2(0, 0);
     }
+    resolveCollisions();
+    resolveWorldBounderies(dt);
 }
 
 void PhysicsWorld2D::resolveWorldBounderies(float dt)
 {
     for (GameObject2D *obj : objects)
     {
+        if (obj->is_static)
+            continue;
 
         if (obj->transform->pos.y >= HEIGHT - obj->transform->scale.y)
         { // top bounce
@@ -137,7 +158,7 @@ void PhysicsWorld2D::resolveWorldBounderies(float dt)
         }
         if (obj->transform->pos.x >= WIDTH - obj->transform->scale.x)
         { // right side
-            obj->transform->pos.y = WIDTH - obj->transform->scale.x;
+            obj->transform->pos.x = WIDTH - obj->transform->scale.x;
             obj->velocity.x *= -1;
         }
         if (obj->transform->pos.x <= obj->transform->scale.x)

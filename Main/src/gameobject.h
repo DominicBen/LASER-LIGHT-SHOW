@@ -4,6 +4,8 @@
 #include <transform.h>
 #include <graphic.h>
 #include <collision.h>
+#include <collider.h>
+#include <vector>
 
 class GameObject2D
 {
@@ -13,13 +15,19 @@ private:
 
 public:
     Graphic *graphic;
-    Collider *collider;
+    // Collider *collider;
+    std::vector<Collider *> colliders;
     Color cur_color = RED;
     // Physics Info
     Transform2D *transform;
     Vec2 velocity = {0, 0};
     Vec2 force = {0, 0};
     float mass = 1;
+    // Physic Bools
+    bool is_static = false;   // weather an object is completly immobile and uneffected by physics
+    bool is_gravity = true;   // whether an object is effected by gravity
+    bool is_collision = true; // Whether an object is effected by collision solvers
+    bool is_collided = false; // wheahter an objects has collided with something since the last frame
 
     // functions
     void update();
@@ -45,8 +53,10 @@ public:
         transform->setPosition(pos_);
         return this;
     }
+    GameObject2D *fitColliderToObject();
     GameObject2D(/* args */);
     GameObject2D(Graphic *g);
+    GameObject2D(Graphic *g, Collider *c);
     ~GameObject2D();
 };
 

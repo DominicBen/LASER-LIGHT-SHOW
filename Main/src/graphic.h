@@ -10,6 +10,18 @@ private:
     /* data */
 protected:
 public:
+    enum Type
+    {
+        Circle,
+        Rectangle,
+        Triangle,
+        Star,
+        Polygon,
+        Diamond,
+        Grid,
+        AlphaNumeric
+    };
+    Type type = Circle;
     Pointer &p = Pointer::getInstance();
     // Transform2D transform;
     virtual void draw(Transform2D transform, Color c) { Serial.println("Calling Basic Graphic Draw"); }

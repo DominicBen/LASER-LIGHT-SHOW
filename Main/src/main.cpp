@@ -15,20 +15,18 @@
 */
 /**************************************************************************/
 #include <Arduino.h>
+#include "TeensyDebug.h"
 #include <Wire.h>
 #include <Adafruit_MCP4725.h>
 #include <vector>
 
+#pragma GCC optimize("O0")
 // Custom Libraries
 
 #include <pointer.h>
-// #include <ILDA.h>
-// #include <shape.h>
 #include <shape.h>
 #include <sentence.h>
-
 #include <screen.h>
-
 #include <pong.h>
 
 static const char *files[] = {
@@ -115,6 +113,7 @@ u_int32_t delay_var = 1500;
 
 void loop(void)
 {
+  // delay(500);
   // cube->draw();
   // delay(delay_cycle);
   // Serial.println("Hello");
@@ -135,19 +134,20 @@ void loop(void)
   // digitalToggle(6);
   // digitalToggle(6);
   // digitalToggle(8);
-
+  // p.setColor(WHITE);
   // p.pointTo({0, 0});
-  // delay(5);
+  // // delay(5);
   // // delayMicroseconds(delay_var);
   // p.pointTo({0, 4095});
-  // delay(5);
+  // // delay(5);
   // // delayMicroseconds(delay_var);
   // p.pointTo({4095, 4095});
-  // delay(5);
+  // // delay(5);
   // // delayMicroseconds(delay_var);
   // p.pointTo({4095, 0});
-  // delay(5);
+  // // delay(5);
   // p.pointTo({0, 0});
+  // p.setLed(HIGH);
   // delay(delay_cycle);
   // p.drawRect(WIDTH / 2, HEIGHT / 2, 4095, 4095);
 

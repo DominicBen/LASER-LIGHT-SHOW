@@ -49,10 +49,13 @@ public:
         y = y / a.y;
     }
 
-    Vec2 operator-(float a) { return Vec2(x - a, y - a); }
-    Vec2 operator+(float a) { return Vec2(x + a, y + a); }
-    Vec2 operator*(float a) { return Vec2(x * a, y * a); }
-    Vec2 operator/(float a) { return Vec2(x / a, y / a); }
+    Vec2 operator-(const float a) const { return Vec2(x - a, y - a); }
+    Vec2 operator+(const float a) const { return Vec2(x + a, y + a); }
+    Vec2 operator*(const float a) const
+    {
+        return Vec2(x * a, y * a);
+    }
+    Vec2 operator/(const float a) const { return Vec2(x / a, y / a); }
 
     Vec2 &normalize()
     {
@@ -73,7 +76,7 @@ public:
         y = abs(y);
         return *this;
     }
-    float dot(Vec2 a)
+    float dot(Vec2 a) const
     {
         return (x * a.x + y * a.y);
     }
@@ -98,6 +101,15 @@ public:
         new_num.x = map(old_num.x, old_min, old_max, new_min, new_max);
         new_num.y = map(old_num.y, old_min, old_max, new_min, new_max);
         return new_num;
+    }
+    void print() const
+    {
+        Serial.print("{");
+        Serial.print(x);
+        Serial.print(",");
+        Serial.print(y);
+        Serial.print("}");
+        Serial.println("");
     }
 };
 /**

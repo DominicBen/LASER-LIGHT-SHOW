@@ -10,11 +10,11 @@ private:
 public:
     Vec2 *center;
     float *radius;
-    CollisionPoints testCollision(const Transform2D *transform, const Collider *collider, Transform2D *colliderTransform) const override;
+    CollisionPoints testCollision(const Transform2D *transform, const Collider *collider, const Transform2D *colliderTransform) const override;
 
-    CollisionPoints testCollision(const Transform2D *transform, const SphereCollider *sphere, Transform2D *colliderTransform) const override;
+    CollisionPoints testCollision(const Transform2D *transform, const SphereCollider *sphere, const Transform2D *colliderTransform) const override;
 
-    CollisionPoints testCollision(const Transform2D *transform, const PlaneCollider *plane, Transform2D *colliderTransform) const override;
+    CollisionPoints testCollision(const Transform2D *transform, const PlaneCollider *plane, const Transform2D *colliderTransform) const override;
 
     SphereCollider(Vec2 *center_, float *radius_);
 

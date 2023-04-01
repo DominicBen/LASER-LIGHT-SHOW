@@ -29,46 +29,56 @@ class Pong : public Game
 {
 private:
 public:
+    // Physics
+    PhysicsWorld2D world;
+    PositionSolver solver1 = PositionSolver();
+    ImpulseSolver solver2 = ImpulseSolver();
+
+    // Game Variables
+    Vec2 rightPaddleOffset = {WIDTH - 300, HEIGHT / 2};
+    Vec2 leftPaddleOffset = {300, HEIGHT / 2};
+    Vec2 paddleSize = {100, 500};
+    Vec2 ballSpeed = {-15, 0};
+
+    // Player info
+    Color player1_color = GREEN;
+    Color player2_color = GREEN;
+    char player1_score = '0';
+    char player2_score = '0';
+    Char player1_score_display = Char(player1_score);
+    Char player2_score_display = Char(player2_score);
+    Vec2 player1_score_location = {WIDTH / 2 - 300, HEIGHT - 300};
+    Vec2 player2_score_location = {WIDTH / 2 + 300, HEIGHT - 300};
+    int font_size = 100;
+    Transform2D player1_score_transform = Transform2D().setPosition(player1_score_location).setScale({font_size * 2, font_size});
+    Transform2D player2_score_transform = Transform2D().setPosition(player2_score_location).setScale({font_size * 2, font_size});
+
+    // Game state
+    bool gameEnd = false;
+
     AudioPlaySdWav playWav1;    // xy=88,55
     AudioOutputI2S audioOutput; // xy=280,79
     AudioConnection patchCord1 = AudioConnection(playWav1, 0, audioOutput, 0);
     AudioConnection patchCord2 = AudioConnection(playWav1, 1, audioOutput, 1);
     AudioControlSGTL5000 sgtl5000_1; // xy=209,140
 
-    Vec2 rightPaddleOffset = {WIDTH - 300, HEIGHT / 2};
-    Vec2 leftPaddleOffset = {300, HEIGHT / 2};
+    Graphic *ballg = new Shape(Graphic::Circle);
+    Graphic *floorg = new Shape(Graphic::Rectangle);
 
-    PositionSolver solver1 = PositionSolver();
+    GameObject2D *ball = (new GameObject2D(ballg))->setPosition({WIDTH / 2, HEIGHT / 2})->setScale({100, 100})->setColor(WHITE)->fitColliderToObject();
+    GameObject2D *leftPaddle = (new GameObject2D(floorg))->setPosition(leftPaddleOffset)->setScale(paddleSize)->setColor(player1_color)->fitColliderToObject();
+    GameObject2D *rightPaddle = (new GameObject2D(floorg))->setPosition(rightPaddleOffset)->setScale(paddleSize)->setColor(player2_color)->fitColliderToObject();
+    GameObject2D *player1border = (new GameObject2D(floorg))->setPosition({WIDTH / 4, HEIGHT / 2})->setScale({WIDTH / 2, HEIGHT - 1})->setColor(player1_color);
+    GameObject2D *player2border = (new GameObject2D(floorg))->setPosition({(WIDTH - WIDTH / 4), HEIGHT / 2})->setScale({WIDTH / 2 - 1, HEIGHT - 1})->setColor(player2_color);
 
-    Graphic *ballg = new Shape(Shape::Circle);
-    // GameObject2D *ball = (new GameObject2D(ballg))->setPosition({WIDTH / 2, HEIGHT / 2})->setScale({500, 500});
+    Pong(/* args */);
+    ~Pong();
 
-    // GameObject2D leftPaddle = (new Shape(Shape::Rectangle))->setPosition(leftPaddleOffset)->setScale({100, 400});
-    // GameObject2D rightPaddle = (new Shape(Shape::Rectangle))->setPosition(rightPaddleOffset)->setScale({100, 400});
-    // GameObject2D border = (new Shape(Shape::Rectangle))->setPosition({WIDTH / 2, HEIGHT / 2})->setScale({WIDTH - 1, HEIGHT - 1});
-    // GameObject2D player1_score_display = (new Char('0'))->setPosition({WIDTH / 2 - 300, HEIGHT - 300});
-    // GameObject2D player2_score_display = (new Char('0'))->setPosition({WIDTH / 2 + 300, HEIGHT - 300});
-
-    // std::vector<GameObject2D *> gameObjects;
-    PhysicsWorld2D world;
-
-    char player1_score = '0';
-    char player2_score = '0';
-
-    int ballSpeedX = -10;
-    int ballSpeedY = 10;
-
-    int font_size = 30;
-
-    bool gameEnd = false;
+    // Helper Functions
     void init();
     void update();
     void draw();
     void drawHud();
-
-    Pong(/* args */);
-    ~Pong();
-    // Helper Functions
     void win(std::string winner);
     void resetRound();
     void playFile(const char *filename);
@@ -94,42 +104,34 @@ void Pong::init()
     // }
     // delay(1000);
 
+    ball->velocity = ballSpeed;
+    ball->is_gravity = false;
+
+    leftPaddle->is_gravity = false;
+    leftPaddle->is_collision = true;
+    leftPaddle->is_static = true;
+    rightPaddle->is_gravity = false;
+    rightPaddle->is_collision = true;
+    rightPaddle->is_static = true;
+    player1border->is_collision = false;
+    player1border->is_gravity = false;
+    player1border->is_static = true;
+    player2border->is_collision = false;
+    player2border->is_gravity = false;
+    player2border->is_static = true;
+
     Serial.println("Filling game vector");
-    // gameObjects.push_back(&ball);
-    // gameObjects.push_back(&leftPaddle);
-    // gameObjects.push_back(&rightPaddle);
-    // gameObjects.push_back(&border);
-    // gameObjects.push_back(&player1_score_display);
-    // gameObjects.push_back(&player2_score_display);
-    for (size_t i = 0; i < 7; i++)
-    {
-        float size = random(100) + 50;
-        float offset = random(100) + 50;
-        GameObject2D *ball = (new GameObject2D(ballg))->setPosition({WIDTH / 2 + offset, HEIGHT / 2 + offset})->setScale({size, size})->setColor((Color)i);
-        world.addObject(ball);
-    }
 
-    // world.addObject(ball);
+    world.addObject(ball);
+    world.addObject(leftPaddle);
+    world.addObject(rightPaddle);
+    world.addObject(player1border);
+    world.addObject(player2border);
+
     world.addSolver(&solver1);
+    world.addSolver(&solver2);
 
-    // world.addObject(&leftPaddle);
-    // world.addObject(&rightPaddle);
-    // world.addObject(&border);
-    // world.addObject(&player1_score_display);
-    // world.addObject(&player2_score_display);
-    // world.fill(gameObjects);
-
-    // p.begin(); // 320x240
-    // p.setRotation(3);
-    // p.fillScreen(ILI9341_BLACK);
-    // p.drawRect(border);
-    // p.drawRect(leftPaddle);
-    // p.drawCircle(ball);
-    // p.drawRect(rightPaddle);
-    // p.drawRect(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT); // border
-    // p.drawRect(100, HEIGHT / 2, 2, 30);               // left paddle
-    // p.drawRect(308, 105, 2, 30);                      // right paddle
-    // p.drawCircle(160, 120, 2);                        // ball
+    // ball
 
     pinMode(41, INPUT_PULLUP);
     pinMode(40, INPUT_PULLUP);
@@ -138,108 +140,91 @@ void Pong::init()
 }
 void Pong::update()
 {
-    world.step(0.75);
+    world.step(1);
 
-    // if (gameEnd == false)
-    // {
-    //     for (size_t i = 0; i < objects.size(); i++)
-    //     {
-    //         objects[i].update();
-    //     }
+    if (gameEnd == false)
+    {
+        if (ball->is_collided)
+        {
+            playFile("bounce.WAV");
+        }
+        // if (ball.transform.pos.y >= HEIGHT - ball.transform.scale.y)
+        // { // bottom bounce
+        //     ballSpeedY *= -1;
+        //     playFile("bounce.WAV");
+        //     delay(25);
+        // }
+        // if (ball.transform.pos.y <= ball.transform.scale.y)
+        // { // top bounce
+        //     ballSpeedY *= -1;
+        //     playFile("bounce.WAV");
+        //     delay(25);
+        // }
+        // if (ball.transform.pos.x >= rightPaddle.transform.pos.x - 4 && ball.transform.pos.y >= rightPaddle.transform.pos.y && ball.transform.pos.y <= rightPaddle.transform.pos.y + 30)
+        // { // right paddle bounce
+        //     ballSpeedX *= -1;
+        //     playFile("bounce.WAV");
+        //     delay(25);
+        // }
+        // if (ball.transform.pos.x <= leftPaddle.transform.pos.x + 5 && ball.transform.pos.y >= leftPaddle.transform.pos.y && ball.transform.pos.y <= leftPaddle.transform.pos.y + 30)
+        // { // left paddle bounce
+        //     ballSpeedX *= -1;
+        //     playFile("bounce.WAV");
+        //     delay(25);
+        // }
 
-    //     if (ball.transform.pos.y >= HEIGHT - ball.transform.scale.y)
-    //     { // bottom bounce
-    //         ballSpeedY *= -1;
-    //         playFile("bounce.WAV");
-    //         delay(25);
-    //     }
-    //     if (ball.transform.pos.y <= ball.transform.scale.y)
-    //     { // top bounce
-    //         ballSpeedY *= -1;
-    //         playFile("bounce.WAV");
-    //         delay(25);
-    //     }
-    //     if (ball.transform.pos.x >= rightPaddle.transform.pos.x - 4 && ball.transform.pos.y >= rightPaddle.transform.pos.y && ball.transform.pos.y <= rightPaddle.transform.pos.y + 30)
-    //     { // right paddle bounce
-    //         ballSpeedX *= -1;
-    //         playFile("bounce.WAV");
-    //         delay(25);
-    //     }
-    //     if (ball.transform.pos.x <= leftPaddle.transform.pos.x + 5 && ball.transform.pos.y >= leftPaddle.transform.pos.y && ball.transform.pos.y <= leftPaddle.transform.pos.y + 30)
-    //     { // left paddle bounce
-    //         ballSpeedX *= -1;
-    //         playFile("bounce.WAV");
-    //         delay(25);
-    //     }
-    //     if (ball.transform.pos.x >= WIDTH - ball.transform.scale.x)
-    //     { // right goal
-    //         player1_score++;
-    //         playFile("goal.WAV");
-    //         delay(25);
-    //         resetRound();
-    //     }
-    //     if (ball.transform.pos.x <= ball.transform.scale.x)
-    //     { // left goal
-    //         player2_score++;
-    //         playFile("goal.WAV");
-    //         delay(25);
-    //         resetRound();
-    //     }
-    //     // p.drawChar(WIDTH - 100, 150, player1, font_size);
-    //     // p.drawChar(WIDTH + 100, 150, player2, font_size);
-    //     // p.drawCircle(ballX, ballY, 2); // ball
-    //     ball.transform.pos.x += ballSpeedX;
-    //     ball.transform.pos.y += ballSpeedY;
-    //     // p.drawCircle(ballX, ballY, 20);                           // ball
-    //     // p.drawRect(WIDTH / 2, HEIGHT / 2, WIDTH - 1, HEIGHT - 1); // border
+        if (ball->transform->pos.x >= WIDTH - ball->transform->scale.x)
+        { // right goal
+            player1_score++;
+            playFile("goal.WAV");
+            delay(25);
+            resetRound();
+        }
+        if (ball->transform->pos.x <= ball->transform->scale.x)
+        { // left goal
+            player2_score++;
+            playFile("goal.WAV");
+            delay(25);
+            resetRound();
+        }
 
-    //     // p.drawRect(leftPaddleOffset.x, leftPaddle.transform.pos.y, 2, 30);   // left paddle
-    //     // p.drawRect(rightPaddleOffset.x, rightPaddle.transform.pos.y, 2, 30); // right paddle
-    //     if (digitalRead(41) == LOW)
-    //     {
-    //         leftPaddle.transform.pos.y += 1;
-    //     }
-    //     if (digitalRead(40) == LOW)
-    //     {
-    //         leftPaddle.transform.pos.y -= 1;
-    //     }
-    //     if (digitalRead(37) == LOW)
-    //     {
-    //         rightPaddle.transform.pos.y += 1;
-    //     }
-    //     if (digitalRead(36) == LOW)
-    //     {
-    //         rightPaddle.transform.pos.y -= 1;
-    //     }
-    //     // p.drawRect(leftPaddleOffset.x, leftPaddle.transform.pos.y, 20, 300);   // left paddle
-    //     // p.drawRect(WIDTH / 2, HEIGHT / 2, 20, 300);             // left paddle
-    //     // p.drawRect(rightPaddleOffset.x, rightPaddle.transform.pos.y, 20, 300); // right paddle
+        // if (digitalRead(41) == LOW)
+        // {
+        //     leftPaddle->transform->pos.y += 1;
+        // }
+        // if (digitalRead(40) == LOW)
+        // {
+        //     leftPaddle->transform->pos.y -= 1;
+        // }
+        // if (digitalRead(37) == LOW)
+        // {
+        //     rightPaddle->transform->pos.y += 1;
+        // }
+        // if (digitalRead(36) == LOW)
+        // {
+        //     rightPaddle->transform->pos.y -= 1;
+        // }
 
-    //     delay(1);
-    // }
-    // if (player1_score >= '9')
-    // {
-    //     gameEnd = true;
-    //     win("1");
-    // }
-    // if (player2_score >= '9')
-    // {
-    //     gameEnd = true;
-    //     win("2");
-    // }
+        delay(1);
+    }
+    if (player1_score >= '9')
+    {
+        gameEnd = true;
+        win("1");
+    }
+    if (player2_score >= '9')
+    {
+        gameEnd = true;
+        win("2");
+    }
 }
 void Pong::draw()
 {
-    // ballg->draw();
     world.draw();
-    // player1_score_display.m = Mesh(player1_score);
-    // player2_score_display.m = Mesh(player2_score);
-    // p.drawChar(player1_score_display);
-    // p.drawChar(player2_score_display);
-    // p.drawRect(leftPaddle);
-    // p.drawRect(rightPaddle);
-    // p.drawCircle(ball);
-    // p.drawRect(border);
+    player1_score_display.m = Mesh(player1_score);
+    player2_score_display.m = Mesh(player2_score);
+    player1_score_display.draw(player1_score_transform, player1_color);
+    player2_score_display.draw(player2_score_transform, player2_color);
 }
 
 Pong::Pong(/* args */)
@@ -268,14 +253,14 @@ void Pong::win(std::string winner)
 
 void Pong::resetRound()
 {
-    // int range = 300;
-    // // gives value between -range/2 to range/2
-    // range = random(range) - range / 2;
-    // ball.transform.pos.x = WIDTH / 2 + range;
-    // ball.transform.pos.y = HEIGHT / 2 + range;
-    // // p.fillScreen(ILI9341_BLACK);
-    // // p.drawRect(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT); // border
-    // // p.drawCircle(ballX, ballY, 20);                   // ball
+    int range = 300;
+    // gives value between -range/2 to range/2
+    range = random(range) - range / 2;
+    ball->transform->pos.x = WIDTH / 2 + range;
+    ball->transform->pos.y = HEIGHT / 2 + range;
+    // p.fillScreen(ILI9341_BLACK);
+    // p.drawRect(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT); // border
+    // p.drawCircle(ballX, ballY, 20);                   // ball
 }
 
 void Pong::playFile(const char *filename)

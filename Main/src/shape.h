@@ -14,21 +14,9 @@ private:
 public:
     /// @brief A Enum representing the different possible types for each shape
     /// @example Circle Vs Square
-    enum Type
-    {
-        Circle,
-        Square,
-        Rectangle,
-        Triangle,
-        Star,
-        Polygon,
-        Diamond,
-        Grid,
-        AlphaNumeric
-    };
 
     /// @brief current type of this instance
-    Type type;
+
     // Transform2D transform;
     // Transform2D transform;
     /// @brief Resolution of the shape, The higher this value is, the clearer the shape comes out, but the longer it takes to draw
@@ -44,28 +32,24 @@ public:
         // Serial.println("Print Shape");
         switch (type)
         {
-        case Shape::Circle:
+        case Graphic::Circle:
             drawCircle(transform, c);
             break;
-        case Shape::Square:
-            // Serial.println("Rect draw arm");
+        case Graphic::Rectangle:
             drawRect(transform, c);
             break;
-        case Shape::Rectangle:
-            drawRect(transform, c);
-            break;
-        case Shape::Triangle:
+        case Graphic::Triangle:
             /* code */
             break;
-        case Shape::Star:
+        case Graphic::Star:
             /* code */
             break;
-        case Shape::Polygon:
+        case Graphic::Polygon:
             /* code */
             break;
-        case Shape::Diamond:
+        case Graphic::Diamond:
             /* code */
-        case Shape::AlphaNumeric:
+        case Graphic::AlphaNumeric:
             /* code */
             break;
         default:

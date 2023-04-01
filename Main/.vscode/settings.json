@@ -39,5 +39,6 @@
         "numeric": "cpp",
         "random": "cpp"
     },
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "cmake.sourceDirectory": "${workspaceFolder}/.pio/libdeps/teensy41/Adafruit BusIO"
 }

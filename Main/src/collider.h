@@ -20,7 +20,7 @@ public:
     Collider(/* args */){};
     ~Collider(){};
 
-    virtual CollisionPoints testCollision(const Transform2D *transform, const Collider *collider, Transform2D *colliderTransform) const = 0;
-    virtual CollisionPoints testCollision(const Transform2D *transform, const SphereCollider *sphere, Transform2D *colliderTransform) const = 0;
-    virtual CollisionPoints testCollision(const Transform2D *transform, const PlaneCollider *plane, Transform2D *colliderTransform) const = 0;
+    virtual CollisionPoints testCollision(const Transform2D *transform, const Collider *collider, const Transform2D *colliderTransform) const = 0;
+    virtual CollisionPoints testCollision(const Transform2D *transform, const SphereCollider *sphere, const Transform2D *colliderTransform) const = 0;
+    virtual CollisionPoints testCollision(const Transform2D *transform, const PlaneCollider *plane, const Transform2D *colliderTransform) const = 0;
 };
