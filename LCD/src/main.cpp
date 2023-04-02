@@ -4,7 +4,6 @@
 #include <SD.h>
 #include "Adafruit_RA8875.h"
 #include <Adafruit_STMPE610.h>
-#include <Adafruit_ILI9341.h>
 #define sd_cs BUILTIN_SDCARD                          // using ethernet shield sd
 
 // Library only supports hardware SPI at this time
@@ -25,13 +24,11 @@
 #define MINPRESSURE 10
 #define MAXPRESSURE 1000
 
-#define TFT_CS 10
-#define TFT_DC 9
-#define TOUCH_CS 8
+
 #define BUTTON_PIN 2
 
 Adafruit_RA8875 tft = Adafruit_RA8875(RA8875_CS, RA8875_RESET);
-Adafruit_ILI9341 ili9341_tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TOUCH_CS);
+
 Adafruit_STMPE610 ts = Adafruit_STMPE610();
 
 void bmpDraw(const char *filename, int x, int y);
@@ -46,15 +43,14 @@ void drawMenu();
 void drawOption(const char* text, int y);
 void touchHandler();
 
-/************
-void handleTouch(int x, int y);
 
-void drawBackButton();
+void handleTouch();
+
+// void drawBackButton();
 void drawGameSelectMenu();
 void drawSettingsMenu();
-void drawAudioMenu();
+// void drawAudioMenu();
 
-************/
 void setup () {
   Serial.begin(9600);
 
@@ -99,7 +95,8 @@ void setup () {
  
   tft.setRotation(3);
   touchHandler();
-  
+  drawGameSelectMenu();
+  drawSettingsMenu();
 
 }
 
@@ -132,35 +129,61 @@ void drawMenu() {
   tft.textSetCursor(225, 100);
   if (selectedOption == 0) {
     tft.textWrite("");
-  } else {
-    tft.textWrite(" ");
+ 
   }
   tft.textWrite("Game Select");
 
   tft.textSetCursor(280, 250);
   if (selectedOption == 1) {
-    tft.textWrite(">");
-  } else {
     tft.textWrite(" ");
+ 
   }
   tft.textWrite("Demo");
 
   tft.textSetCursor(250, 400);
   if (selectedOption == 2) {
-    tft.textWrite(">");
-  } else {
     tft.textWrite(" ");
+  
   }
   tft.textWrite("Settings");
 
   tft.textEnlarge(2);
 
 }
+
+void drawGameSelectMenu() {
+  
+  bmpDraw("background.bmp", 0, 0);
+  drawOption("Pong", OPTION_X_START);
+  drawOption("Astroids", OPTION_X_START + OPTION_HEIGHT + OPTION_SPACING);
+  drawOption("Flappy Bird", OPTION_X_START + (OPTION_HEIGHT + OPTION_SPACING) * 2);
+  
+}
+
+void drawSettingsMenu() {
+  
+  bmpDraw("background.bmp", 0, 0);
+  drawOption("Brightness", OPTION_X_START);
+  drawOption("Audio", OPTION_X_START + OPTION_HEIGHT + OPTION_SPACING);
+ 
+  
+}
+
 void touchHandler() {
   TS_Point p = ts.getPoint();
   if (p.z > MINPRESSURE && p.z < MAXPRESSURE) {
    
-    while (ts.touched()) {}
+    while (ts.touched()) {
+      if (p.x < 100 && p.y < 100) {
+        drawGameSelectMenu(); // Game Select button
+      // Code to transition to Game Select page
+    } else if (p.x < 100 && p.y > 200) { // Demo button
+      // Code to transition to Demo page
+    } else if (p.x > 200 && p.y < 100) { 
+      drawSettingsMenu(); // Settings button
+      // Code to transition to Settings page
+    }
+    }
   }
 }
 
