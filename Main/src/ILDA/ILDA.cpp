@@ -1,10 +1,18 @@
-#include <ILDA.h>
+#include <ilda/ILDA.h>
 #include <Audio.h>
 
 ILDA::ILDA()
 {
     frames = NULL;
     num_frames = 0;
+    type = Other;
+}
+ILDA::ILDA(const char *filepath)
+{
+    frames = NULL;
+    num_frames = 0;
+    type = Other;
+    read(filepath);
 }
 
 ILDA::~ILDA()
@@ -90,4 +98,37 @@ void ILDA::print_header(const ILDA_Header_t &header)
 
     Serial.print("Number frames:");
     Serial.println(header.total_frames);
+}
+
+void ILDA::draw(Transform2D transform, Color c)
+{
+    Serial.print("drawing ILDA with frames");
+    Serial.println(num_frames);
+
+    for (u_int16_t i = 0; i < num_frames; i++)
+    {
+
+        Serial.print("drawing frame ");
+        Serial.print(i);
+        Serial.print(" with points ");
+        Serial.println(frames[i].number_points);
+        for (u_int16_t j = 0; j < frames[i].number_points; j++)
+        {
+            Vec2 point = Vec2(frames[i].points[j].x, frames[i].points[j].y);
+
+            point.mapVec(-32768, 32767, (WIDTH / 2 - 2000), (WIDTH / 2 + 2000));
+            // toggles led's based on status code
+            if ((frames[i].points[j].status_code & 0b01000000) == 0)
+            {
+                p.setColor(c);
+            }
+            else
+            {
+                p.setLed(HIGH);
+            }
+            p.pointTo(point);
+        }
+
+        delay(20);
+    }
 }

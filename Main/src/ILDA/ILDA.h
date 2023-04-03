@@ -5,6 +5,7 @@
 #include <SerialFlash.h>
 #include <SPI.h>
 #include <vector>
+#include <graphic.h>
 
 #define SDCARD_CS_PIN 10
 #define SDCARD_MOSI_PIN 11
@@ -44,7 +45,7 @@ typedef struct
     uint16_t number_points;
 } ILDA_Frame_t;
 
-class ILDA
+class ILDA : public Graphic
 {
 private:
     /* data */
@@ -57,7 +58,10 @@ public:
 
     bool read(const char *filepath);
     void print_header(const ILDA_Header_t &header);
+    void draw(Transform2D transform, Color c) override;
+
     ILDA();
+    ILDA(const char *filepath);
     ~ILDA();
 };
 

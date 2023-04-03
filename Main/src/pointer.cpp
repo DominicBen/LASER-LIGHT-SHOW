@@ -315,45 +315,10 @@ void Pointer::setColor(Color c)
 // void Pointer::print(std::string sen)
 // {
 //     Sentence sentence = Sentence(sen);
-//     sentence.transform.setPosition(format_info.cursor_pos);
-//     print(sentence);
+//     sentence.draw(format_info.cursor_pos, WHITE);
 // }
 // void Pointer::println(std::string sen)
 // {
 //     Sentence sentence = Sentence(sen);
-//     sentence.transform.setPosition({format_info.font_size, format_info.cursor_pos.y - format_info.font_size * 2});
-//     print(sentence);
-// }
-
-// void Pointer::drawILDA(ILDA &ild)
-// {
-//     Serial.print("drawing ILDA with frames");
-//     Serial.println(ild.num_frames);
-
-//     for (u_int16_t i = 0; i < ild.num_frames; i++)
-//     {
-
-//         Serial.print("drawing frame ");
-//         Serial.print(i);
-//         Serial.print(" with points ");
-//         Serial.println(ild.frames[i].number_points);
-//         for (u_int16_t j = 0; j < ild.frames[i].number_points; j++)
-//         {
-//             Vec2 point = Vec2(ild.frames[i].points[j].x, ild.frames[i].points[j].y);
-
-//             point.mapVec(-32768, 32767, (WIDTH / 2 - 2000), (WIDTH / 2 + 2000));
-//             // toggles led's based on status code
-//             if ((ild.frames[i].points[j].status_code & 0b01000000) == 0)
-//             {
-//                 toggleLed(HIGH);
-//             }
-//             else
-//             {
-//                 toggleLed(LOW);
-//             }
-//             pointTo(point);
-//         }
-
-//         delay(20);
-//     }
+//     sentence.draw({format_info.font_size, format_info.cursor_pos.y - format_info.font_size * 2}, WHITE);
 // }

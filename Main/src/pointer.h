@@ -18,6 +18,7 @@
 #include <MCP4922.h>
 
 #include <vec.h>
+#include <color.h>
 
 // #include <shape.h>
 // #include <mesh.h>
@@ -44,29 +45,31 @@ struct Cursor_info
     Vec2 cursor_pos;
 };
 
-enum Color
-{
-    WHITE,
-    RED,
-    BLUE,
-    GREEN,
-    CYAN,
-    YELLOW,
-    MAGGENTA
-};
-
 class Pointer
 {
 private:
-    // CS 10,
-    // LDAC 9
-    // MOSI 11
-    // SCK 13
-
 protected:
     Pointer();
 
 public:
+    /// @brief Current position of the galvo, updated on point_to()
+    Vec2 current_pos;
+    /// @brief Current cursor data of the cursor, used for where to print words
+    Cursor_info format_info;
+    /// @brief Current color of the laser
+    Color cur_color;
+    /// @brief Dac object used to control the galvo DACS
+    MCP4922 dac = MCP4922(CS, LDAC);
+
+    void init()
+    {
+        pinMode(RED_LED, OUTPUT);
+        pinMode(GREEN_LED, OUTPUT);
+        pinMode(BLUE_LED, OUTPUT);
+        setLed(LOW);
+        format_info.kerneling = KERNELING;
+        format_info.font_size = FONT_SIZE;
+    }
     /**
      * @brief Points the laser to the provided position, pos
      * 0,0 is the bottom left of the screen
@@ -105,43 +108,8 @@ public:
     Pointer &operator=(const Pointer &) = delete;
     Pointer &operator=(Pointer &&) = delete;
 
-    /// @brief Current position of the galvo, updated on point_to()
-    Vec2 current_pos;
-    /// @brief Current cursor data of the cursor, used for where to print words
-    Cursor_info format_info;
-    Color cur_color;
-
-    MCP4922 dac = MCP4922(CS, LDAC);
-
-    // /**
-    //  * @brief Draws a given shape s, the algorithm used depends on the shape's type
-    //  * @param s
-    //  */
-    // // // void draw_shape(Shape s);
-    // void drawCircle(Shape c);
-    // void drawRect(Shape s);
-    // /// @brief Draws a grid of shapes g, default 3x3
-    // /// @param g
-    // void drawGrid(Grid g);
-    // /// @brief Draws a symbol object s, if first_word is true, a small delay is added before the laser beings drawing
-    // /// @param s
-    // /// @param first_word
-    // void drawChar(Char s);
-    // void drawShape(Shape s);
-
-    // // /// @brief Draws a mesh object, these are objects that contain a specific set of vertices to be draw.
-    // // /// This includes characters
-    // // /// @param m
-    // // void drawMesh(Mesh m);
     // void println(std::string sen);
     // void print(std::string sen);
-    // /// @brief Prints a string at the current location
-    // /// @param sen
-    // void print(Sentence sen);
-    // // WIP
-    // void draw3DCube(double size, uint16_t x, uint16_t y, uint16_t rows, uint16_t cols);
-    // /// @brief returns a reference to the singleton instance of this class
-    // /// @return
 
     // // user friendly function calls
     // /**

@@ -16,7 +16,7 @@ private:
     /* data */
 public:
     Vec2 pos;
-    Vec2 rot;
+    Vec3 rot;
     Vec2 scale;
 
     Transform2D &setScale(Vec2 scale_)
@@ -24,7 +24,7 @@ public:
         scale = scale_;
         return *this;
     }
-    Transform2D &setRotation(Vec2 rot_)
+    Transform2D &setRotation(Vec3 rot_)
     {
         rot = rot_;
         return *this;
@@ -35,7 +35,7 @@ public:
         return *this;
     }
 
-    Transform2D(Vec2 scale_ = {100, 100}, Vec2 pos_ = {WIDTH / 2, HEIGHT / 2}, Vec2 rot_ = {0, 0})
+    Transform2D(Vec2 scale_ = {100, 100}, Vec2 pos_ = {WIDTH / 2, HEIGHT / 2}, Vec3 rot_ = {0, 0, 0})
     {
         pos = pos_;
         rot = rot_;

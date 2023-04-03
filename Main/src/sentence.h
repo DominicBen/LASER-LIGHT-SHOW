@@ -13,9 +13,6 @@ public:
     std::vector<Char> word;
     /// @brief This constructor takes in a sentence as a string, and converts it to a sentence object
     /// Any characters that are not supported by the software, are simply ignored
-    /// @param word_
-    /// @param kerneling_
-    /// @param font_size_
     Sentence(std::string word_);
     Sentence(/* args */);
     ~Sentence();
@@ -41,6 +38,33 @@ public:
 
             Char sym = word[i];
             Transform2D temp = Transform2D().setScale({(float)p.format_info.font_size, (float)p.format_info.font_size}).setPosition(newPos);
+            sym.draw(temp, c);
+        }
+        p.format_info.cursor_pos = {newPos.x + p.format_info.kerneling, newPos.y};
+        p.setLed(HIGH);
+    }
+    void draw(Transform2D transform, Color c, float kerneling, float font_size)
+    {
+
+        p.pointTo({transform.pos.x, transform.pos.y});
+        int16_t character_count = word.size();
+        int16_t line_count = 0;
+        Vec2 newPos = transform.pos - kerneling;
+
+        for (int i = 0; i < character_count; i++)
+        {
+            if (newPos.x + kerneling + font_size >= WIDTH)
+            {
+                line_count++;
+                newPos = {(float)font_size, newPos.y - font_size * 2};
+            }
+            else
+            {
+                newPos = {newPos.x + kerneling, newPos.y};
+            }
+
+            Char sym = word[i];
+            Transform2D temp = Transform2D().setScale({(float)font_size, (float)font_size}).setPosition(newPos);
             sym.draw(temp, c);
         }
         p.format_info.cursor_pos = {newPos.x + p.format_info.kerneling, newPos.y};

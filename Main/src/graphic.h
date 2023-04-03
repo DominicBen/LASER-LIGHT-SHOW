@@ -1,6 +1,5 @@
 #pragma once
 #include <Arduino.h>
-
 #include <pointer.h>
 #include <transform.h>
 
@@ -19,8 +18,11 @@ public:
         Polygon,
         Diamond,
         Grid,
-        AlphaNumeric
+        AlphaNumeric,
+        Other,
+
     };
+
     Type type = Circle;
     Pointer &p = Pointer::getInstance();
     // Transform2D transform;

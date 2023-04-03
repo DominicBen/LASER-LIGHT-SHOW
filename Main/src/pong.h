@@ -11,6 +11,7 @@
 #include <vector>
 #include "game.h"
 #include "physicsworld.h"
+#include <controller.h>
 
 #define SDCARD_CS_PIN 10
 #define SDCARD_MOSI_PIN 11
@@ -34,11 +35,14 @@ public:
     PositionSolver solver1 = PositionSolver();
     ImpulseSolver solver2 = ImpulseSolver();
 
+    Controller player1_input = Controller("943c,c6,38818e");
+
     // Game Variables
     Vec2 rightPaddleOffset = {WIDTH - 300, HEIGHT / 2};
     Vec2 leftPaddleOffset = {300, HEIGHT / 2};
     Vec2 paddleSize = {100, 500};
-    Vec2 ballSpeed = {-15, 0};
+    float paddleSpeed = 75;
+    Vec2 ballSpeed = {-50, 24};
 
     // Player info
     Color player1_color = GREEN;
@@ -83,12 +87,15 @@ public:
     void resetRound();
     void playFile(const char *filename);
 };
+
 void Pong::init()
 {
-    Serial.begin(BAUD_RATE);
+    // Serial.begin(BAUD_RATE);
     AudioMemory(8);
     sgtl5000_1.enable();
     sgtl5000_1.volume(1);
+
+    player1_input.pair();
     // SPI.setMISO(SDCARD_MISO_PIN);
     // SPI.setMOSI(SDCARD_MOSI_PIN);
     // SPI.setSCK(SDCARD_SCK_PIN);
@@ -133,13 +140,15 @@ void Pong::init()
 
     // ball
 
-    pinMode(41, INPUT_PULLUP);
-    pinMode(40, INPUT_PULLUP);
-    pinMode(37, INPUT_PULLUP);
-    pinMode(36, INPUT_PULLUP);
+    // pinMode(41, INPUT_PULLUP);
+    // pinMode(40, INPUT_PULLUP);
+    // pinMode(37, INPUT_PULLUP);
+    // pinMode(36, INPUT_PULLUP);
 }
 void Pong::update()
 {
+
+    ControllerState player1_state = player1_input.read();
     world.step(1);
 
     if (gameEnd == false)
@@ -188,22 +197,22 @@ void Pong::update()
             resetRound();
         }
 
-        // if (digitalRead(41) == LOW)
-        // {
-        //     leftPaddle->transform->pos.y += 1;
-        // }
-        // if (digitalRead(40) == LOW)
-        // {
-        //     leftPaddle->transform->pos.y -= 1;
-        // }
-        // if (digitalRead(37) == LOW)
-        // {
-        //     rightPaddle->transform->pos.y += 1;
-        // }
-        // if (digitalRead(36) == LOW)
-        // {
-        //     rightPaddle->transform->pos.y -= 1;
-        // }
+        if (player1_state.left)
+        {
+            leftPaddle->transform->pos.y += paddleSpeed;
+        }
+        if (player1_state.down)
+        {
+            leftPaddle->transform->pos.y -= paddleSpeed;
+        }
+        if (player1_state.up)
+        {
+            rightPaddle->transform->pos.y += paddleSpeed;
+        }
+        if (player1_state.right)
+        {
+            rightPaddle->transform->pos.y -= paddleSpeed;
+        }
 
         delay(1);
     }
@@ -237,18 +246,19 @@ Pong::~Pong()
 
 void Pong::win(std::string winner)
 {
-    // for (size_t i = 0; i < 700; i++)
-    // {
-    //     // p.fillScreen(ILI9341_BLACK);
-    //     p.format_info.cursor_pos = {100, 3000};
-    //     // p.setTextColor(ILI9341_WHITE);
-    //     // p.setTextSize(6);
+    for (size_t i = 0; i < 700; i++)
+    {
+        // p.fillScreen(ILI9341_BLACK);
+        p.format_info.cursor_pos = {100, 3000};
+        // p.setTextColor(ILI9341_WHITE);
+        // p.setTextSize(6);
 
-    //     p.print("player ");
-    //     p.print(winner);
-    //     p.println("winner");
-    //     playFile("victory.WAV");
-    // }
+        // p.print("player ");
+        // // Sentence("player ").draw()
+        // p.print(winner);
+        // p.println("winner");
+        // playFile("victory.WAV");
+    }
 }
 
 void Pong::resetRound()

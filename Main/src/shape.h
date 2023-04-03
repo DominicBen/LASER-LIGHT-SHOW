@@ -6,7 +6,7 @@
 #include <graphic.h>
 #include <transform.h>
 #include <pointer.h>
-
+#include <mat4.h>
 class Shape : public Graphic
 {
 private:
@@ -88,12 +88,26 @@ public:
         // Draw the rectangle
         // Serial.println("Drawing rect");
         // Move Pointer to bottom left position
-        p.pointTo({leftbound, bottombound});
+        Vec2 botleft = Vec2({leftbound, bottombound});
+        Vec2 topleft = Vec2({leftbound, topbound});
+        Vec2 topright = Vec2({rightbound, topbound});
+        Vec2 botright = Vec2({rightbound, bottombound});
+
+        Mat4 points = Mat4({{botleft.x, topleft.x, topright.x, botright.x}, {botleft.y, topleft.y, topright.y, botright.y}, {1, 1, 1, 1}, {1, 1, 1, 1}});
+        points = points.rotate(transform.rot, transform.pos);
+        // points.print();
+        // Vec2 bottleft = Vec2({leftbound, bottombound});
+        botleft = Vec2({points(0, 0), points(1, 0)});
+        topleft = Vec2({points(0, 1), points(1, 1)});
+        topright = Vec2({points(0, 2), points(1, 2)});
+        botright = Vec2({points(0, 3), points(1, 3)});
+        p.pointTo(botleft);
         p.setColor(c);
-        p.pointTo({leftbound, topbound});
-        p.pointTo({rightbound, topbound});
-        p.pointTo({rightbound, bottombound});
-        p.pointTo({leftbound, bottombound});
+        p.pointTo(topleft);
+        p.pointTo(topright);
+        p.pointTo(botright);
+        p.pointTo(botleft);
+
         // Turn off the laser
         p.setLed(HIGH);
     }

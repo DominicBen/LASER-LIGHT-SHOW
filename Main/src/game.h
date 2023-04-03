@@ -11,7 +11,6 @@ private:
 
 public:
     Pointer &p = Pointer::getInstance();
-    std::vector<GameObject2D> objects;
 
     virtual void init() = 0;
     virtual void update() = 0;

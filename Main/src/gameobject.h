@@ -43,7 +43,7 @@ public:
         transform->setScale(scale_);
         return this;
     }
-    GameObject2D *setRotation(Vec2 rot_)
+    GameObject2D *setRotation(Vec3 rot_)
     {
         transform->setRotation(rot_);
         return this;
