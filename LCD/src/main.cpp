@@ -3,6 +3,7 @@
 #include <Wire.h>
 #include <SD.h>
 #include "Adafruit_RA8875.h"
+#include "TouchScreen.h"
 #define sd_cs BUILTIN_SDCARD                          // using ethernet shield sd
 
 // Library only supports hardware SPI at this time
@@ -22,10 +23,12 @@
 // pressure for the touchscreen
 #define MINPRESSURE 10
 #define MAXPRESSURE 1000
+// Connecting touchscreen for User Input
+#define TS_CS 0
 
 
 Adafruit_RA8875 tft = Adafruit_RA8875(RA8875_CS, RA8875_RESET);
-
+// TouchScreen ts = TouchScreen(TS_CS, 0);
 
 
 void bmpDraw(const char *filename, int x, int y);
