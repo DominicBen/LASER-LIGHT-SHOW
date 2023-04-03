@@ -3,7 +3,6 @@
 #include <Wire.h>
 #include <SD.h>
 #include "Adafruit_RA8875.h"
-#include <Adafruit_STMPE610.h>
 #define sd_cs BUILTIN_SDCARD                          // using ethernet shield sd
 
 // Library only supports hardware SPI at this time
@@ -25,11 +24,9 @@
 #define MAXPRESSURE 1000
 
 
-#define BUTTON_PIN 2
-
 Adafruit_RA8875 tft = Adafruit_RA8875(RA8875_CS, RA8875_RESET);
 
-Adafruit_STMPE610 ts = Adafruit_STMPE610();
+
 
 void bmpDraw(const char *filename, int x, int y);
 uint16_t read16(File f);
@@ -41,15 +38,8 @@ int selectedOption = 0;
 
 void drawMenu();
 void drawOption(const char* text, int y);
-void touchHandler();
-
-
-void handleTouch();
-
-// void drawBackButton();
 void drawGameSelectMenu();
 void drawSettingsMenu();
-// void drawAudioMenu();
 
 void setup () {
   Serial.begin(9600);
@@ -85,26 +75,19 @@ void setup () {
   tft.graphicsMode();                 // go back to graphics mode
   tft.fillScreen(RA8875_BLACK);
   tft.graphicsMode();
-  bmpDraw("caution.bmp", 50, 100);
+  bmpDraw("caution.bmp", 0, 0);
 
  
   bmpDraw("background.bmp", 0, 0);
   drawMenu();
   void drawOption(const char*, int y);
-  pinMode(BUTTON_PIN, INPUT);
- 
-  tft.setRotation(3);
-  touchHandler();
-  drawGameSelectMenu();
-  drawSettingsMenu();
+
 
 }
 
 void loop()
 {
- if (tft.touched()) {
-    touchHandler();
-  }
+
 }
 void drawOption(const char* text, int y) {
   tft.fillRect(OPTION_X_START, y, OPTION_WIDTH, OPTION_HEIGHT, RA8875_BLACK);
@@ -120,9 +103,9 @@ void drawMenu() {
   tft.setTextSize(3);
   tft.textMode();
   tft.textEnlarge(3);
-  drawOption("----------", OPTION_Y);
-  drawOption("Menu", OPTION_Y + OPTION_HEIGHT + OPTION_SPACING);
-  drawOption("-----------", OPTION_Y + (OPTION_HEIGHT + OPTION_SPACING) * 2);
+  drawOption("Menu", OPTION_Y);
+  drawOption("", OPTION_Y + OPTION_HEIGHT + OPTION_SPACING);
+  drawOption("", OPTION_Y + (OPTION_HEIGHT + OPTION_SPACING) * 2);
 
 
   tft.textEnlarge(2);
@@ -151,63 +134,6 @@ void drawMenu() {
 
 }
 
-void drawGameSelectMenu() {
-  
-  bmpDraw("background.bmp", 0, 0);
-  drawOption("Pong", OPTION_X_START);
-  drawOption("Astroids", OPTION_X_START + OPTION_HEIGHT + OPTION_SPACING);
-  drawOption("Flappy Bird", OPTION_X_START + (OPTION_HEIGHT + OPTION_SPACING) * 2);
-  
-}
-
-void drawSettingsMenu() {
-  
-  bmpDraw("background.bmp", 0, 0);
-  drawOption("Brightness", OPTION_X_START);
-  drawOption("Audio", OPTION_X_START + OPTION_HEIGHT + OPTION_SPACING);
- 
-  
-}
-
-void touchHandler() {
-  TS_Point p = ts.getPoint();
-  if (p.z > MINPRESSURE && p.z < MAXPRESSURE) {
-   
-    while (ts.touched()) {
-      if (p.x < 100 && p.y < 100) {
-        drawGameSelectMenu(); // Game Select button
-      // Code to transition to Game Select page
-    } else if (p.x < 100 && p.y > 200) { // Demo button
-      // Code to transition to Demo page
-    } else if (p.x > 200 && p.y < 100) { 
-      drawSettingsMenu(); // Settings button
-      // Code to transition to Settings page
-    }
-    }
-  }
-}
-
-/**********************
-void drawMenu() {
-  tft.setTextSize(3);
-  tft.textMode();
-  tft.textEnlarge(3);
-  drawOption("Game Select", OPTION_X_START);
-  drawOption("Demo", OPTION_X_START + OPTION_HEIGHT + OPTION_SPACING);
-  drawOption("Settings", OPTION_X_START + (OPTION_HEIGHT + OPTION_SPACING) * 2);
-
-}
-
-void drawOption(const char* text, int y) {
-  tft.fillRect(OPTION_Y, y, OPTION_WIDTH, OPTION_HEIGHT, RA8875_BLACK);
-  tft.drawRect(OPTION_Y, y, OPTION_WIDTH, OPTION_HEIGHT, RA8875_CYAN);
-  int16_t x1, y1;
-  uint16_t w, h;
-  tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
-  tft.setCursor(OPTION_Y + (OPTION_WIDTH - w) / 2, y + (OPTION_HEIGHT - h) / 2);
-  tft.print(text);
-}
-*****************************/
 
 // This function opens a Windows Bitmap (BMP) file and
 // displays it at the given coordinates.  It's sped up
