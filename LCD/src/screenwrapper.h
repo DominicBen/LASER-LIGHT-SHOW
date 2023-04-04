@@ -1,5 +1,8 @@
-#pragma once
-#include "Adafruit_RA8875.h"
-#include "TouchScreen.h"
+#ifndef WRAPPER
+#define WRAPPER
+
 #include <constants.h>
-Adafruit_RA8875 tft = Adafruit_RA8875(RA8875_CS, RA8875_RESET);
+#include <Adafruit_RA8875.h>
+extern Adafruit_RA8875 tft;
+
+#endif

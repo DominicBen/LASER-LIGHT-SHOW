@@ -1,10 +1,11 @@
-#ifndef MENU_H
-#define MENU_H
+#pragma once
 
 #include <Adafruit_GFX.h>
 #include <screenwrapper.h>
 #include <vector>
+#include <vec.h>
 #include <screen.h>
+#include <bmp.h>
 
 #define OPTION_WIDTH 350
 #define OPTION_HEIGHT 100
@@ -12,63 +13,31 @@
 #define OPTION_Y 50
 #define OPTION_X_START 200
 
+class Screen;
 class Menu
 {
 private:
   std::vector<Screen *> screens;
 
+public:
   int selectedScreen = 0;
   int previousScreen = 0;
-
-public:
+  bool changedScreens = false;
+  int lastTouchInput = millis();
+  Vec2 lastTouchPos = {0, 0};
   Menu() : selectedScreen(0) {}
 
-  void drawSelectedScreen()
-  {
-    Serial.println("drawing currently selected screen");
-    screens[selectedScreen]->draw();
-  }
+  void drawSelectedScreen();
 
-  Screen *getSelectedScreen()
-  {
-    return screens[selectedScreen];
-  }
+  Screen *getSelectedScreen();
 
-  void setSelectedScreen(int option)
-  {
-    previousScreen = selectedScreen;
-    selectedScreen = option;
-  }
+  void setSelectedScreen(int option);
 
-  void nextScreen()
-  {
-    previousScreen = selectedScreen;
-    selectedScreen++;
-    if (selectedScreen >= screens.size())
-    {
-      selectedScreen = 0;
-    }
-  }
+  void nextScreen();
 
-  void prevScreen()
-  {
-    previousScreen = selectedScreen;
+  void prevScreen();
 
-    selectedScreen--;
-    if (selectedScreen < 0)
-    {
-      selectedScreen = screens.size() - 1;
-    }
-  }
+  void addScreen(Screen *s);
 
-  void addScreen(Screen *s)
-  {
-    Serial.println("Menu:: Adding screen with buttons " + s->buttons.size());
-    screens.push_back(s);
-  }
-  void removeScreen()
-  {
-  }
+  void removeScreen();
 };
-
-#endif

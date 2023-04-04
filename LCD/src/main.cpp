@@ -1,3 +1,4 @@
+#include <screenwrapper.h>
 #include <Adafruit_GFX.h> // Core graphics library
 #include <SPI.h>
 #include <Wire.h>
@@ -5,15 +6,16 @@
 #include <bmp.h>
 #include "menu.h"
 #include <screen.h>
-#include <constants.h>
+#include <screens/startscreen.h>
+#include <screens/demoscreen.h>
 
 void bmpDraw(const char *filename, int x, int y);
 uint16_t read16(File f);
 uint32_t read32(File f);
 uint16_t color565(uint8_t r, uint8_t g, uint8_t b);
-Menu menu;
-Screen *start;
-Screen *demos;
+Menu *menu = new Menu();
+Screen *start = new StartScreen(menu);
+Screen *demos = new DemoScreen(menu);
 Screen *settings;
 Screen *gameselect;
 
@@ -59,28 +61,28 @@ void setup()
   tft.graphicsMode(); // go back to graphics mode
   tft.fillScreen(RA8875_BLACK);
   tft.graphicsMode();
+
   // bmpDraw("caution.bmp", 0, 0);
   delay(1000);
-  // tft.drawRect(0, 0, LCD_WIDTH / 2, LCD_HEIGHT / 2, RA8875_CYAN);
+  bmpDraw("background.bmp", 0, 0);
 
-  // bmpDraw("background.bmp", 0, 0);
+  delay(1000);
+  bmpDraw("background.bmp", 0, 0);
+
   Serial.println("Adding start screen");
+
   // menu.addScreen(demos);
   // menu.addScreen(settings);
   // menu.addScreen(gameselect);
-  std::vector<String> temp = {"Game Select", "Demos", "Settings", "About"};
-  Serial.println("defining main screen");
-  start = new Screen(temp);
-  menu.addScreen(start);
-  Serial.println("Changing selected screen");
-  menu.setSelectedScreen(0);
+  menu->addScreen(start);
+  menu->addScreen(demos);
   Serial.println("Drawing selected screen");
-  menu.drawSelectedScreen();
+  menu->setSelectedScreen(0);
 }
 
 void loop()
 {
-  menu.getSelectedScreen()->detectTouch();
+  menu->getSelectedScreen()->detectTouch();
 }
 
 // void drawMenu()

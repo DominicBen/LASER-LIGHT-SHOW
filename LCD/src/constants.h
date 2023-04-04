@@ -21,5 +21,6 @@
 #define MAXPRESSURE 1000
 // Connecting touchscreen for User Input
 #define TS_CS 0
+#define TOUCH_COOLDOWN 200
 const int LCD_WIDTH = 800;
 const int LCD_HEIGHT = 480;
