@@ -4,6 +4,7 @@
 #include <SD.h>
 #include "Adafruit_RA8875.h"
 #include "TouchScreen.h"
+#include "menu.h"
 #define sd_cs BUILTIN_SDCARD                          // using ethernet shield sd
 
 // Library only supports hardware SPI at this time
@@ -79,7 +80,7 @@ void setup () {
   tft.fillScreen(RA8875_BLACK);
   tft.graphicsMode();
   bmpDraw("caution.bmp", 0, 0);
-
+  delay(1000);
  
   bmpDraw("background.bmp", 0, 0);
   drawMenu();
@@ -92,50 +93,17 @@ void loop()
 {
 
 }
-void drawOption(const char* text, int y) {
-  tft.fillRect(OPTION_X_START, y, OPTION_WIDTH, OPTION_HEIGHT, RA8875_BLACK);
-  tft.drawRect(OPTION_X_START, y, OPTION_WIDTH, OPTION_HEIGHT, RA8875_CYAN);
-  int16_t x1, y1;
-  uint16_t w, h;
-  tft.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
-  tft.setCursor(OPTION_X_START + (OPTION_WIDTH - w) / 2, y + (OPTION_HEIGHT - h) / 2);
-  tft.print(text);
-}
+
 
 void drawMenu() {
-  tft.setTextSize(3);
-  tft.textMode();
-  tft.textEnlarge(3);
-  drawOption("Menu", OPTION_Y);
-  drawOption("", OPTION_Y + OPTION_HEIGHT + OPTION_SPACING);
-  drawOption("", OPTION_Y + (OPTION_HEIGHT + OPTION_SPACING) * 2);
-
-
-  tft.textEnlarge(2);
-  tft.textSetCursor(225, 100);
-  if (selectedOption == 0) {
-    tft.textWrite("");
- 
-  }
-  tft.textWrite("Game Select");
-
-  tft.textSetCursor(280, 250);
-  if (selectedOption == 1) {
-    tft.textWrite(" ");
- 
-  }
-  tft.textWrite("Demo");
-
-  tft.textSetCursor(250, 400);
-  if (selectedOption == 2) {
-    tft.textWrite(" ");
-  
-  }
-  tft.textWrite("Settings");
-
-  tft.textEnlarge(2);
-
+  const char* optionTexts[] = {"Game Select", "Demo", "Settings"};
+  int numOptions = sizeof(optionTexts) / sizeof(optionTexts[0]);
+  Menu menu(tft, numOptions, optionTexts);
+  menu.setSelectedOption(selectedOption);
+  menu.draw();
+  selectedOption = menu.getSelectedOption();
 }
+
 
 
 // This function opens a Windows Bitmap (BMP) file and
