@@ -5,7 +5,7 @@
 #include <SerialFlash.h>
 #include <SPI.h>
 #include <vector>
-#include <graphic.h>
+#include <graphics/graphic.h>
 
 #define SDCARD_CS_PIN 10
 #define SDCARD_MOSI_PIN 11

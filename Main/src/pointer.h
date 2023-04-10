@@ -17,16 +17,11 @@
 #include <constants.h>
 #include <MCP4922.h>
 
-#include <vec.h>
+#include <dataobjects/vec.h>
 #include <color.h>
-
-// #include <shape.h>
-// #include <mesh.h>
-// #include <char.h>
-// #include <sentence.h>
-// #include <ILDA.h>
-
 #include <string>
+
+// #include <ILDA.h>
 
 /**
  * @brief

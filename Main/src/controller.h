@@ -83,7 +83,7 @@ ControllerState Controller::read()
     ControllerState state;
     // while (BTSerial.available())
     //     Serial.write(BTSerial.read());
-    while (BTSerial.available())
+    while (BTSerial.available() > 36)
     {
         delay(3);
         // delay(30);

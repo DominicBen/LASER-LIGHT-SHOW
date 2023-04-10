@@ -8,5 +8,6 @@ enum Color
     GREEN,
     CYAN,
     YELLOW,
-    MAGGENTA
+    MAGGENTA,
+    RAINBOW
 };

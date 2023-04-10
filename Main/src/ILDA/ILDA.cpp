@@ -19,7 +19,16 @@ ILDA::~ILDA()
 {
     free(frames);
 }
-
+uint16_t ntohs(uint16_t netshort)
+{
+    // Create a variable to hold the result in host byte order
+    uint16_t hostshort = 0;
+    // Copy the two bytes from network byte order to host byte order
+    hostshort |= (netshort & 0x00FF) << 8;
+    hostshort |= (netshort & 0xFF00) >> 8;
+    // Return the result
+    return hostshort;
+}
 bool ILDA::read(const char *filepath)
 {
     // SPI.setMISO(SDCARD_MISO_PIN);
@@ -36,8 +45,8 @@ bool ILDA::read(const char *filepath)
     if (file)
     {
         file.read((uint8_t *)&header, sizeof(ILDA_Header_t));
-        header.points = (header.points >> 8);
-        header.total_frames = (header.total_frames >> 8);
+        header.points = ntohs(header.points);
+        header.total_frames = ntohs(header.total_frames);
         print_header(header);
 
         // allocate space for the frames
@@ -52,14 +61,15 @@ bool ILDA::read(const char *filepath)
             for (int i = 0; i < header.points; i++)
             {
                 file.read((uint8_t *)(&points[i]), sizeof(ILDA_Point_t));
-                points[i].x = ((points[i].x & 0x00ff) << 8) | ((points[i].x & 0xff00) >> 8);
-                points[i].y = ((points[i].y & 0x00ff) << 8) | ((points[i].y & 0xff00) >> 8);
-                points[i].z = ((points[i].z & 0x00ff) << 8) | ((points[i].z & 0xff00) >> 8);
+                points[i].x = ntohs(points[i].x);
+                points[i].y = ntohs(points[i].y);
+
+                points[i].z = ntohs(points[i].z);
             }
             // read the next header
             file.read((uint8_t *)&header, sizeof(ILDA_Header_t));
-            header.points = (header.points >> 8);
-            header.total_frames = (header.total_frames >> 8);
+            header.points = ntohs(header.points);
+            header.total_frames = ntohs(header.total_frames);
         }
 
         // finished();

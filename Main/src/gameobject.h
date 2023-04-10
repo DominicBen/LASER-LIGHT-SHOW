@@ -1,10 +1,10 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include <transform.h>
-#include <graphic.h>
-#include <collision.h>
-#include <collider.h>
+#include <dataobjects/transform.h>
+#include <graphics/graphic.h>
+#include <physics/collision/collision.h>
+#include <physics/collision/collider.h>
 #include <vector>
 
 class GameObject2D
