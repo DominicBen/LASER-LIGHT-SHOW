@@ -23,7 +23,14 @@ public:
     void step();
     void draw();
     void resolveCollisions();
+    void resolveTriggers(std::vector<Collision> collisions);
     void resolveWorldBounderies(float dt);
     void fill(std::vector<GameObject2D *> objects_);
-    ~PhysicsWorld2D();
+    ~PhysicsWorld2D()
+    {
+        for (auto i : objects)
+            delete i;
+        for (auto i : solvers)
+            delete i;
+    }
 };

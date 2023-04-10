@@ -1,7 +1,7 @@
 #include <physics/collision/spherecollider.h>
-#include<physics/collision/collisionalgorithms.h>
+#include <physics/collision/collisionalgorithms.h>
 
-    CollisionPoints SphereCollider::testCollision(const Transform2D *transform, const Collider *collider, const Transform2D *colliderTransform) const
+CollisionPoints SphereCollider::testCollision(const Transform2D *transform, const Collider *collider, const Transform2D *colliderTransform) const
 {
     // Serial.println("testing collision");
     return collider->testCollision(colliderTransform, this, transform);
@@ -15,10 +15,4 @@ CollisionPoints SphereCollider::testCollision(const Transform2D *transform, cons
 {
     // Serial.println("testing collision");
     return collisionalgorithms::FindSpherePlaneCollisionPoints(this, transform, plane, colliderTransform);
-}
-
-SphereCollider::SphereCollider(Vec2 *center_, float *radius_)
-{
-    center = center_;
-    radius = radius_;
 }

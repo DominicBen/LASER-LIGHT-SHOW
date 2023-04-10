@@ -10,7 +10,7 @@ private:
 public:
     virtual void solve(std::vector<Collision> collisions) = 0;
     Solver(/* args */){};
-    ~Solver(){};
+    virtual ~Solver(){};
 };
 
 #include <physics/solvers/impulsesolver.h>

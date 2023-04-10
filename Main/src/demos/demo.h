@@ -1,28 +1,41 @@
 #pragma once
 #include <pointer.h>
+#include <gameobject.h>
 
 class Demo
 {
-private:
+protected:
     /* data */
+    float a = 0;
+    float b = 0;
+    float c = 0;
+
 public:
     Demo(/* args */){};
     float dt = 1;
+    bool mIsPaused = false;
     Pointer &p = Pointer::getInstance();
-    int a = 0;
-    int b = 0;
-    int c = 0;
     ~Demo(){};
-    virtual void play() = 0;
-    virtual void pause() = 0;
-    virtual void draw() = 0;
-    virtual void update() = 0;
-    void setSpeed(float dt_) { dt = dt_; };
-    void setA(int val) { a = val; };
-    void setB(int val) { b = val; };
-    void setC(int val) { c = val; };
+    // Media Control Playback
+    void play() { mIsPaused = false; }
+    void pause() { mIsPaused = true; }
     virtual void restart() = 0;
+    // Drawing
+    virtual void draw() = 0;
+    virtual void update()
+    {
+        if (mIsPaused)
+            return;
+    };
+    // Variables
+    virtual void setA(float val) { a = val; };
+    virtual void setB(float val) { b = val; };
+    virtual void setC(float val) { c = val; };
+    virtual float &getA() { return a; };
+    virtual float &getB() { return b; };
+    virtual float &getC() { return c; };
     virtual void init() = 0;
+    void setSpeed(float dt_) { dt = dt_; };
 };
 
 #include <demos/balls/ballsdemo.h>
@@ -33,4 +46,6 @@ public:
 #include <demos/gravity/gravitydemo.h>
 #include <demos/collision/collisiondemo.h>
 #include <demos/beemovie/beemoviedemo.h>
-#include <demos/ilda/cube3d/cube3dilda.h>
+#include <demos/ilda/selection/selectilda.h>
+#include <demos/games/pong.h>
+#include <demos/ilda/badapple/badapple.h>

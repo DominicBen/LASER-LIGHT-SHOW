@@ -8,7 +8,7 @@ void DemoScreen::init()
     auto back = [&](int x) -> void
     {
         Serial.println("We are in the callback funtion");
-        menuref.prevScreen();
+        menuref.setSelectedScreen(0);
     };
     auto loadDemo = [&](int x) -> void
     {
@@ -32,7 +32,7 @@ void DemoScreen::init()
                                ->addComponent(new Button("Balls", loadDemo, 7))
                                ->addComponent(new Button("BeeMovie", loadDemo, 8));
     ListComponent *list3 = (new ListComponent({LCD_WIDTH * 5 / 6, LCD_HEIGHT / 2}, listScale))
-                               ->addComponent(new Button("cube3d", loadDemo, 9))
+                               ->addComponent(new Button("ILDA", loadDemo, 9))
                                ->addComponent(new Button("badapple", loadDemo, 10))
                                ->addComponent(new Button("tbd", loadDemo, 11))
                                ->addComponent(new Button("tbd", loadDemo, 12))

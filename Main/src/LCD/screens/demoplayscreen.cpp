@@ -12,17 +12,21 @@ void DemoPlayScreen::init()
     auto loadDemo = [&](int x) -> void
     {
         Serial.println("We are in the callback funtion");
-        menuref.setSelectedScreen(0);
+        mA = menuref.mCurDemo->getA();
+        menuref.mCurDemo->setA(mA + x);
+        mA = menuref.mCurDemo->getA();
+        draw();
     };
     auto pause = [&](int x) -> void
     {
-        mIsPaused = !mIsPaused;
+        menuref.mCurDemo->mIsPaused = !menuref.mCurDemo->mIsPaused;
         Serial.println("We are in the callback funtion");
         // menuref.setSelectedScreen(0);
     };
-    auto reset = [&](int x) -> void
+    auto restart = [&](int x) -> void
     {
         Serial.println("We are in the callback funtion");
+        menuref.mCurDemo->restart();
     };
     auto changeSpeed = [&](int x) -> void
     {
@@ -33,19 +37,22 @@ void DemoPlayScreen::init()
             mGameSpeed = 5;
 
         Serial.println(mGameSpeed);
+        menuref.mCurDemo->dt = mGameSpeed;
         draw();
     };
-    components.push_back((new VariableComponent({LCD_WIDTH * 1 / 8, LCD_HEIGHT / 2}, {LCD_WIDTH * (2.0 / 8.0), LCD_HEIGHT}, "SPEED", 1, 5, &mGameSpeed, changeSpeed)));
-
+    components.push_back((new VariableComponent({LCD_WIDTH * 1 / 8, LCD_HEIGHT * 1 / 4}, {LCD_WIDTH * 1 / 4, LCD_HEIGHT / 2}, "SPEED", 1, 5, &mGameSpeed, changeSpeed)));
+    components.push_back((new VariableComponent({LCD_WIDTH * 3 / 8, LCD_HEIGHT * 1 / 4}, {LCD_WIDTH * 1 / 4, LCD_HEIGHT / 2}, "A", 1, 5, &mA, loadDemo)));
+    components.push_back((new VariableComponent({LCD_WIDTH * 1 / 8, LCD_HEIGHT * 3 / 4}, {LCD_WIDTH * 1 / 4, LCD_HEIGHT / 2}, "B", 1, 5, &mGameSpeed, changeSpeed)));
+    components.push_back((new VariableComponent({LCD_WIDTH * 3 / 8, LCD_HEIGHT * 3 / 4}, {LCD_WIDTH * 1 / 4, LCD_HEIGHT / 2}, "C", 1, 5, &mGameSpeed, changeSpeed)));
     components.push_back((new Button("Pause", pause, 0))
-                             ->setPos(MIDDLE)
+                             ->setPos({LCD_WIDTH * 6 / 8, LCD_HEIGHT * 1 / 4})
+                             ->setScale({LCD_WIDTH / 2, LCD_HEIGHT / 2}));
+    components.push_back((new Button("Reset", restart, 0))
+                             ->setPos({LCD_WIDTH * 5 / 8, LCD_HEIGHT * 3 / 4})
                              ->setScale({LCD_WIDTH / 4, LCD_HEIGHT / 2}));
-    components.push_back((new Button("Reset", pause, 0))
-                             ->setPos({LCD_WIDTH * (3.0 / 4.0), LCD_HEIGHT * (3.0 / 8.0)})
-                             ->setScale({LCD_WIDTH / 4, LCD_HEIGHT / 4}));
     components.push_back((new Button("Back", back, 0))
-                             ->setPos({LCD_WIDTH * (3.0 / 4.0), LCD_HEIGHT * (5.0 / 8.0)})
-                             ->setScale({LCD_WIDTH / 4, LCD_HEIGHT / 4}));
+                             ->setPos({LCD_WIDTH * 7 / 8, LCD_HEIGHT * 3 / 4})
+                             ->setScale({LCD_WIDTH / 4, LCD_HEIGHT / 2}));
 }
 
 void DemoPlayScreen::draw()

@@ -23,6 +23,7 @@ void Menu::setSelectedScreen(int option)
 
 void Menu::setCurrentDemo(int demo)
 {
+    free(mCurDemo);
     switch (demo)
     {
     case 0:
@@ -89,13 +90,38 @@ void Menu::setCurrentDemo(int demo)
     }
     case 9:
     {
-        Demo *temp = new Cube3D();
+        Demo *temp = new ILDADemo();
+        temp->init();
+        mCurDemo = temp;
+        break;
+    }
+    case 10:
+    {
+        Demo *temp = new BadAppleDemo();
         temp->init();
         mCurDemo = temp;
         break;
     }
 
     break;
+
+    default:
+        break;
+    }
+}
+
+void Menu::setCurrentGame(int game)
+{
+    free(mCurDemo);
+    switch (game)
+    {
+    case 0:
+    {
+        Demo *temp = new Pong();
+        temp->init();
+        mCurDemo = temp;
+        break;
+    }
 
     default:
         break;

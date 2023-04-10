@@ -23,21 +23,15 @@ void GridDemo::init()
                                      ->setPosition({WIDTH / 2 + spacing * i, HEIGHT / 2 + spacing * j})
                                      ->setScale({spacing, spacing})
                                      ->setColor((Color)WHITE);
-            ball->is_gravity = false;
-            ball->is_static = true;
+            ball->mIsGravity = false;
+            ball->mIsDynamic = false;
             world.addObject(ball);
         }
     }
     world.addSolver(&solver1);
     world.addSolver(&solver2);
 }
-void GridDemo::play()
-{
-}
 
-void GridDemo::pause()
-{
-}
 void GridDemo::draw()
 {
     world.draw();

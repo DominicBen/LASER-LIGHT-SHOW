@@ -31,13 +31,6 @@ void BeeMovieDemo::init()
     p.format_info.font_size = 200;
 }
 
-void BeeMovieDemo::play()
-{
-}
-
-void BeeMovieDemo::pause()
-{
-}
 void BeeMovieDemo::draw()
 {
     u_int64_t cycleTime = 3000;

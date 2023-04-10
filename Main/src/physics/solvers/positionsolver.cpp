@@ -4,6 +4,8 @@ void PositionSolver::solve(std::vector<Collision> collisions)
 {
     for (Collision collision : collisions)
     {
+        if (collision.a->mIsTrigger || collision.b->mIsTrigger)
+            continue;
 
         Serial.println("PositionSolver::Found a collision to solve, lets get on that");
         Serial.print("PositionSolver::Position of collision");
@@ -15,12 +17,13 @@ void PositionSolver::solve(std::vector<Collision> collisions)
         Serial.print(posChange.x);
         Serial.print(",");
         Serial.println(posChange.y);
-        if (collision.a->is_collision && !collision.a->is_static)
+
+        if (collision.a->mIsDynamic)
         {
             Serial.println("PositionSolver::Updated object a");
             collision.a->transform->pos += posChange;
         }
-        if (collision.b->is_collision && !collision.b->is_static)
+        if (collision.b->mIsDynamic)
         {
             Serial.println("PositionSolver::Updated object b");
             Vec2 temp = (posChange * -1);

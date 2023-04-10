@@ -10,6 +10,7 @@ private:
     void detectTouch() override;
     void init() override;
     float mGameSpeed = 1;
+    float mA = 1;
     bool mIsPaused = false;
 
 public:

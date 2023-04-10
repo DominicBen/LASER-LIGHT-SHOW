@@ -15,13 +15,7 @@ void SentencesDemo::init()
     text2 = (new GameObject2D(new Sentence("3.141592653589793238462643383279502884197")))->setPosition({300, HEIGHT / 2})->setScale({100, 100})->setColor((Color)WHITE);
     text3 = (new GameObject2D(new Sentence("what the dog doin?")))->setPosition({300, HEIGHT / 2})->setScale({100, 100})->setColor((Color)WHITE);
 }
-void SentencesDemo::play()
-{
-}
 
-void SentencesDemo::pause()
-{
-}
 void SentencesDemo::draw()
 {
     u_int64_t cycleTime = mScreenOneTime + mScreenTwoTime + mScreenThreeTime;

@@ -54,6 +54,7 @@ public:
   void setSelectedScreen(int option);
 
   void setCurrentDemo(int demo);
+  void setCurrentGame(int game);
 
   void updateCurrentDemo();
 

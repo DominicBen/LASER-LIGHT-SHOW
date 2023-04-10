@@ -27,12 +27,7 @@ public:
 
     CollisionPoints testCollision(const Transform2D *transform, const PlaneCollider *plane, const Transform2D *colliderTransform) const override;
 
-    PlaneCollider(/* args */){};
-    PlaneCollider(Vec2 pos_, Vec2 normal_, float distance_)
-    {
-        pos = pos_;
-        normal = normal_;
-        distance = distance_;
-    };
+    PlaneCollider(){};
+    PlaneCollider(Vec2 pos_, Vec2 normal_, float distance_) : pos(pos_), normal(normal_), distance(distance_){};
     ~PlaneCollider(){};
 };

@@ -11,7 +11,9 @@ void ImpulseSolver::solve(std::vector<Collision> collisions)
 {
     for (Collision collision : collisions)
     {
-        Serial.println("ImpulseSolver:: updating impulse");
+
+        if (collision.a->mIsTrigger || collision.b->mIsTrigger)
+            continue;
         // Compute the relative velocity between the two spheres
         Vec2 relative_velocity = collision.b->velocity - collision.a->velocity;
 
@@ -28,11 +30,11 @@ void ImpulseSolver::solve(std::vector<Collision> collisions)
         // Compute the impulse scalar
         float e = 1.0; // coefficient of restitution
         float j = -(1.0 + e) * velocity_along_normal;
-        if (!collision.a->is_static && !collision.b->is_static)
+        if (collision.a->mIsDynamic && collision.b->mIsDynamic)
             j /= 1.0f / collision.b->mass + 1.0f / collision.a->mass;
-        else if (!collision.a->is_static)
+        else if (collision.a->mIsDynamic)
             j /= 1.0f / collision.a->mass;
-        else if (!collision.b->is_static)
+        else if (collision.b->mIsDynamic)
             j /= 1.0f / collision.b->mass;
         else
         {
@@ -47,13 +49,13 @@ void ImpulseSolver::solve(std::vector<Collision> collisions)
         Serial.println("ImpulseSolver:: impulse");
         impulse.print();
 
-        if (!collision.a->is_static)
+        if (collision.a->mIsDynamic)
         {
 
             collision.a->velocity -= impulse * (1.0f / collision.a->mass);
             Serial.println("ImpulseSolver:: updating object a");
         }
-        if (!collision.b->is_static)
+        if (collision.b->mIsDynamic)
         {
             collision.b->velocity += impulse * (1.0f / collision.b->mass);
             Serial.println("ImpulseSolver:: updating object b");

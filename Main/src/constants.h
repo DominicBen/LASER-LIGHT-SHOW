@@ -13,6 +13,8 @@ const uint16_t BLUE_LED = 5;
 const uint16_t CS = 10;
 /// @brief Pin to toggle the LDAC on the dac
 const uint16_t LDAC = 9;
+const uint16_t START_MAX_DELAY = 1500;
+const uint16_t START_MIN_DELAY = 300;
 
 #define SDCARD_CS_PIN 10
 #define SDCARD_MOSI_PIN 11
@@ -25,9 +27,6 @@ const uint16_t LDAC = 9;
 // 1400 Medium- High
 // 1450 High, Dots appear
 // 1500 Highest, Dots appear
-const uint32_t MAX_DELAY = 1500;
-/// @brief Minimum delay the laser experiences when moving
-const uint32_t MIN_DELAY = 300; // 300 usually pretty good
 
 /// @brief Max resolution when drawing circles
 const u_int16_t CIRCLE_RESOLUTION = 10;

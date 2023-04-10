@@ -45,6 +45,12 @@ typedef struct
     uint16_t number_points;
 } ILDA_Frame_t;
 
+typedef struct
+{
+    const char *filepath;
+    u_int16_t framerate;
+
+} ILDAFileInformation_t;
 class ILDA : public Graphic
 {
 private:
@@ -53,15 +59,24 @@ public:
     File file;
 
     ILDA_Header_t header;
-    ILDA_Frame_t *frames;
+    ILDA_Frame_t frames;
     int num_frames;
+    u_int64_t mSeekPos;
+    u_int16_t mFrameRate = 30;
+    u_int16_t mMinDelay = 20;
+    u_int16_t mMaxDelay = 100;
+    float mCalibrationFactor = 2;
+    bool mPlayNext = true; // A simple bool that desides if we play the next frame;
 
     bool read(const char *filepath);
+    bool readNextHeader();
+    bool resetRead();
     void print_header(const ILDA_Header_t &header);
     void draw(Transform2D transform, Color c) override;
+    void update() override;
 
     ILDA();
-    ILDA(const char *filepath);
+    ILDA(ILDAFileInformation_t info);
     ~ILDA();
 };
 

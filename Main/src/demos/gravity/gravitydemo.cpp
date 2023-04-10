@@ -10,20 +10,14 @@ void GravityDemo::init()
 {
     ball = (new GameObject2D(new Shape(Shape::Circle)))->setPosition({WIDTH / 2, HEIGHT / 2})->setScale({100, 100})->setColor((Color)WHITE)->fitColliderToObject();
     ball->velocity = {xspeed, yspeed};
-    ball->is_gravity = true;
+    ball->mIsGravity = true;
     dt = 0.5;
     world.addObject(ball);
 
     world.addSolver(&solver1);
     world.addSolver(&solver2);
 }
-void GravityDemo::play()
-{
-}
 
-void GravityDemo::pause()
-{
-}
 void GravityDemo::draw()
 {
     world.draw();

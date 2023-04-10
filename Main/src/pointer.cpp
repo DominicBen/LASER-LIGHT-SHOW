@@ -71,8 +71,8 @@ void Pointer::pointTo(Vec2 pos)
     Vec2 distance = current_pos - pos;
     distance.absVec();
     float distance_traveled = max(distance.x, distance.y);
-    float slope = (MAX_DELAY - MIN_DELAY) / (float)(4095 - 0);
-    u_int32_t total_delay = (u_int32_t)(slope * (distance_traveled)) + MIN_DELAY;
+    float slope = (mMaxDelay - mMinDelay) / (float)(4095 - 0);
+    u_int32_t total_delay = (u_int32_t)(slope * (distance_traveled)) + mMinDelay;
     // Clamp value to the window
 
     // Serial.print(newPos.x);
@@ -102,6 +102,18 @@ void Pointer::pointTo(Vec2 pos)
  */
 void Pointer::setRed(int8_t state) { digitalWrite(RED_LED, state); }
 void Pointer::setGreen(int8_t state) { digitalWrite(GREEN_LED, state); }
+// {
+//     if (state == LOW)
+//     {
+//         // analogWriteFrequency(GREEN_LED, 1000);
+//         analogWrite(GREEN_LED, 0);
+//     }
+//     else
+//     {
+//         analogWriteFrequency(GREEN_LED, 100000);
+//         analogWrite(GREEN_LED, 132);
+//     }
+// }
 void Pointer::setBlue(int8_t state) { digitalWrite(BLUE_LED, state); }
 
 void Pointer::setLed(int8_t state)

@@ -19,7 +19,7 @@ public:
     virtual void init();
 
     Screen() { init(); };
-    ~Screen() { components.empty(); };
+    virtual ~Screen() { components.empty(); };
 };
 
 #include <LCD/screens/startscreen.h>

@@ -23,8 +23,7 @@ public:
 
     BeeMovieDemo(/* args */);
     ~BeeMovieDemo();
-    void play() override;
-    void pause() override;
+   
     void draw() override;
     void update() override;
     void restart() override;

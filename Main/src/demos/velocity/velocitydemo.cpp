@@ -10,19 +10,13 @@ void VelocityDemo::init()
 {
     ball = (new GameObject2D(new Shape(Shape::Circle)))->setPosition({WIDTH / 2, HEIGHT / 2})->setScale({100, 100})->setColor((Color)WHITE)->fitColliderToObject();
     ball->velocity = {xspeed, yspeed};
-    ball->is_gravity = false;
+    ball->mIsGravity = false;
     world.addObject(ball);
 
     world.addSolver(&solver1);
     world.addSolver(&solver2);
 }
-void VelocityDemo::play()
-{
-}
 
-void VelocityDemo::pause()
-{
-}
 void VelocityDemo::draw()
 {
     world.draw();

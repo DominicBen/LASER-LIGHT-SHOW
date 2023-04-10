@@ -11,6 +11,8 @@ void GameScreen::init()
     };
     auto loadGame = [&](int x) -> void
     {
+        Serial.println("We are in the callback funtion");
+        menuref.setCurrentGame(mCurrentGame);
         menuref.setSelectedScreen(5);
     };
     auto nextGame = [&](int x) -> void
@@ -36,7 +38,7 @@ void GameScreen::init()
     components.push_back(backButton);
     components.push_back(nextButton);
     components.push_back(prevButton);
-    components.push_back((new Button("", loadGame, mCurrentGame))
+    components.push_back((new Button("", loadGame, 0))
                              ->setPos(MIDDLE)
                              ->setScale(mGameIconSize));
 }

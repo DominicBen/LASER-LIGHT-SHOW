@@ -11,28 +11,22 @@ void CollisionDemo::init()
     p.format_info.kerneling = 300;
     p.format_info.font_size = 400;
     text = (new GameObject2D(sentanceg))->setPosition({100, HEIGHT / 2})->setScale({100, 100})->setColor((Color)WHITE)->fitColliderToObject();
-    text->is_static = true;
+    text->mIsDynamic = false;
     world.addObject(text);
 
     GameObject2D *ball = (new GameObject2D(ballg))->setPosition({WIDTH / 2 - 400, HEIGHT / 2})->setScale({100, 100})->setColor((Color)WHITE)->fitColliderToObject();
     ball->velocity = {10, 0};
-    ball->is_gravity = true;
+    ball->mIsGravity = true;
     world.addObject(ball);
     ball = (new GameObject2D(ballg))->setPosition({WIDTH / 2 + 400, HEIGHT / 2})->setScale({100, 100})->setColor((Color)WHITE)->fitColliderToObject();
     ball->velocity = {-10, 0};
-    ball->is_gravity = true;
+    ball->mIsGravity = true;
     world.addObject(ball);
 
     world.addSolver(&solver1);
     world.addSolver(&solver2);
 }
-void CollisionDemo::play()
-{
-}
 
-void CollisionDemo::pause()
-{
-}
 void CollisionDemo::draw()
 {
     world.draw();
