@@ -113,7 +113,8 @@ void PhysicsWorld2D::step(float dt)
         obj->force = Vec2(0, 0);
     }
     resolveCollisions();
-    resolveWorldBounderies(dt);
+    if (mHasBorder)
+        resolveWorldBounderies(dt);
 }
 
 void PhysicsWorld2D::resolveWorldBounderies(float dt)

@@ -16,11 +16,11 @@ void Pong::init()
     Graphic *ballg = new Shape(Graphic::Circle);
     Graphic *floorg = new Shape(Graphic::Rectangle);
 
-    auto playBounce = [&]()
+    auto playBounce = [&](GameObject2D *caller)
     {
         playFile("bounce.WAV");
     };
-    auto player1Score = [&]()
+    auto player1Score = [&](GameObject2D *caller)
     {
         player1_score++;
         Serial.println("PLAYER 1 SCORED");
@@ -28,7 +28,7 @@ void Pong::init()
         delay(25);
         restartRound();
     };
-    auto player2Score = [&]()
+    auto player2Score = [&](GameObject2D *caller)
     {
         player2_score++;
         Serial.println("PLAYER 2 SCORED");

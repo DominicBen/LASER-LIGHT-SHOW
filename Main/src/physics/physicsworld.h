@@ -15,6 +15,7 @@ private:
     Vec2 gravity = {0, -9.81};
 
 public:
+    bool mHasBorder = true;
     PhysicsWorld2D();
     void step(float dt);
     void addObject(GameObject2D *obj);
