@@ -13,12 +13,14 @@ public:
     {
         Circle,
         Rectangle,
+        SmallCircle,
         Triangle,
         Star,
         Polygon,
         Diamond,
         Grid,
         AlphaNumeric,
+        LargeCircle,
         Other,
 
     };

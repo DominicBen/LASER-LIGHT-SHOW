@@ -23,7 +23,7 @@ void Menu::setSelectedScreen(int option)
 
 void Menu::setCurrentDemo(int demo)
 {
-    free(mCurDemo);
+    delete mCurDemo;
     switch (demo)
     {
     case 0:
@@ -112,7 +112,7 @@ void Menu::setCurrentDemo(int demo)
 
 void Menu::setCurrentGame(int game)
 {
-    free(mCurDemo);
+    delete mCurDemo;
     switch (game)
     {
     case 0:
@@ -126,7 +126,7 @@ void Menu::setCurrentGame(int game)
     case 1:
     {
         Demo *temp = new Flappy();
-              temp->init();
+        temp->init();
         mCurDemo = temp;
         break;
     }

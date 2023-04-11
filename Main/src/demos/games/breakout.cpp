@@ -16,17 +16,16 @@ void Breakout::init()
     Graphic *ballg = new Shape(Graphic::Circle);
     Graphic *floorg = new Shape(Graphic::Rectangle);
 
-    auto deleteBrick = [&]()
+    auto deleteBrick = [&](GameObject2D *collider, GameObject2D *other)
     {
-        if(brick35 != NULL)
+        if (brick35 != NULL)
             brick35->mMarkedForDeletion = true;
-        //playFile("bounce.WAV");
+        // playFile("bounce.WAV");
     };
 
-
     ball = (new GameObject2D(ballg))->setPosition({WIDTH / 2, HEIGHT / 2})->setScale({100, 100})->setColor(WHITE)->fitColliderToObject();
-    Paddle = (new GameObject2D(floorg))->setPosition(PaddleOffset)->setScale(paddleSize)->setColor(player1_color)->fitColliderToObject(/*playBounce*/);
-    border = (new GameObject2D(floorg))->setPosition({WIDTH/2, HEIGHT/2})->setScale({WIDTH-1, HEIGHT-1})->setColor(player1_color);
+    Paddle = (new GameObject2D(floorg))->setPosition(PaddleOffset)->setScale(paddleSize)->setColor(mPlayer1Color)->fitColliderToObject(/*playBounce*/);
+    border = (new GameObject2D(floorg))->setPosition({WIDTH / 2, HEIGHT / 2})->setScale({WIDTH - 1, HEIGHT - 1})->setColor(mPlayer1Color);
     brick11 = (new GameObject2D(floorg))->setPosition(brickA)->setScale(brickSize)->setColor(topBricks)->fitColliderToObject(deleteBrick);
     brick12 = (new GameObject2D(floorg))->setPosition(brickB)->setScale(brickSize)->setColor(topBricks)->fitColliderToObject(deleteBrick);
     brick13 = (new GameObject2D(floorg))->setPosition(brickC)->setScale(brickSize)->setColor(topBricks)->fitColliderToObject(deleteBrick);
@@ -49,7 +48,6 @@ void Breakout::init()
     ball->mIsGravity = false;
 
     Paddle->mIsDynamic = false;
-
 
     border->mIsDynamic = false;
 
@@ -91,17 +89,14 @@ void Breakout::init()
     world.addObject(brick34);
     world.addObject(brick35);
 
-
     world.addSolver(&solver1);
     world.addSolver(&solver2);
-
-
 }
 
 void Breakout::update()
 {
     Serial.println("Breakout::updating");
-     if (mIsPaused)
+    if (mIsPaused)
         return;
     ControllerState player1_state = player1_input.read();
     Serial.println("p1: left " + (String)player1_state.left + "right " + (String)player1_state.right + "up " + (String)player1_state.up + "down " + (String)player1_state.down);
@@ -133,7 +128,7 @@ void Breakout::draw()
 
 void Breakout::restart()
 {
-   restartRound();
+    restartRound();
 }
 
 void Breakout::win(std::string winner)
@@ -144,7 +139,6 @@ void Breakout::win(std::string winner)
 
 void Breakout::restartRound()
 {
-   
 }
 
 void Breakout::playFile(const char *filename)

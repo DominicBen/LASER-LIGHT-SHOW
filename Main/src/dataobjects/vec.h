@@ -137,6 +137,20 @@ public:
         new_num.y = map(old_num.y, old_min, old_max, new_min, new_max);
         return new_num;
     }
+
+    float cubicEaseOut(float t)
+    {
+        float f = t - 1.0;
+        return f * f * f + 1.0;
+    }
+    Vec2 lerp(Vec2 a, Vec2 b, float duration, float currentTime)
+    {
+        float t = fmin((currentTime) / duration, 1.0); // calculate progress from start time and duration, and cap at 1.0
+        float easedT = cubicEaseOut(t);                // apply ease-out formula to progress
+        float x = a.x + (b.x - a.x) * easedT;          // interpolate x value
+        float y = a.y + (b.y - a.y) * easedT;          // interpolate y value
+        return Vec2(x, y);                             // return interpolated Vec2
+    }
     void print() const
     {
         Serial.print("{");

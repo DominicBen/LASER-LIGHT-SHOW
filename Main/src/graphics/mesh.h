@@ -25,6 +25,7 @@ public:
     /// currently supports A-Z
     /// @param sym
     Mesh(char sym);
+    Mesh(String s);
     ~Mesh();
 };
 

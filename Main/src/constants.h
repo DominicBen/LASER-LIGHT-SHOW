@@ -20,6 +20,8 @@ const uint16_t START_MIN_DELAY = 300;
 #define SDCARD_MOSI_PIN 11
 #define SDCARD_MISO_PIN 12
 #define SDCARD_SCK_PIN 13
+#define PLAYER1SERIAL 16, 17
+#define PLAYER2SERIAL 34, 35
 
 /// @brief Maximum delay the laser experiences when moving, usually from one side of the screen to another.
 // 1300 MicroSeconds for Low Resolution

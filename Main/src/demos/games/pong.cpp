@@ -16,21 +16,24 @@ void Pong::init()
     Graphic *ballg = new Shape(Graphic::Circle);
     Graphic *floorg = new Shape(Graphic::Rectangle);
 
-    auto playBounce = [&](GameObject2D *caller)
+    auto playBounce = [&](GameObject2D *caller, GameObject2D *other)
     {
         playFile("bounce.WAV");
+        mMaxBallSpeed += mDifficultyScaling;
+        other->velocity += caller->velocity / 4;
+        other->velocity = other->velocity * (mMaxBallSpeed / other->velocity.magnitude());
     };
-    auto player1Score = [&](GameObject2D *caller)
+    auto player1Score = [&](GameObject2D *caller, GameObject2D *other)
     {
-        player1_score++;
+        mPlayer1Score++;
         Serial.println("PLAYER 1 SCORED");
         playFile("goal.WAV");
         delay(25);
         restartRound();
     };
-    auto player2Score = [&](GameObject2D *caller)
+    auto player2Score = [&](GameObject2D *caller, GameObject2D *other)
     {
-        player2_score++;
+        mPlayer2Score++;
         Serial.println("PLAYER 2 SCORED");
         playFile("goal.WAV");
         delay(25);
@@ -38,14 +41,13 @@ void Pong::init()
     };
 
     ball = (new GameObject2D(ballg))->setPosition({WIDTH / 2, HEIGHT / 2})->setScale({100, 100})->setColor(WHITE)->fitColliderToObject();
-    leftPaddle = (new GameObject2D(floorg))->setPosition(leftPaddleOffset)->setScale(paddleSize)->setColor(player1_color)->fitColliderToObject(playBounce);
-    rightPaddle = (new GameObject2D(floorg))->setPosition(rightPaddleOffset)->setScale(paddleSize)->setColor(player2_color)->fitColliderToObject(playBounce);
-    player1border = (new GameObject2D(floorg))->setPosition({WIDTH / 4, HEIGHT / 2})->setScale({WIDTH / 2, HEIGHT - 1})->setColor(player1_color);
-    player2border = (new GameObject2D(floorg))->setPosition({(WIDTH - WIDTH / 4), HEIGHT / 2})->setScale({WIDTH / 2 - 1, HEIGHT - 1})->setColor(player2_color);
-    player1goal = (new GameObject2D(floorg))->setPosition({50, HEIGHT / 2})->setScale({25, HEIGHT - 1})->setColor(player2_color)->fitColliderToObject(player2Score);
-    player2goal = (new GameObject2D(floorg))->setPosition({WIDTH - 50, HEIGHT / 2})->setScale({25, HEIGHT - 1})->setColor(player2_color)->fitColliderToObject(player1Score);
+    leftPaddle = (new GameObject2D(floorg))->setPosition(leftPaddleOffset)->setScale(paddleSize)->setColor(mPlayer1Color)->fitColliderToObject(playBounce);
+    rightPaddle = (new GameObject2D(floorg))->setPosition(rightPaddleOffset)->setScale(paddleSize)->setColor(mPlayer2Color)->fitColliderToObject(playBounce);
+    player1border = (new GameObject2D(floorg))->setPosition({WIDTH / 4, HEIGHT / 2})->setScale({WIDTH / 2, HEIGHT - 1})->setColor(mPlayer1Color);
+    player2border = (new GameObject2D(floorg))->setPosition({(WIDTH - WIDTH / 4), HEIGHT / 2})->setScale({WIDTH / 2 - 1, HEIGHT - 1})->setColor(mPlayer2Color);
+    player1goal = (new GameObject2D(floorg))->setPosition({50, HEIGHT / 2})->setScale({25, HEIGHT - 1})->setColor(mPlayer2Color)->fitColliderToObject(player2Score);
+    player2goal = (new GameObject2D(floorg))->setPosition({WIDTH - 50, HEIGHT / 2})->setScale({25, HEIGHT - 1})->setColor(mPlayer2Color)->fitColliderToObject(player1Score);
 
-    ball->velocity = ballSpeed;
     ball->mIsDynamic = true;
     ball->mIsGravity = false;
 
@@ -74,6 +76,7 @@ void Pong::init()
 
     world.addSolver(&solver1);
     world.addSolver(&solver2);
+    restartRound();
 }
 void Pong::update()
 {
@@ -81,98 +84,66 @@ void Pong::update()
         return;
     ControllerState player1_state = player1_input.read();
     ControllerState player2_state = player2_input.read();
-    Serial.println("p1: left " + (String)player1_state.left + "right " + (String)player1_state.right + "up " + (String)player1_state.up + "down " + (String)player1_state.down);
-
-    Serial.println("p2: left " + (String)player2_state.left + "right " + (String)player2_state.right + "up " + (String)player2_state.up + "down " + (String)player2_state.down);
-
-    world.step(1);
+    if (player1_state.isValid)
+        Serial.println("p1: left " + (String)player1_state.left + "right " + (String)player1_state.right + "up " + (String)player1_state.up + "down " + (String)player1_state.down + "x " + (String)player1_state.xdim + "y " + (String)player1_state.ydim);
+    if (player2_state.isValid)
+        Serial.println("p2: left " + (String)player2_state.left + "right " + (String)player2_state.right + "up " + (String)player2_state.up + "down " + (String)player2_state.down + "x " + (String)player2_state.xdim + "y " + (String)player2_state.ydim);
 
     if (gameEnd == false)
     {
 
-        // if (ball.transform.pos.y >= HEIGHT - ball.transform.scale.y)
-        // { // bottom bounce
-        //     ballSpeedY *= -1;
-        //     playFile("bounce.WAV");
-        //     delay(25);
+        // if (player1_state.upIsPressed)
+        // {
+        //     leftPaddle->transform->pos.y += paddleSpeed;
         // }
-        // if (ball.transform.pos.y <= ball.transform.scale.y)
-        // { // top bounce
-        //     ballSpeedY *= -1;
-        //     playFile("bounce.WAV");
-        //     delay(25);
+        // if (player1_state.downIsPressed)
+        // {
+        //     leftPaddle->transform->pos.y -= paddleSpeed;
         // }
-        // if (ball.transform.pos.x >= rightPaddle.transform.pos.x - 4 && ball.transform.pos.y >= rightPaddle.transform.pos.y && ball.transform.pos.y <= rightPaddle.transform.pos.y + 30)
-        // { // right paddle bounce
-        //     ballSpeedX *= -1;
-        //     playFile("bounce.WAV");
-        //     delay(25);
+        // if (player2_state.upIsPressed)
+        // {
+        //     rightPaddle->transform->pos.y += paddleSpeed;
         // }
-        // if (ball.transform.pos.x <= leftPaddle.transform.pos.x + 5 && ball.transform.pos.y >= leftPaddle.transform.pos.y && ball.transform.pos.y <= leftPaddle.transform.pos.y + 30)
-        // { // left paddle bounce
-        //     ballSpeedX *= -1;
-        //     playFile("bounce.WAV");
-        //     delay(25);
+        // if (player2_state.downIsPressed)
+        // {
+        //     rightPaddle->transform->pos.y -= paddleSpeed;
         // }
-
-        // if (ball->transform->pos.x >= WIDTH - ball->transform->scale.x)
-        // { // right goal
-        //     player1_score++;
-        //     playFile("goal.WAV");
-        //     delay(25);
-        //     resetRound();
-        // }
-        // if (ball->transform->pos.x <= ball->transform->scale.x)
-        // { // left goal
-        //     player2_score++;
-        //     playFile("goal.WAV");
-        //     delay(25);
-        //     resetRound();
-        // }
-
-        if (player1_state.up)
+        if (player1_state.isValid)
         {
-            leftPaddle->transform->pos.y += paddleSpeed;
+            leftPaddle->velocity.y = (player1_state.ydim - 512) * -mPaddleSpeed / 100;
         }
-        if (player1_state.down)
+        if (player2_state.isValid)
         {
-            leftPaddle->transform->pos.y -= paddleSpeed;
-        }
-        if (player2_state.up)
-        {
-            rightPaddle->transform->pos.y += paddleSpeed;
-        }
-        if (player2_state.right)
-        {
-            rightPaddle->transform->pos.y -= paddleSpeed;
+            rightPaddle->velocity.y = (player2_state.ydim - 512) * -mPaddleSpeed / 100;
         }
 
-        delay(1);
+        if (mPlayer1Score >= '9')
+        {
+            gameEnd = true;
+            win("1");
+        }
+        if (mPlayer2Score >= '9')
+        {
+            gameEnd = true;
+            win("2");
+        }
     }
-    if (player1_score >= '9')
-    {
-        gameEnd = true;
-        win("1");
-    }
-    if (player2_score >= '9')
-    {
-        gameEnd = true;
-        win("2");
-    }
+    world.step(1);
 }
 void Pong::draw()
 {
     world.draw();
-    player1_score_display.m = Mesh(player1_score);
-    player2_score_display.m = Mesh(player2_score);
-    player1_score_display.draw(player1_score_transform, player1_color);
-    player2_score_display.draw(player2_score_transform, player2_color);
+    mPlayer1ScoreDisplay.m = Mesh(mPlayer1Score);
+    mPlayer2ScoreDisplay.m = Mesh(mPlayer2Score);
+    mPlayer1ScoreDisplay.draw(mPlayer1ScoreTransform, mPlayer1Color);
+    mPlayer2ScoreDisplay.draw(mPlayer2ScoreTransform, mPlayer2Color);
 }
 
 void Pong::restart()
 {
-    player1_score = '0';
-    player2_score = '0';
+    mPlayer1Score = '0';
+    mPlayer2Score = '0';
+    gameEnd = false;
     restartRound();
 }
 
@@ -196,6 +167,8 @@ void Pong::restartRound()
     range = random(range) - range / 2;
     ball->transform->pos.x = WIDTH / 2 + range;
     ball->transform->pos.y = HEIGHT / 2 + range;
+    mMaxBallSpeed = mStartingMaxSpeed;
+    ball->velocity = {-mMaxBallSpeed, 0};
     // p.fillScreen(ILI9341_BLACK);
     // p.drawRect(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT); // border
     // p.drawCircle(ballX, ballY, 20);                   // ball

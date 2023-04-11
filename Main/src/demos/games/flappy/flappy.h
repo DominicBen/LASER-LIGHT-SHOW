@@ -35,28 +35,37 @@ public:
     ImpulseSolver solver2 = ImpulseSolver();
 
     // Controller player1_input = Controller("943c,c6,38818e");
-    Controller player1_input = Controller(28, 29);
-    Controller player2_input = Controller(34, 35);
+    Controller player1_input = Controller(PLAYER1SERIAL);
+    Controller player2_input = Controller(PLAYER2SERIAL);
 
     // Game Variables
-    float mJumpStrength = 30;
-    float mPipeSpeed = 1;
+    float mJumpStrength = 90;
+    float mPipeSpeed = 20;
+    float mGoalSize = 1200;
+    float mGoalRange = 1600;
+    float mPipeThickness = 200;
+    float mPipeSpawnPoint = WIDTH - 50 - mPipeThickness;
+    u_int64_t mScoreCooldown = 1000;
 
     // Player info
-    Color player1_color = WHITE;
-    Color player2_color = WHITE;
-    char player1_score = '0';
-    char player2_score = '0';
-    Char player1_score_display = Char(player1_score);
-    Char player2_score_display = Char(player2_score);
-    Vec2 player1_score_location = {WIDTH / 2 - 300, HEIGHT - 300};
-    Vec2 player2_score_location = {WIDTH / 2 + 300, HEIGHT - 300};
+    Color mPlayer1Color = WHITE;
+    Color mPlayer2Color = WHITE;
+    int mPlayer1Score = 0;
+    int mPlayer2Score = 0;
+    uint64_t mPlayer1LastScore = 0;
+    uint64_t mPlayer2LastScore = 0;
+    Char mPlayer1ScoreDisplay = Char(mPlayer1Score);
+    Char mPlayer2ScoreDisplay = Char(mPlayer2Score);
+    Vec2 mPlayer1ScoreLocation = {WIDTH / 2 - 300, HEIGHT - 300};
+    Vec2 mPlayer2ScoreLocation = {WIDTH / 2 + 300, HEIGHT - 300};
+
     int font_size = 100;
-    Transform2D player1_score_transform = Transform2D().setPosition(player1_score_location).setScale({font_size * 2, font_size});
-    Transform2D player2_score_transform = Transform2D().setPosition(player2_score_location).setScale({font_size * 2, font_size});
+    Transform2D mPlayer1ScoreTransform = Transform2D().setPosition(mPlayer1ScoreLocation).setScale({font_size * 2, font_size});
+    Transform2D mPlayer2ScoreTransform = Transform2D().setPosition(mPlayer2ScoreLocation).setScale({font_size * 2, font_size});
 
     // Game state
     bool gameEnd = false;
+    float gameEndTime = 0;
     bool mIsPlayer1Dead = false;
     bool mIsPlayer2Dead = false;
 
@@ -67,11 +76,16 @@ public:
     AudioConnection patchCord2 = AudioConnection(playWav1, 1, audioOutput, 1);
 
     // Game OBjects
-    GameObject2D *player1;
-    GameObject2D *player2;
-    GameObject2D *ground;
-    GameObject2D *pipeTop;
-    GameObject2D *pipeBot;
+    GameObject2D *player1 = NULL;
+    GameObject2D *player2 = NULL;
+    GameObject2D *ground = NULL;
+    GameObject2D *ceiling = NULL;
+
+    GameObject2D *pipeTop = NULL;
+    GameObject2D *pipeBot = NULL;
+    GameObject2D *pipeGoal = NULL;
+    GameObject2D *player1FinalScore = NULL;
+    GameObject2D *player2FinalScore = NULL;
 
     Flappy(/* args */){};
     ~Flappy(){};
@@ -83,8 +97,12 @@ public:
     void update();
     void draw();
     void drawHud();
-    void win(std::string winner);
+    void gameOver();
+    void displayScore();
     void resetPipe();
+    void resetPlayers();
     void restartRound();
+    void player1Score();
+    void player2Score();
     void playFile(const char *filename);
 };

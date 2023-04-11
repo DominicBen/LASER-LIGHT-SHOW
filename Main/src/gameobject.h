@@ -19,7 +19,7 @@ public:
     Transform2D *transform;
     // std::vector<Collider *> colliders;
     ColliderGroup mColliderGroup = ColliderGroup(this);
-
+    String mID;
     bool mMarkedForDeletion = false;
 
     Color cur_color = RED;
@@ -61,16 +61,17 @@ public:
 
     GameObject2D *changeGraphic(Graphic *g)
     {
-        free(graphic);
+        delete graphic;
         graphic = g;
         return this;
     }
     GameObject2D(/* args */);
     GameObject2D(Graphic *g);
-    GameObject2D(Graphic *g, Collider *c);
+    GameObject2D(Graphic *g, String id);
+
     ~GameObject2D()
     {
-        
+
         delete transform;
     }
 };

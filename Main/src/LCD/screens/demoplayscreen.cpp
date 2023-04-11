@@ -6,12 +6,13 @@ void DemoPlayScreen::init()
 
     auto back = [&](int x) -> void
     {
-        Serial.println("We are in the callback funtion");
+        Demo *temp = menuref.mCurDemo;
+        menuref.mCurDemo = NULL;
+        delete temp;
         menuref.prevScreen();
     };
     auto loadDemo = [&](int x) -> void
     {
-        Serial.println("We are in the callback funtion");
         mA = menuref.mCurDemo->getA();
         menuref.mCurDemo->setA(mA + x);
         mA = menuref.mCurDemo->getA();
@@ -20,12 +21,10 @@ void DemoPlayScreen::init()
     auto pause = [&](int x) -> void
     {
         menuref.mCurDemo->mIsPaused = !menuref.mCurDemo->mIsPaused;
-        Serial.println("We are in the callback funtion");
-        // menuref.setSelectedScreen(0);
+        draw();
     };
     auto restart = [&](int x) -> void
     {
-        Serial.println("We are in the callback funtion");
         menuref.mCurDemo->restart();
     };
     auto changeSpeed = [&](int x) -> void

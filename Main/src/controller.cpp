@@ -71,7 +71,10 @@ ControllerState Controller::read()
         int leftmask = 1 << 2;  // left
         int rightmask = 1 << 3; // right
         int stickmask = 1 << 4; // joystick
-
+        if (xdim < 512 + mControllerDeadzone && xdim > 512 - mControllerDeadzone)
+            xdim = 512;
+        if (ydim < 512 + mControllerDeadzone && ydim > 512 - mControllerDeadzone)
+            ydim = 512;
         state.xdim = xdim;
         state.ydim = ydim;
         // state.buttons = buttons;
@@ -84,7 +87,7 @@ ControllerState Controller::read()
         // Serial.println("left " + (String)state.left + "right " + (String)state.right + "up " + (String)state.up + "down " + (String)state.down + " xdim  " + (String)xdim + " ydim " + (String)ydim);
         if (state.down == 1 && mPreviousInput.downIsPressed == true)
         {
-            state.downIsPressed == false;
+            state.downIsPressed = false;
         }
         else if (state.down == 1 && mPreviousInput.down == 0)
         {
@@ -92,7 +95,7 @@ ControllerState Controller::read()
         }
         if (state.up == 1 && mPreviousInput.upIsPressed == true)
         {
-            state.downIsPressed == false;
+            state.downIsPressed = false;
         }
         else if (state.up == 1 && mPreviousInput.up == 0)
         {
@@ -100,7 +103,7 @@ ControllerState Controller::read()
         }
         if (state.left == 1 && mPreviousInput.leftIsPressed == true)
         {
-            state.downIsPressed == false;
+            state.downIsPressed = false;
         }
         else if (state.left == 1 && mPreviousInput.left == 0)
         {
@@ -108,7 +111,7 @@ ControllerState Controller::read()
         }
         if (state.right == 1 && mPreviousInput.rightIsPressed == true)
         {
-            state.downIsPressed == false;
+            state.downIsPressed = false;
         }
         else if (state.right == 1 && mPreviousInput.right == 0)
         {
