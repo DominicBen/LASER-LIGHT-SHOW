@@ -48,4 +48,5 @@ public:
 #include <demos/beemovie/beemoviedemo.h>
 #include <demos/ilda/selection/selectilda.h>
 #include <demos/games/pong.h>
+#include <demos/games/breakout.h>
 #include <demos/ilda/badapple/badapple.h>

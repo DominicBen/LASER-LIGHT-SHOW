@@ -13,13 +13,14 @@ private:
     std::vector<GameObject2D *> objects;
     std::vector<Solver *> solvers;
     Vec2 gravity = {0, -9.81};
+    void removeObject(GameObject2D *obj);
 
 public:
     PhysicsWorld2D();
     void step(float dt);
     void addObject(GameObject2D *obj);
     void addSolver(Solver *sov);
-    void removeObject(GameObject2D *obj);
+    void cleanUpWorld();
     void step();
     void draw();
     void resolveCollisions();

@@ -20,6 +20,8 @@ public:
     // std::vector<Collider *> colliders;
     ColliderGroup mColliderGroup;
 
+    bool mMarkedForDeletion = false;
+
     Color cur_color = RED;
     // Physics Info
     Vec2 velocity = {0, 0};
@@ -68,7 +70,7 @@ public:
     GameObject2D(Graphic *g, Collider *c);
     ~GameObject2D()
     {
-        delete graphic;
+        
         delete transform;
     }
 };
