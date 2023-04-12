@@ -18,7 +18,7 @@ public:
     Graphic *graphic;
     Transform2D *transform;
     // std::vector<Collider *> colliders;
-    ColliderGroup mColliderGroup;
+    ColliderGroup mColliderGroup = ColliderGroup(this);
 
     bool mMarkedForDeletion = false;
 

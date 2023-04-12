@@ -122,9 +122,18 @@ void Menu::setCurrentGame(int game)
         mCurDemo = temp;
         break;
     }
+
+    case 1:
+    {
+        Demo *temp = new Flappy();
+              temp->init();
+        mCurDemo = temp;
+        break;
+    }
     case 2:
     {
         Demo *temp = new Breakout();
+
         temp->init();
         mCurDemo = temp;
         break;

@@ -8,14 +8,31 @@ struct ControllerState
     //      X
     //  Y       A
     //      B
-    bool up = 9999;
-    bool down = 9999;
-    bool left = 9999;
-    bool right = 9999;
-    bool stick = 9999;
-    uint16_t xdim = 9999; // 4095 is far left, 0 is far right center is about 1788
-    uint16_t ydim = 9999; // 4095 is far up, 0 is far down, 1788 is about middle
+    bool up = 0;
+    bool down = 0;
+    bool left = 0;
+    bool right = 0;
+    bool stick = 0;
+    bool upIsPressed = 0;
+    bool downIsPressed = 0;
+    bool leftIsPressed = 0;
+    bool rightIsPressed = 0;
+    bool stickIsPressed = 0;
+    uint16_t xdim = 512;  // 4095 is far left, 0 is far right center is about 1788
+    uint16_t ydim = 512;  // 4095 is far up, 0 is far down, 1788 is about middle
+    bool isValid = false; // Weather an input is valid or not
+    bool operator==(const ControllerState &other) const
+    {
+        return (up == other.up &&
+                down == other.down &&
+                left == other.left &&
+                right == other.right &&
+                stick == other.stick &&
+                xdim == other.xdim &&
+                ydim == other.ydim);
+    }
 };
+
 class Controller
 {
 private:
@@ -24,6 +41,7 @@ public:
     SoftwareSerial ControlerSerial = SoftwareSerial(34, 35); // RX | TX
 
     String BTADDR = "943c,c6,38818e";
+    ControllerState mPreviousInput;
 
     // bool pair();
     void delayAndRead(int delayTime);

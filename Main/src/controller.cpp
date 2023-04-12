@@ -45,13 +45,14 @@ ControllerState Controller::read()
     // while (BTSerial.available())
     //     Serial.write(BTSerial.read());
     // Serial.println("reading player input");
+    delay(2);
     while (ControlerSerial.available())
     {
+        state.isValid = true;
         // Serial.println("READ");
-        delay(3);
+        // delay(3);
         // delay(30);
 
-        // delay(30);
         ControlerSerial.readStringUntil('\n');
         ControlerSerial.readStringUntil('\n');
 
@@ -59,10 +60,10 @@ ControllerState Controller::read()
         int xdim = ControlerSerial.parseInt();
         int ydim = ControlerSerial.parseInt();
         if (buttons > 32)
-            continue;
-        // while (ControlerSerial.available())
-        //     ControlerSerial.read();
+            Serial.println("Controller::Invalid buttons");
 
+        while (ControlerSerial.available())
+            ControlerSerial.read();
         // Serial.println("buttons " + (String)buttons + "\txdim " + (String)xdim + "\tydim " + (String)ydim);
         // 0b0000yaxb
         int upmask = 1;         // up
@@ -81,8 +82,41 @@ ControllerState Controller::read()
         state.stick = stickmask & buttons;
 
         // Serial.println("left " + (String)state.left + "right " + (String)state.right + "up " + (String)state.up + "down " + (String)state.down + " xdim  " + (String)xdim + " ydim " + (String)ydim);
-        return state;
+        if (state.down == 1 && mPreviousInput.downIsPressed == true)
+        {
+            state.downIsPressed == false;
+        }
+        else if (state.down == 1 && mPreviousInput.down == 0)
+        {
+            state.downIsPressed = true;
+        }
+        if (state.up == 1 && mPreviousInput.upIsPressed == true)
+        {
+            state.downIsPressed == false;
+        }
+        else if (state.up == 1 && mPreviousInput.up == 0)
+        {
+            state.downIsPressed = true;
+        }
+        if (state.left == 1 && mPreviousInput.leftIsPressed == true)
+        {
+            state.downIsPressed == false;
+        }
+        else if (state.left == 1 && mPreviousInput.left == 0)
+        {
+            state.downIsPressed = true;
+        }
+        if (state.right == 1 && mPreviousInput.rightIsPressed == true)
+        {
+            state.downIsPressed == false;
+        }
+        else if (state.right == 1 && mPreviousInput.right == 0)
+        {
+            state.downIsPressed = true;
+        }
 
+        mPreviousInput = state;
+        return state;
         // }
     }
     return state;

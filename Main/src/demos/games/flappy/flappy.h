@@ -14,7 +14,7 @@
 
 // #define SDCARD_CS_PIN 10
 // #define SDCARD_MOSI_PIN 11
-// #define SDCARD_MISO_PIN 12
+// #define SDCARD_MISO_PIN 12w
 // #define SDCARD_SCK_PIN 13
 
 // // p screen
@@ -25,7 +25,7 @@
 // #define p_SCLK 13
 // #define p_MISO 12
 
-class Pong : public Demo
+class Flappy : public Demo
 {
 private:
 public:
@@ -35,15 +35,12 @@ public:
     ImpulseSolver solver2 = ImpulseSolver();
 
     // Controller player1_input = Controller("943c,c6,38818e");
-    Controller player1_input = Controller(29, 28);
+    Controller player1_input = Controller(28, 29);
     Controller player2_input = Controller(34, 35);
 
-    // Game Variablesga
-    Vec2 rightPaddleOffset = {WIDTH - 300, HEIGHT / 2};
-    Vec2 leftPaddleOffset = {300, HEIGHT / 2};
-    Vec2 paddleSize = {100, 500};
-    float paddleSpeed = 75;
-    Vec2 ballSpeed = {-50, 0};
+    // Game Variables
+    float mJumpStrength = 30;
+    float mPipeSpeed = 1;
 
     // Player info
     Color player1_color = WHITE;
@@ -60,6 +57,8 @@ public:
 
     // Game state
     bool gameEnd = false;
+    bool mIsPlayer1Dead = false;
+    bool mIsPlayer2Dead = false;
 
     // Audio
     AudioPlaySdWav playWav1;     // xy=88,55
@@ -68,16 +67,14 @@ public:
     AudioConnection patchCord2 = AudioConnection(playWav1, 1, audioOutput, 1);
 
     // Game OBjects
-    GameObject2D *ball;
-    GameObject2D *leftPaddle;
-    GameObject2D *rightPaddle;
-    GameObject2D *player1border;
-    GameObject2D *player2border;
-    GameObject2D *player1goal;
-    GameObject2D *player2goal;
+    GameObject2D *player1;
+    GameObject2D *player2;
+    GameObject2D *ground;
+    GameObject2D *pipeTop;
+    GameObject2D *pipeBot;
 
-    Pong(/* args */){};
-    ~Pong(){};
+    Flappy(/* args */){};
+    ~Flappy(){};
 
     // Helper Functions
 
@@ -87,6 +84,7 @@ public:
     void draw();
     void drawHud();
     void win(std::string winner);
+    void resetPipe();
     void restartRound();
     void playFile(const char *filename);
 };

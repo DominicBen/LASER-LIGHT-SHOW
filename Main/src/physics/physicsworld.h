@@ -16,6 +16,7 @@ private:
     void removeObject(GameObject2D *obj);
 
 public:
+    bool mHasBorder = true;
     PhysicsWorld2D();
     void step(float dt);
     void addObject(GameObject2D *obj);

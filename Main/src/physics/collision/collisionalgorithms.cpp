@@ -5,9 +5,9 @@ CollisionPoints collisionalgorithms::FindSphereSphereCollisionPoints(const Spher
     CollisionPoints ret;
     // Serial.println("Testing collision between two spheres?");
     float distance = Vec2::distance(ta->pos, tb->pos);
-    Serial.println(distance);
+    // Serial.println(distance);
     ret.depth = (ta->scale.x + tb->scale.x) - distance;
-    Serial.println(ret.depth);
+    // Serial.println(ret.depth);
     if (ret.depth > 0)
     {
         ret.hasCollision = true;
