@@ -17,16 +17,11 @@
 #include <constants.h>
 #include <MCP4922.h>
 
-#include <vec.h>
+#include <dataobjects/vec.h>
 #include <color.h>
-
-// #include <shape.h>
-// #include <mesh.h>
-// #include <char.h>
-// #include <sentence.h>
-// #include <ILDA.h>
-
 #include <string>
+
+// #include <ILDA.h>
 
 /**
  * @brief
@@ -56,6 +51,14 @@ public:
     Vec2 current_pos;
     /// @brief Current cursor data of the cursor, used for where to print words
     Cursor_info format_info;
+
+    uint32_t mMaxDelay = START_MAX_DELAY;
+    uint32_t mMinDelay = START_MIN_DELAY;
+    void resetDelay()
+    {
+        mMaxDelay = START_MAX_DELAY;
+        mMinDelay = START_MIN_DELAY;
+    }
     /// @brief Current color of the laser
     Color cur_color;
     /// @brief Dac object used to control the galvo DACS

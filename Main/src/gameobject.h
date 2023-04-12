@@ -1,10 +1,11 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include <transform.h>
-#include <graphic.h>
-#include <collision.h>
-#include <collider.h>
+#include <dataobjects/transform.h>
+#include <graphics/graphic.h>
+#include <physics/collision/collision.h>
+#include <physics/collision/collider.h>
+#include <physics/collision/collidergroup.h>
 #include <vector>
 
 class GameObject2D
@@ -15,20 +16,22 @@ private:
 
 public:
     Graphic *graphic;
-    // Collider *collider;
-    std::vector<Collider *> colliders;
+    Transform2D *transform;
+    // std::vector<Collider *> colliders;
+    ColliderGroup mColliderGroup;
+
+    bool mMarkedForDeletion = false;
+
     Color cur_color = RED;
     // Physics Info
-    Transform2D *transform;
     Vec2 velocity = {0, 0};
     Vec2 force = {0, 0};
     float mass = 1;
     // Physic Bools
-    bool is_static = false;   // weather an object is completly immobile and uneffected by physics
-    bool is_gravity = true;   // whether an object is effected by gravity
-    bool is_collision = true; // Whether an object is effected by collision solvers
-    bool is_collided = false; // wheahter an objects has collided with something since the last frame
-
+    bool mIsDynamic = true;  // weather an object is completly immobile and uneffected by physics
+    bool mIsGravity = true;  // whether an object is effected by gravity
+    bool mIsDrawn = true;    // Weahter an object is drawn on a drawn call, Good for triggers
+    bool mIsTrigger = false; // Whether an object is effected by collision solvers
     // functions
     void update();
     void draw();
@@ -53,11 +56,23 @@ public:
         transform->setPosition(pos_);
         return this;
     }
+    GameObject2D *fitColliderToObject(ColliderCallback callback);
     GameObject2D *fitColliderToObject();
+
+    GameObject2D *changeGraphic(Graphic *g)
+    {
+        free(graphic);
+        graphic = g;
+        return this;
+    }
     GameObject2D(/* args */);
     GameObject2D(Graphic *g);
     GameObject2D(Graphic *g, Collider *c);
-    ~GameObject2D();
+    ~GameObject2D()
+    {
+        
+        delete transform;
+    }
 };
 
 #endif // !GAMEOBJECT_H

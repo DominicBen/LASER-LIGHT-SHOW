@@ -71,14 +71,14 @@ void Pointer::pointTo(Vec2 pos)
     Vec2 distance = current_pos - pos;
     distance.absVec();
     float distance_traveled = max(distance.x, distance.y);
-    float slope = (MAX_DELAY - MIN_DELAY) / (float)(4095 - 0);
-    u_int32_t total_delay = (u_int32_t)(slope * (distance_traveled)) + MIN_DELAY;
+    float slope = (mMaxDelay - mMinDelay) / (float)(4095 - 0);
+    u_int32_t total_delay = (u_int32_t)(slope * (distance_traveled)) + mMinDelay;
     // Clamp value to the window
-    Vec2 newPos = pos.clamp(0, WIDTH);
 
     // Serial.print(newPos.x);
     // Serial.println(newPos.y);
 
+    Vec2 newPos = pos.clamp(0, WIDTH);
     if (current_pos.x != newPos.x)
     {
 
@@ -102,19 +102,31 @@ void Pointer::pointTo(Vec2 pos)
  */
 void Pointer::setRed(int8_t state) { digitalWrite(RED_LED, state); }
 void Pointer::setGreen(int8_t state) { digitalWrite(GREEN_LED, state); }
+// {
+//     if (state == LOW)
+//     {
+//         // analogWriteFrequency(GREEN_LED, 1000);
+//         analogWrite(GREEN_LED, 0);
+//     }
+//     else
+//     {
+//         analogWriteFrequency(GREEN_LED, 100000);
+//         analogWrite(GREEN_LED, 132);
+//     }
+// }
 void Pointer::setBlue(int8_t state) { digitalWrite(BLUE_LED, state); }
 
 void Pointer::setLed(int8_t state)
 {
-    if (state == LOW)
+    if (state == HIGH)
     {
-        setColor(cur_color);
+        setRed(LOW);
+        setGreen(LOW);
+        setBlue(LOW);
     }
     else
     {
-        setRed(HIGH);
-        setGreen(HIGH);
-        setBlue(HIGH);
+        setColor(cur_color);
     }
 }
 void Pointer::setColor(Color c)
@@ -122,52 +134,52 @@ void Pointer::setColor(Color c)
     switch (c)
     {
     case RED:
-        setRed(LOW);
-        setGreen(HIGH);
-        setBlue(HIGH);
+        setRed(HIGH);
+        setGreen(LOW);
+        setBlue(LOW);
 
         break;
     case GREEN:
-        setRed(HIGH);
-        setGreen(LOW);
-        setBlue(HIGH);
+        setRed(LOW);
+        setGreen(HIGH);
+        setBlue(LOW);
         /* code */
         break;
     case BLUE:
-        setRed(HIGH);
-        setGreen(HIGH);
-        setBlue(LOW);
-        /* code */
-        break;
-    case CYAN:
-        setRed(HIGH);
-        setGreen(LOW);
-        setBlue(LOW);
-        /* code */
-        break;
-    case YELLOW:
         setRed(LOW);
         setGreen(LOW);
         setBlue(HIGH);
         /* code */
         break;
-    case MAGGENTA:
+    case CYAN:
         setRed(LOW);
+        setGreen(HIGH);
+        setBlue(HIGH);
+        /* code */
+        break;
+    case YELLOW:
+        setRed(HIGH);
         setGreen(HIGH);
         setBlue(LOW);
         /* code */
         break;
-    case WHITE:
-        setRed(LOW);
+    case MAGGENTA:
+        setRed(HIGH);
         setGreen(LOW);
-        setBlue(LOW);
+        setBlue(HIGH);
+        /* code */
+        break;
+    case WHITE:
+        setBlue(HIGH);
+        setRed(HIGH);
+        setGreen(HIGH);
         /* code */
         break;
 
     default:
-        setRed(LOW);
-        setGreen(LOW);
-        setBlue(LOW);
+        setRed(HIGH);
+        setGreen(HIGH);
+        setBlue(HIGH);
         break;
     }
     cur_color = c;

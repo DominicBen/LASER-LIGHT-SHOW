@@ -1,30 +1,62 @@
 #include <ilda/ILDA.h>
 #include <Audio.h>
+//#include <MemoryFree.h>
 
 ILDA::ILDA()
 {
-    frames = NULL;
     num_frames = 0;
     type = Other;
 }
-ILDA::ILDA(const char *filepath)
+ILDA::ILDA(ILDAFileInformation_t info)
 {
-    frames = NULL;
     num_frames = 0;
+    mFrameRate = info.framerate;
     type = Other;
-    read(filepath);
+    read(info.filepath);
 }
 
 ILDA::~ILDA()
 {
-    free(frames);
-}
+    free(frames.points);
 
+    file.close();
+}
+uint16_t ntohs(uint16_t netshort)
+{
+    // Create a variable to hold the result in host byte order
+    uint16_t hostshort = 0;
+    // Copy the two bytes from network byte order to host byte order
+    hostshort |= (netshort & 0x00FF) << 8;
+    hostshort |= (netshort & 0xFF00) >> 8;
+    // Return the result
+    return hostshort;
+}
+bool ILDA::resetRead()
+{
+    if (file)
+    {
+        file.seek(0, SeekSet);
+        file.read((uint8_t *)&header, sizeof(ILDA_Header_t));
+        header.points = ntohs(header.points);
+        header.total_frames = ntohs(header.total_frames);
+        print_header(header);
+
+        // allocate space for the frames
+        // frames = (ILDA_Frame_t *)malloc(sizeof(ILDA_Frame_t) * 1);
+        num_frames = header.total_frames;
+        frames.points = NULL;
+        frames.number_points = 0;
+
+        mSeekPos = file.position();
+    }
+    else
+    {
+        Serial.print(F("SD Card: error on opening file"));
+    }
+    return true;
+}
 bool ILDA::read(const char *filepath)
 {
-    // SPI.setMISO(SDCARD_MISO_PIN);
-    // SPI.setMOSI(SDCARD_MOSI_PIN);
-    // SPI.setSCK(SDCARD_SCK_PIN);
 
     while (!(SD.begin(BUILTIN_SDCARD)))
     {
@@ -35,35 +67,44 @@ bool ILDA::read(const char *filepath)
     file = SD.open(filepath, FILE_READ);
     if (file)
     {
-        file.read((uint8_t *)&header, sizeof(ILDA_Header_t));
-        header.points = (header.points >> 8);
-        header.total_frames = (header.total_frames >> 8);
-        print_header(header);
+        resetRead();
+    }
+    else
+    {
+        Serial.print(F("SD Card: error on opening file"));
+    }
+    return true;
+}
+bool ILDA::readNextHeader()
+{
+    if (file)
+    {
 
-        // allocate space for the frames
-        frames = (ILDA_Frame_t *)malloc(sizeof(ILDA_Frame_t) * header.total_frames);
-        num_frames = header.total_frames;
-        // read in each frame
-        for (int frame_idx = 0; frame_idx < header.total_frames; frame_idx++)
+        frames.number_points = header.points;
+
+        // Serial.print("Free memory ");
+        // Serial.println(freeMemory());
+        void *ptr = malloc(sizeof(ILDA_Point_t) * header.points);
+        if (ptr == nullptr)
         {
-            frames[frame_idx].number_points = header.points;
-            frames[frame_idx].points = (ILDA_Point_t *)malloc(sizeof(ILDA_Point_t) * header.points);
-            ILDA_Point_t *points = frames[frame_idx].points;
-            for (int i = 0; i < header.points; i++)
-            {
-                file.read((uint8_t *)(&points[i]), sizeof(ILDA_Point_t));
-                points[i].x = ((points[i].x & 0x00ff) << 8) | ((points[i].x & 0xff00) >> 8);
-                points[i].y = ((points[i].y & 0x00ff) << 8) | ((points[i].y & 0xff00) >> 8);
-                points[i].z = ((points[i].z & 0x00ff) << 8) | ((points[i].z & 0xff00) >> 8);
-            }
-            // read the next header
-            file.read((uint8_t *)&header, sizeof(ILDA_Header_t));
-            header.points = (header.points >> 8);
-            header.total_frames = (header.total_frames >> 8);
+            Serial.println("out of memory");
+            while (1)
+                ;
         }
-
-        // finished();
-        file.close();
+        frames.points = (ILDA_Point_t *)ptr;
+        ILDA_Point_t *points = frames.points;
+        for (int i = 0; i < header.points; i++)
+        {
+            file.read((uint8_t *)(&points[i]), sizeof(ILDA_Point_t));
+            points[i].x = ntohs(points[i].x);
+            points[i].y = ntohs(points[i].y);
+            points[i].z = ntohs(points[i].z);
+        }
+        // read the next header
+        file.read((uint8_t *)&header, sizeof(ILDA_Header_t));
+        header.points = ntohs(header.points);
+        header.total_frames = ntohs(header.total_frames);
+        // free(points);
     }
     else
     {
@@ -100,25 +141,46 @@ void ILDA::print_header(const ILDA_Header_t &header)
     Serial.println(header.total_frames);
 }
 
+void ILDA::update()
+{
+    mPlayNext = true;
+}
+
 void ILDA::draw(Transform2D transform, Color c)
 {
-    Serial.print("drawing ILDA with frames");
-    Serial.println(num_frames);
 
-    for (u_int16_t i = 0; i < num_frames; i++)
+    if (file.available())
     {
-
-        Serial.print("drawing frame ");
-        Serial.print(i);
-        Serial.print(" with points ");
-        Serial.println(frames[i].number_points);
-        for (u_int16_t j = 0; j < frames[i].number_points; j++)
+        if (mPlayNext)
         {
-            Vec2 point = Vec2(frames[i].points[j].x, frames[i].points[j].y);
+            if (frames.points != NULL)
+            {
+                free(frames.points);
+            }
+            readNextHeader();
+        }
+        mPlayNext = false;
+        Serial.print("ILDA::drawing frame with points");
+        Serial.println(frames.number_points);
+        if (mFrameRate != 0)
+        {
+            p.mMinDelay = 1000000 / mFrameRate / frames.number_points;
+            p.mMinDelay /= mCalibrationFactor;
+            p.mMaxDelay = p.mMinDelay;
+            Serial.print("ILDA::setting delay to ");
+            Serial.println(p.mMinDelay);
+        }
+        uint32_t startTime = millis();
+        float maxFrameTime = 1000 / (mFrameRate + 1.0);
 
-            point.mapVec(-32768, 32767, (WIDTH / 2 - 2000), (WIDTH / 2 + 2000));
+        for (u_int16_t j = 0; j < frames.number_points; j++)
+        {
+            Vec2 point = Vec2(frames.points[j].x, frames.points[j].y);
+
+            point.mapX(-32768, 32767, -transform.scale.x / 2, transform.scale.x / 2);
+            point.mapY(-32768, 32767, -transform.scale.y / 2, transform.scale.y / 2);
             // toggles led's based on status code
-            if ((frames[i].points[j].status_code & 0b01000000) == 0)
+            if ((frames.points[j].status_code & 0b01000000) == 0)
             {
                 p.setColor(c);
             }
@@ -126,9 +188,35 @@ void ILDA::draw(Transform2D transform, Color c)
             {
                 p.setLed(HIGH);
             }
+            point = point + transform.pos;
             p.pointTo(point);
         }
+        uint32_t endTime = millis();
+        uint32_t totalTime = endTime - startTime;
+        if (totalTime > maxFrameTime)
+        {
+            Serial.print("ILDA::WARNING, PREFORMING UNDER EXPECATIONS Expected a delay of");
+            Serial.println(maxFrameTime);
+            mCalibrationFactor *= 1.05;
+            Serial.print("ILDA::That frame took this many milliseonds to print: ");
+            Serial.println(totalTime);
+        }
+        else
+        {
+            if (frames.number_points > 10)
+                mCalibrationFactor *= 0.95;
+            delay(maxFrameTime - totalTime);
+            Serial.print("ILDA::NOTICE delaying for extra milliseconds");
+            Serial.println(maxFrameTime - totalTime);
+        }
 
-        delay(20);
+        // delay(20);
+        // free(frames.points);
+
+        p.resetDelay();
+    }
+    else
+    {
+        resetRead();
     }
 }

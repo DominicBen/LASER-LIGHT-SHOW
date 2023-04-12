@@ -13,6 +13,8 @@ const uint16_t BLUE_LED = 5;
 const uint16_t CS = 10;
 /// @brief Pin to toggle the LDAC on the dac
 const uint16_t LDAC = 9;
+const uint16_t START_MAX_DELAY = 1500;
+const uint16_t START_MIN_DELAY = 300;
 
 #define SDCARD_CS_PIN 10
 #define SDCARD_MOSI_PIN 11
@@ -25,9 +27,6 @@ const uint16_t LDAC = 9;
 // 1400 Medium- High
 // 1450 High, Dots appear
 // 1500 Highest, Dots appear
-const uint32_t MAX_DELAY = 1500;
-/// @brief Minimum delay the laser experiences when moving
-const uint32_t MIN_DELAY = 300; // 300 usually pretty good
 
 /// @brief Max resolution when drawing circles
 const u_int16_t CIRCLE_RESOLUTION = 10;
@@ -37,3 +36,36 @@ const uint16_t WIDTH = 4096;
 const uint16_t HEIGHT = 4096;
 
 const float GRAVITY = 9.81;
+
+//
+// LCD
+//
+
+#define sd_cs BUILTIN_SDCARD // using ethernet shield sd
+
+// Library only supports hardware SPI at this time
+// Connect SCLK to UNO Digital #13 (Hardware SPI clock)
+// Connect MISO to UNO Digital #12 (Hardware SPI MISO)
+// Connect MOSI to UNO Digital #11 (Hardware SPI MOSI)
+#define RA8875_CS 24
+#define RA8875_INT 33
+#define RA8875_RESET 32
+// options boxes
+// #define OPTION_WIDTH 350
+// #define OPTION_HEIGHT 100
+// #define OPTION_SPACING 50
+// // menu options
+// #define OPTION_Y 50
+// #define OPTION_X_START 200
+// pressure for the touchscreen
+#define MINPRESSURE 10
+#define MAXPRESSURE 1000
+// Connecting touchscreen for User Input
+#define TS_CS 0
+#define TOUCH_COOLDOWN 200
+const int LCD_WIDTH = 800;
+const int LCD_HEIGHT = 480;
+#define MIDDLE                        \
+    {                                 \
+        LCD_WIDTH / 2, LCD_HEIGHT / 2 \
+    }
