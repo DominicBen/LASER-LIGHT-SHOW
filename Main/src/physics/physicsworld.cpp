@@ -1,4 +1,5 @@
 #include <physics/physicsworld.h>
+#include <algorithm>
 
 PhysicsWorld2D::PhysicsWorld2D()
 {
@@ -8,6 +9,7 @@ void PhysicsWorld2D::draw()
 
     for (GameObject2D *obj : objects)
     {
+        Serial.println("world::drawing obj");
         obj->draw();
     }
 }
@@ -82,20 +84,59 @@ void PhysicsWorld2D::addSolver(Solver *sov)
 {
     solvers.push_back(sov);
 }
+void PhysicsWorld2D::cleanUpWorld()
+{
+    while (true)
+    {
+        /* code */
+        for (size_t i = 0; i < objects.size(); i++)
+        {
+
+            if(objects[i]->mMarkedForDeletion)
+            {
+                Serial.println("World::clean:: removing obj");
+                removeObject(objects[i]);
+                Serial.println("World::clean:: obj removed");
+                break;
+            }
+            if (i == objects.size()-1)
+            {
+                Serial.println("World::clean:: cleanup done");
+                return;
+            }
+            
+        }
+    }
+    
+}
+
 void PhysicsWorld2D::removeObject(GameObject2D *obj)
 {
-    // if (!obj)
-    // {
-    //     return;
-    // }
+    Serial.println("World:: Deleting obj first");
+    if (obj == NULL)
+    {
+        Serial.println("World:: obj is null");
+        return;
+    }
+            Serial.println("World:: Deleting obj 2");
 
-    // auto itr = std::find(objects.begin(), objects.end(), obj);
+    auto it = std::find(objects.begin(), objects.end(), obj);
+        Serial.println("World:: Deleting obj 3");
 
-    // if (itr == objects.end())
-    // {
-    //     return;
-    // }
-    // objects.erase(itr);
+    if(it != objects.end()){
+            Serial.println("World:: Deleting obj 4");
+
+        objects.erase(it);
+            Serial.println("World:: Deleting obj5");
+
+        delete obj;
+            Serial.println("World:: Deleting obj6");
+
+        obj = NULL;
+            Serial.println("World:: Deleting obj");
+
+    }
+
 }
 
 void PhysicsWorld2D::step(float dt)

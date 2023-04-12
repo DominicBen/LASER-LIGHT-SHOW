@@ -1,6 +1,7 @@
 #include <gameobject.h>
 void GameObject2D::draw()
 {
+    Serial.println("Gameobj::drawing");
     if (mIsDrawn)
         graphic->draw(*transform, cur_color);
 }
