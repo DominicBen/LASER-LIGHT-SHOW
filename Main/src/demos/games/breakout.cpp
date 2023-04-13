@@ -16,6 +16,7 @@ void Breakout::init()
     Graphic *ballg = new Shape(Graphic::Circle);
     Graphic *floorg = new Shape(Graphic::Rectangle);
 
+
     auto deleteBrick = [&](GameObject2D * caller)
     {
         if(caller != NULL)
@@ -60,6 +61,7 @@ void Breakout::init()
     ball->mIsDynamic = true;
     ball->mIsGravity = false;
     Paddle->mIsDynamic = false;
+
     border->mIsDynamic = false;
     ground->mIsTrigger = true;
     ground->mIsDynamic = false;
@@ -104,16 +106,14 @@ void Breakout::init()
     world.addObject(brick34);
     world.addObject(brick35);
 
-
     world.addSolver(&solver1);
     world.addSolver(&solver2);
-
-
 }
 
 void Breakout::update()
 {
     Serial.println("Breakout::updating");
+
      if (mIsPaused){
         return;
      }
@@ -147,8 +147,10 @@ void Breakout::draw()
 
 void Breakout::restart()
 {
+
     world.reset();
    restartRound();
+
 }
 
 void Breakout::win()
@@ -176,7 +178,9 @@ void Breakout::lose(){
 
 void Breakout::restartRound()
 {
+
    init();
+
 }
 
 void Breakout::playFile(const char *filename)

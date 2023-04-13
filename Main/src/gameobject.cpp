@@ -1,7 +1,7 @@
 #include <gameobject.h>
 void GameObject2D::draw()
 {
-    Serial.println("Gameobj::drawing");
+    // Serial.println("Gameobj::drawing");
     if (mIsDrawn)
         graphic->draw(*transform, cur_color);
 }
@@ -11,17 +11,13 @@ void GameObject2D::update()
     graphic->update();
 }
 
-GameObject2D::GameObject2D(Graphic *g)
+GameObject2D::GameObject2D(Graphic *g) : GameObject2D(g, "default")
 {
-    graphic = g;
-    transform = new Transform2D();
 }
-GameObject2D::GameObject2D(Graphic *g, Collider *c)
+GameObject2D::GameObject2D(Graphic *g, String id) : mID(id), graphic(g), transform(new Transform2D())
 {
-    graphic = g;
-    mColliderGroup.colliders.push_back(c);
-    transform = new Transform2D();
 }
+
 GameObject2D *GameObject2D::fitColliderToObject()
 {
     mColliderGroup.colliders.clear();
@@ -30,28 +26,39 @@ GameObject2D *GameObject2D::fitColliderToObject()
 
     switch (graphic->type)
     {
-
     case Graphic::Circle:
+    {
         Serial.println("fitCollider::added collider to Circle");
         mColliderGroup.colliders.push_back(new SphereCollider());
         break;
+    }
     case Graphic::Rectangle:
+    {
+
         Serial.println("fitCollider::added collider to rectangle");
         Collider *topside = new PlaneCollider({0, transform->scale.y / 2}, {0, 1}, transform->scale.x);
         Collider *rightside = new PlaneCollider({transform->scale.x / 2, 0}, {1, 0}, transform->scale.y);
         Collider *bottomside = new PlaneCollider({0, -transform->scale.y / 2}, {0, -1}, transform->scale.x);
         Collider *leftside = new PlaneCollider({-transform->scale.x / 2, 0}, {-1, 0}, transform->scale.y);
-        mColliderGroup.colliders.push_back(topside);
         mColliderGroup.colliders.push_back(rightside);
-        mColliderGroup.colliders.push_back(bottomside);
         mColliderGroup.colliders.push_back(leftside);
+        mColliderGroup.colliders.push_back(topside);
+        mColliderGroup.colliders.push_back(bottomside);
         break;
-
+    }
+    case Graphic::SmallCircle:
+    {
+        Serial.println("fitCollider::added collider to SmallCircle");
+        mColliderGroup.colliders.push_back(new SphereCollider());
+        break;
+    }
     default:
+    {
         Serial.println("fitCollider::added collider to defualt");
         mColliderGroup.colliders.push_back(new SphereCollider());
 
         break;
+    }
     }
 
     return this;

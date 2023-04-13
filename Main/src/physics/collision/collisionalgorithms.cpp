@@ -42,12 +42,12 @@ CollisionPoints collisionalgorithms::FindSpherePlaneCollisionPoints(const Sphere
 
     if (depth > 0 && ((ta->pos - (tb->pos + b->pos)).magnitude() <= b->distance / 2 + ta->scale.x))
     {
-        Serial.println("Sphere Plane collision detected");
+        // Serial.println("Sphere Plane collision detected");
 
-        b->normal.print();
+        // b->normal.print();
         ret.hasCollision = true;
         ret.normal = b->normal * (-1);
-        ret.normal.print();
+        // ret.normal.print();
         ret.depth = depth;
     }
     else

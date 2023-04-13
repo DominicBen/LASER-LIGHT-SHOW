@@ -38,20 +38,19 @@ class Controller
 private:
     /* data */
 public:
-    SoftwareSerial ControlerSerial = SoftwareSerial(34, 35); // RX | TX
+    SoftwareSerial ControlerSerial;
 
     String BTADDR = "943c,c6,38818e";
     ControllerState mPreviousInput;
+    int mControllerDeadzone = 100;
 
     // bool pair();
     void delayAndRead(int delayTime);
     ControllerState read();
 
-    Controller(String BLTAdress) : BTADDR(BLTAdress){};
-    Controller(int rx, int tx)
+    Controller(int rx, int tx) : ControlerSerial(SoftwareSerial(rx, tx))
     {
         Serial.begin(9600);
-        ControlerSerial = SoftwareSerial(rx, tx);
         Serial.println("Enter AT commands:");
         ControlerSerial.begin(9600); // HC-05 default speed in AT command more
     };

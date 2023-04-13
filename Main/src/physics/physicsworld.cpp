@@ -9,7 +9,7 @@ void PhysicsWorld2D::draw()
 
     for (GameObject2D *obj : objects)
     {
-        Serial.println("world::drawing obj");
+        // Serial.println("world::drawing obj");
         obj->draw();
     }
 }
@@ -22,8 +22,8 @@ void PhysicsWorld2D::resolveTriggers(std::vector<Collision> collisions)
 {
     for (auto i : collisions)
     {
-        i.a->mColliderGroup.trigger();
-        i.b->mColliderGroup.trigger();
+        i.a->mColliderGroup.trigger(i.b);
+        i.b->mColliderGroup.trigger(i.a);
     }
 }
 void PhysicsWorld2D::resolveCollisions()
@@ -61,7 +61,7 @@ void PhysicsWorld2D::resolveCollisions()
                     if (points.hasCollision)
                     {
                         collisions.emplace_back(a, b, points);
-                        Serial.println("collision detected");
+                        // Serial.println("collision detected");
                         should_break = true;
                     }
                 }
@@ -99,64 +99,69 @@ void PhysicsWorld2D::cleanUpWorld()
         for (size_t i = 0; i < objects.size(); i++)
         {
 
-            if(objects[i]->mMarkedForDeletion)
+            if (objects[i]->mMarkedForDeletion)
             {
-                Serial.println("World::clean:: removing obj");
+                // Serial.println("World::clean:: removing obj");
                 removeObject(objects[i]);
-                Serial.println("World::clean:: obj removed");
+                // Serial.println("World::clean:: obj removed");
                 break;
             }
-            if (i == objects.size()-1)
+            if (i == objects.size() - 1)
             {
-                Serial.println("World::clean:: cleanup done");
+                // Serial.println("World::clean:: cleanup done");
                 return;
             }
-            
         }
     }
-    
 }
 
 void PhysicsWorld2D::removeObject(GameObject2D *obj)
 {
-    Serial.println("World:: Deleting obj first");
+
+    // Serial.println("World:: Deleting obj first");
     if (obj == NULL)
     {
-        Serial.println("World:: obj is null");
+        // Serial.println("World:: obj is null");
         return;
     }
-            Serial.println("World:: Deleting obj 2");
+    // Serial.println("World:: Deleting obj 2");
 
     auto it = std::find(objects.begin(), objects.end(), obj);
-        Serial.println("World:: Deleting obj 3");
+    Serial.println("World:: Deleting obj 3");
 
-    if(it != objects.end()){
-            Serial.println("World:: Deleting obj 4");
+    if (it != objects.end())
+    {
+        // Serial.println("World:: Deleting obj 4");
 
         objects.erase(it);
-            Serial.println("World:: Deleting obj5");
+        // Serial.println("World:: Deleting obj5");
 
         delete obj;
-            Serial.println("World:: Deleting obj6");
+        // Serial.println("World:: Deleting obj6");
 
         obj = NULL;
-            Serial.println("World:: Deleting obj");
-
+        // Serial.println("World:: Deleting obj");
     }
-
 }
 
 void PhysicsWorld2D::step(float dt)
 {
 
+    uint64_t curTime = millis();
+
+    float deltaT = curTime - mTimeSinceLastUpdate;
+    mTimeSinceLastUpdate = curTime;
+    // Serial.println("Delta T " + (String)deltaT);
+    if (mTimeSinceLastUpdate != 0)
+        dt = dt * min(deltaT, 90) / 35;
+
     for (GameObject2D *obj : objects)
     {
-        if (!obj->mIsDynamic)
-            continue;
 
-        if (obj->mIsGravity)
+        if (obj->mIsGravity && obj->mIsDynamic)
             obj->force += gravity * obj->mass;
-        obj->velocity += obj->force / obj->mass * dt;
+        if (obj->mIsDynamic)
+            obj->velocity += obj->force / obj->mass * dt;
         obj->transform->pos += obj->velocity * dt;
         obj->force = Vec2(0, 0);
     }
@@ -175,22 +180,26 @@ void PhysicsWorld2D::resolveWorldBounderies(float dt)
         if (obj->transform->pos.y >= HEIGHT - obj->transform->scale.y)
         { // top bounce
             obj->transform->pos.y = HEIGHT - obj->transform->scale.y;
-            obj->velocity.y *= -1;
+            if (mWorldBounderiesBounce)
+                obj->velocity.y *= -1;
         }
         if (obj->transform->pos.y <= obj->transform->scale.y)
         { // bottom bounce
             obj->transform->pos.y = obj->transform->scale.y;
-            obj->velocity.y *= -1;
+            if (mWorldBounderiesBounce)
+                obj->velocity.y *= -1;
         }
         if (obj->transform->pos.x >= WIDTH - obj->transform->scale.x)
         { // right side
             obj->transform->pos.x = WIDTH - obj->transform->scale.x;
-            obj->velocity.x *= -1;
+            if (mWorldBounderiesBounce)
+                obj->velocity.x *= -1;
         }
         if (obj->transform->pos.x <= obj->transform->scale.x)
         { // left goal
             obj->transform->pos.x = obj->transform->scale.x;
-            obj->velocity.x *= -1;
+            if (mWorldBounderiesBounce)
+                obj->velocity.x *= -1;
         }
     }
 }

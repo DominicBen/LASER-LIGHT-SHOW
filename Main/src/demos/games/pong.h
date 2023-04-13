@@ -35,28 +35,30 @@ public:
     ImpulseSolver solver2 = ImpulseSolver();
 
     // Controller player1_input = Controller("943c,c6,38818e");
-    Controller player1_input = Controller(29, 28);
-    Controller player2_input = Controller(34, 35);
+    Controller player1_input = Controller(PLAYER1SERIAL);
+    Controller player2_input = Controller(PLAYER2SERIAL);
 
     // Game Variablesga
     Vec2 rightPaddleOffset = {WIDTH - 300, HEIGHT / 2};
     Vec2 leftPaddleOffset = {300, HEIGHT / 2};
-    Vec2 paddleSize = {100, 500};
-    float paddleSpeed = 75;
-    Vec2 ballSpeed = {-50, 0};
+    Vec2 paddleSize = {200, 500};
+    float mPaddleSpeed = 20;
+    int mMaxBallSpeed;
+    int mDifficultyScaling = 10;
+    const int mStartingMaxSpeed = 50;
 
     // Player info
-    Color player1_color = WHITE;
-    Color player2_color = WHITE;
-    char player1_score = '0';
-    char player2_score = '0';
-    Char player1_score_display = Char(player1_score);
-    Char player2_score_display = Char(player2_score);
-    Vec2 player1_score_location = {WIDTH / 2 - 300, HEIGHT - 300};
-    Vec2 player2_score_location = {WIDTH / 2 + 300, HEIGHT - 300};
+    Color mPlayer1Color = WHITE;
+    Color mPlayer2Color = WHITE;
+    char mPlayer1Score = '0';
+    char mPlayer2Score = '0';
+    Char mPlayer1ScoreDisplay = Char(mPlayer1Score);
+    Char mPlayer2ScoreDisplay = Char(mPlayer2Score);
+    Vec2 mPlayer1ScoreLocation = {WIDTH / 2 - 300, HEIGHT - 300};
+    Vec2 mPlayer2ScoreLocation = {WIDTH / 2 + 300, HEIGHT - 300};
     int font_size = 100;
-    Transform2D player1_score_transform = Transform2D().setPosition(player1_score_location).setScale({font_size * 2, font_size});
-    Transform2D player2_score_transform = Transform2D().setPosition(player2_score_location).setScale({font_size * 2, font_size});
+    Transform2D mPlayer1ScoreTransform = Transform2D().setPosition(mPlayer1ScoreLocation).setScale({font_size * 2, font_size});
+    Transform2D mPlayer2ScoreTransform = Transform2D().setPosition(mPlayer2ScoreLocation).setScale({font_size * 2, font_size});
 
     // Game state
     bool gameEnd = false;
@@ -77,7 +79,16 @@ public:
     GameObject2D *player2goal;
 
     Pong(/* args */){};
-    ~Pong(){};
+    ~Pong()
+    {
+        delete ball;
+        delete leftPaddle;
+        delete rightPaddle;
+        delete player1border;
+        delete player2border;
+        delete player1goal;
+        delete player2goal;
+    };
 
     // Helper Functions
 

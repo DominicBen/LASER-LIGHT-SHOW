@@ -17,6 +17,8 @@ private:
 
 public:
     bool mHasBorder = true;
+    bool mWorldBounderiesBounce = true;
+    uint64_t mTimeSinceLastUpdate = 0;
     PhysicsWorld2D();
     void step(float dt);
     void addObject(GameObject2D *obj);

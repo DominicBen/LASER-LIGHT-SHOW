@@ -3,7 +3,7 @@
 #include <gameobject.h>
 class GameObject2D;
 
-typedef std::function<void(GameObject2D *parent)> ColliderCallback;
+typedef std::function<void(GameObject2D *parent, GameObject2D *other)> ColliderCallback;
 
 class ColliderGroup
 {
@@ -14,10 +14,10 @@ private:
 public:
     std::vector<Collider *> colliders;
     void addCollider(Collider *collider) { colliders.push_back(collider); }
-    void trigger()
+    void trigger(GameObject2D *other)
     {
         if (callback)
-            callback(parent);
+            callback(parent, other);
     }
     void setTrigger(ColliderCallback callback_)
     {
@@ -25,5 +25,11 @@ public:
         callback = callback_;
     }
     ColliderGroup(GameObject2D *parent_) { parent = parent_; };
-    ~ColliderGroup(){};
+    ~ColliderGroup()
+    {
+        for (auto i : colliders)
+        {
+            delete i;
+        }
+    };
 };

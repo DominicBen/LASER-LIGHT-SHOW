@@ -18,7 +18,9 @@ public:
     Char(Mesh m_)
     {
         m = m_;
-    }
+        }
+    Char(String s) : m(Mesh(s)){};
+
     Char(char c_) { m = Mesh(c_); }
     // Char(char c_, Transform2D transform_)
     // {
