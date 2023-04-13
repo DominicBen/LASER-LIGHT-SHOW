@@ -3,7 +3,8 @@
 void Menu::drawSelectedScreen()
 {
     Serial.println("drawing currently selected screen ... " + selectedScreen);
-    // bmpDraw("background.bmp", 0, 0);
+    //bmpDraw("background.bmp", 0, 0);
+    tft.fillScreen(RA8875_BLACK);
     if (selectedScreen >= screens.size())
         screens[0]->draw();
     screens[selectedScreen]->draw();
@@ -161,6 +162,7 @@ void Menu::nextScreen()
     {
         selectedScreen = 0;
     }
+
     drawSelectedScreen();
 }
 

@@ -84,6 +84,13 @@ void PhysicsWorld2D::addSolver(Solver *sov)
 {
     solvers.push_back(sov);
 }
+void PhysicsWorld2D::reset(){
+    for(auto i : objects)
+    {
+        delete i;
+    }
+    objects.clear();
+}
 void PhysicsWorld2D::cleanUpWorld()
 {
     while (true)

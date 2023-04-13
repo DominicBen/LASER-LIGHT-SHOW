@@ -26,6 +26,7 @@ public:
     void cleanUpWorld();
     void step();
     void draw();
+    void reset();
     void resolveCollisions();
     void resolveTriggers(std::vector<Collision> collisions);
     void resolveWorldBounderies(float dt);
