@@ -23,12 +23,12 @@ public:
     ImpulseSolver solver2 = ImpulseSolver();
 
    
-    Controller player1_input = Controller(28, 29);
+    Controller player1_input = Controller(16, 17);
 
     // Game Variables
     Vec2 PaddleOffset = {WIDTH/2, 100};
     Vec2 paddleSize = {500, 100};
-    Vec2 brickSize = {WIDTH/6,HEIGHT/6}; // five bricks + 1/2 + 1/2 offset
+    Vec2 brickSize = {(WIDTH/6)*0.95,(HEIGHT/6)*0.95}; // five bricks + 1/2 + 1/2 offset
     Vec2 brickA = {WIDTH/6 + (WIDTH/6)*0,(HEIGHT/6)*6 - HEIGHT/12};
     Vec2 brickB = {WIDTH/6 + (WIDTH/6)*1,(HEIGHT/6)*6 - HEIGHT/12};
     Vec2 brickC = {WIDTH/6 + (WIDTH/6)*2,(HEIGHT/6)*6 - HEIGHT/12};
@@ -46,12 +46,12 @@ public:
     Vec2 brickO = {WIDTH/6 + (WIDTH/6)*3,(HEIGHT/6)*4 - HEIGHT/12};
     Vec2 brickP = {WIDTH/6 + (WIDTH/6)*4,(HEIGHT/6)*4 - HEIGHT/12};
     float paddleSpeed = 75;
-    Vec2 ballSpeed = {-50, 24};
+    Vec2 ballSpeed = {100, 60};
 
     // Player info
     Color player1_color = WHITE;
-    Color topBricks = RED;
-    Color middleBricks = BLUE;
+    Color topBricks = YELLOW;
+    Color middleBricks = MAGGENTA;
     Color bottomBricks = GREEN;
     int font_size = 100;
     // Game state
@@ -67,6 +67,7 @@ public:
     GameObject2D *ball;
     GameObject2D *Paddle;
     GameObject2D *border;
+    GameObject2D *ground;
     GameObject2D *brick11;  //(1,1)
     GameObject2D *brick12;  //(1,2)
     GameObject2D *brick13;  //(1,3)
@@ -93,7 +94,8 @@ public:
     void init();
     void update();
     void draw();
-    void win(std::string winner);
+    void lose();
+    void win();
     void restartRound();
     void playFile(const char *filename);
 };

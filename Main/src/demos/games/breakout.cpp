@@ -3,30 +3,42 @@
 void Breakout::init()
 {
     AudioMemory(250);
-
+    gameEnd = false;
     if (!(SD.begin(BUILTIN_SDCARD)))
     {
         // stop here, but print a message repetitively
         while (1)
         {
             Serial.println("Unable to access the SD card");
-            delay(500);
+            //delay(500);
         }
     }
     Graphic *ballg = new Shape(Graphic::Circle);
     Graphic *floorg = new Shape(Graphic::Rectangle);
 
-    auto deleteBrick = [&]()
+    auto deleteBrick = [&](GameObject2D * caller)
     {
-        if(brick35 != NULL)
-            brick35->mMarkedForDeletion = true;
-        //playFile("bounce.WAV");
+        if(caller != NULL)
+            caller->mMarkedForDeletion = true;
+        playFile("glassBreak.WAV");
+    };
+
+    auto playBounce = [&](GameObject2D *caller)
+    {
+        playFile("bounce.WAV");
+    };
+
+    auto gameOver = [&](GameObject2D *caller)
+    {
+        lose();
+        gameEnd = true;
     };
 
 
-    ball = (new GameObject2D(ballg))->setPosition({WIDTH / 2, HEIGHT / 2})->setScale({100, 100})->setColor(WHITE)->fitColliderToObject();
-    Paddle = (new GameObject2D(floorg))->setPosition(PaddleOffset)->setScale(paddleSize)->setColor(player1_color)->fitColliderToObject(/*playBounce*/);
-    border = (new GameObject2D(floorg))->setPosition({WIDTH/2, HEIGHT/2})->setScale({WIDTH-1, HEIGHT-1})->setColor(player1_color);
+    ball = (new GameObject2D(ballg))->setPosition({WIDTH / 2, 500})->setScale({100, 100})->setColor(WHITE)->fitColliderToObject();
+    Paddle = (new GameObject2D(floorg))->setPosition(PaddleOffset)->setScale(paddleSize)->setColor(player1_color)->fitColliderToObject(playBounce);
+    border = (new GameObject2D(floorg))->setPosition({WIDTH/2, HEIGHT/2})->setScale({WIDTH-1, HEIGHT-1})->setColor(player1_color)->fitColliderToObject(playBounce);
+    ground = (new GameObject2D(floorg))->setPosition({HEIGHT / 2,50})->setScale({WIDTH - 1,25})->setColor(player1_color)->fitColliderToObject(gameOver);
     brick11 = (new GameObject2D(floorg))->setPosition(brickA)->setScale(brickSize)->setColor(topBricks)->fitColliderToObject(deleteBrick);
     brick12 = (new GameObject2D(floorg))->setPosition(brickB)->setScale(brickSize)->setColor(topBricks)->fitColliderToObject(deleteBrick);
     brick13 = (new GameObject2D(floorg))->setPosition(brickC)->setScale(brickSize)->setColor(topBricks)->fitColliderToObject(deleteBrick);
@@ -47,11 +59,11 @@ void Breakout::init()
     ball->velocity = ballSpeed;
     ball->mIsDynamic = true;
     ball->mIsGravity = false;
-
     Paddle->mIsDynamic = false;
-
-
     border->mIsDynamic = false;
+    ground->mIsTrigger = true;
+    ground->mIsDynamic = false;
+    ground->mIsDrawn = false;
 
     brick11->mIsDynamic = false;
     brick12->mIsDynamic = false;
@@ -73,6 +85,7 @@ void Breakout::init()
     world.addObject(ball);
     world.addObject(Paddle);
     world.addObject(border);
+    world.addObject(ground);
 
     world.addObject(brick11);
     world.addObject(brick12);
@@ -101,15 +114,16 @@ void Breakout::init()
 void Breakout::update()
 {
     Serial.println("Breakout::updating");
-     if (mIsPaused)
+     if (mIsPaused){
         return;
+     }
     ControllerState player1_state = player1_input.read();
     Serial.println("p1: left " + (String)player1_state.left + "right " + (String)player1_state.right + "up " + (String)player1_state.up + "down " + (String)player1_state.down);
 
-    world.step(1);
-
+    //gameEnd = false;
     if (gameEnd == false)
     {
+    world.step(1);
 
         if (player1_state.right)
         {
@@ -133,18 +147,36 @@ void Breakout::draw()
 
 void Breakout::restart()
 {
+    world.reset();
    restartRound();
 }
 
-void Breakout::win(std::string winner)
+void Breakout::win()
 {
     playFile("victory.WAV");
+    for (size_t i = 0; i < 350; i++)
+    {
+        Transform2D tran;
+        tran.setPosition({250, HEIGHT / 2}).setScale({500, 250});
+        Sentence("you win").draw(tran, WHITE);
+    }
+    restart();
+}
+
+void Breakout::lose(){
+    playFile("gameOver.WAV");
+    for (size_t i = 0; i < 350; i++)
+    {
+        Transform2D tran;
+        tran.setPosition({250, HEIGHT / 2}).setScale({300, 250});
+        Sentence("game over").draw(tran, WHITE);
+    }
     restart();
 }
 
 void Breakout::restartRound()
 {
-   
+   init();
 }
 
 void Breakout::playFile(const char *filename)
