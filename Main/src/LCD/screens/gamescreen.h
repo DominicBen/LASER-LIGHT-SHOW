@@ -9,7 +9,7 @@ private:
     void detectTouch() override;
     void init() override;
     int mCurrentGame = 0;
-    int mNumGames = 4;
+    int mNumGames = 3;
     Vec2 mGameIconSize = {200, 189};
 
 public:

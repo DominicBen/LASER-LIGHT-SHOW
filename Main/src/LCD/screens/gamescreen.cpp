@@ -55,10 +55,7 @@ void GameScreen::draw()
         bmpDraw("flappy_bird.bmp", LCD_WIDTH / 2 - mGameIconSize.x / 2, LCD_HEIGHT / 2 - mGameIconSize.y / 2);
         break;
     case 2:
-        bmpDraw("tetris.bmp", LCD_WIDTH / 2 - mGameIconSize.x / 2, LCD_HEIGHT / 2 - mGameIconSize.y / 2);
-        break;
-    case 3:
-        bmpDraw("astroids.bmp", LCD_WIDTH / 2 - mGameIconSize.x / 2, LCD_HEIGHT / 2 - mGameIconSize.y / 2);
+        bmpDraw("breakout.bmp", LCD_WIDTH / 2 - mGameIconSize.x / 2, LCD_HEIGHT / 2 - mGameIconSize.y / 2);
         break;
 
     default:

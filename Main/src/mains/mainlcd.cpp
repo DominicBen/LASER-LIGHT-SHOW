@@ -51,8 +51,8 @@ void setup()
   tft.fillScreen(RA8875_BLACK);
   tft.graphicsMode();
 
-  // bmpDraw("caution.bmp", 0, 0);
-  // delay(1000);
+  bmpDraw("caution.bmp", 0, 0);
+  delay(1000);
   // bmpDraw("background.bmp", 0, 0);
 
   // delay(1000);
